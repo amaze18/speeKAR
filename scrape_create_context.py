@@ -114,15 +114,7 @@ def get_df():
     df['text'] = df.fname + ". " + remove_newlines(df.text)
     return df
 
-SCRAPING_DONE = False
-if not SCRAPING_DONE:
-    crawl(full_url)
-    df = get_df()
-    df.to_csv(RESULTS_DIR + 'processed/scraped.csv')
-    df.head()
-    !zip -r iventure_scrape.zip scraped_files
-else:
-    !unzip iventure_scrape.zip
+
 
 """# Create Embeddings
 
@@ -222,17 +214,7 @@ load_dotenv()
 SECRET_IN_ENV = False
 
 import os
-SECRET_TOKEN = os.getenv("SECRET_TOKEN")
-
-
-def load_api_key():
-    with open("secret.txt", "r") as f:
-        return f.read()
-
-if SECRET_IN_ENV:
-    SECRET_TOKEN = os.getenv("SECRET_TOKEN")
-else:
-    SECRET_TOKEN = load_api_key()
+SECRET_TOKEN = os.getenv("SECRET_TOKEN_GPT3.5")
 
 openai.api_key = SECRET_TOKEN
 
