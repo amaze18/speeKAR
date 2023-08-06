@@ -29,6 +29,6 @@ outputs = gr.outputs.Textbox(label="Reply")
 
 gr.Interface(fn=chatbot, inputs=inputs, outputs=outputs, title="Talk with I-venture @ ISB",
              description="Anything you want to find out about entreprenuership at ISB. Sample questions include >>> how to get incubated at ISB Dlabs? >>> What is the latest event being organized by I-venture @ ISB? >>> and more",
-             theme="huggingface", live=True,).launch(share=False)    
+             theme="compact", live=True,).launch(share=True)    
 
 # , debug=True
