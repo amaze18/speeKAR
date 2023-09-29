@@ -1,6 +1,7 @@
 from collections import namedtuple
 import altair as alt
 import math
+import glob
 import pandas as pd
 import streamlit as st
 import openai
@@ -91,7 +92,7 @@ if not audio.empty():
     st.audio(audio.export().read())  
 
     # To save audio to a file, use pydub export method:
-    audio.export("audio.wav", format="wav")
+    audio.export("query.wav", format="wav")
 
     # To get audio properties, use pydub AudioSegment properties:
     st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
@@ -136,12 +137,13 @@ if uploaded_file is not None:
 
 
 # Function for generating LLM response
-def generate_response(prompt_input, email, passwd):
-     question0=prompt_input
-     question=prompt_input
-     ans = speechtotext(prompt_input)
-    
-     return ans
+def generate_response(speech_input, email, passwd):
+     question0=speech_input
+     question=speech_input
+     query = speechtotext(speech_input)
+     
+     #ans, context, keys = chatbot_slim(query, text_split)
+     return query
 
 # User-provided prompt
 page_bg_img = '''
@@ -164,9 +166,9 @@ if prompt := st.chat_input():
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = generate_response(prompt,hf_email,hf_pass) 
-            st.write(response) 
-    message = {"role": "assistant", "content": response}
+            query = generate_response("query.wav",hf_email,hf_pass) 
+            st.write(query) 
+    message = {"role": "assistant", "content": query}
     st.session_state.messages.append(message)
 
 
