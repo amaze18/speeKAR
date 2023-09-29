@@ -88,13 +88,30 @@ SECRET_TOKEN = os.environ["SECRET_TOKEN"]
 openai.api_key = SECRET_TOKEN
 
 
-
+#-------------------------------------------------------------------------#
+#--------------------------GUI CONFIGS------------------------------------#
+#-------------------------------------------------------------------------#
 # App title
 st.set_page_config(page_title="🤗💬 SpeeKAR @ Gen AI-Chat Bot")
 st.header("SpeeKAR @ Gen AI-Chat Bot")
 st.title("Audio Recorder")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
+
+# Hugging Face Credentials
+with st.sidebar:
+    st.title('🤗💬SpeeKAR @ Gen-AI Chat Bot')
+    st.success('Access to this Gen-AI Powered Chatbot is provided by  [Anupam](https://www.linkedin.com/in/anupamisb/)!!', icon='✅')
+    hf_email = 'anupam_purwar2019@pgp.isb.edu'
+    hf_pass = 'PASS'
+    st.markdown('📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!')
+    #image = Image.open('isbdlabs.jpg')
+    #st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
+
+
+#------------------------------------------------------------------------------#
+#-------------------------QUERY AUDIO INPUT------------------------------------#
+#------------------------------------------------------------------------------#
 if not audio.empty():
     # To play audio in frontend:
     st.audio(audio.export().read())  
@@ -108,17 +125,7 @@ if not audio.empty():
     st.write(query)
 
 
-# Hugging Face Credentials
-with st.sidebar:
-    st.title('🤗💬SpeeKAR @ Gen-AI Chat Bot')
-    st.success('Access to this Gen-AI Powered Chatbot is provided by  [Anupam](https://www.linkedin.com/in/anupamisb/)!!', icon='✅')
-    hf_email = 'anupam_purwar2019@pgp.isb.edu'
-    hf_pass = 'PASS'
-    st.markdown('📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!')
-    #image = Image.open('isbdlabs.jpg')
-    #st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
-#
-    
+
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "assistant", "content": "Ask anything about uploaded document ..."}]
