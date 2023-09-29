@@ -218,7 +218,8 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            
+            pass        
+        pass
     message = {"role": "assistant", "content": ans}
     st.session_state.messages.append(message)
 
