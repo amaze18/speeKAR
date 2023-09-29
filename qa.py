@@ -3,10 +3,6 @@ Original file is located at
     https://colab.research.google.com/drive/1GYmsZSR4MWuvORNpSWFWrXz79lQKb6oc
 """
 
-import os
-
-RESULTS_DIR = "scraped_files/"
-os.makedirs(RESULTS_DIR, exist_ok=True)
 import time, os
 
 from pydub import AudioSegment
@@ -42,6 +38,37 @@ import pandas as pd
 import numpy as np
 from docx import Document
 from docx.shared import Inches
+
+
+import openai
+from langchain.chat_models import ChatOpenAI
+import os
+from langchain.llms import OpenAI
+from langchain import HuggingFacePipeline
+from langchain.chains import RetrievalQA
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import FAISS
+from langchain.chains import LLMChain
+from dotenv import find_dotenv, load_dotenv
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.document_loaders import TextLoader
+import textwrap
+import glob
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+import openai
+import pprint as pp
+import pandas as pd
+from keybert import KeyBERT
+import time
+
 # -*- coding: utf-8 -*-
 """SpeechIntegrated_KeywordAugmentedRetrieval_ChatBot.ipynb
 
@@ -194,30 +221,6 @@ for t in  para_texts:
 Here, firstly a context is created and the chatbot function takes in the query responds based on a given context (as provided in "Rank_new.docx"). One can even change the document to suit their needs.
 """
 
-import openai
-from langchain.chat_models import ChatOpenAI
-import os
-from langchain.llms import OpenAI
-from langchain import HuggingFacePipeline
-from langchain.chains import RetrievalQA
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
-from langchain.chains import LLMChain
-from dotenv import find_dotenv, load_dotenv
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
-
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.document_loaders import TextLoader
-import textwrap
-import glob
-
-from keybert import KeyBERT
-import time
 
 kw_model = KeyBERT()
 
@@ -332,13 +335,7 @@ def create_context(query, text_split):
     return "\n\n###\n\n".join(returns), keywords
 
 messages =[]
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
-import openai
-import pprint as pp
-import pandas as pd
 
-import time
 
 #Instead of calling the flan-t5 model as earlier, only the KAR based LLM responses are provided to converse real time.
 def chatbot_slim(query, text_split):
