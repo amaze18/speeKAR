@@ -18,6 +18,7 @@ requests
 ffmpeg-python
 mutagen
 docx
+SpeechRecognition
 pandas
 numpy
 html-parser
@@ -33,7 +34,6 @@ faiss-cpu
 unstructured
 htbuilder
 gtts
-speech_recognition
 soundfile
 pydub
 audiorecorder
