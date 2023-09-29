@@ -170,9 +170,9 @@ background-size: cover;
 #            st.write(query) 
 #    message = {"role": "assistant", "content": query}
 #    st.session_state.messages.append(message)
-
-query = generate_response("query.wav",hf_email,hf_pass) 
-st.write(query) 
+if audio != None:
+    query = generate_response("query.wav",hf_email,hf_pass) 
+    st.write(query) 
 
 myargs = [
     "Made in India",""
