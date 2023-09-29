@@ -125,7 +125,7 @@ def readdoc_splittext(filename):
         print(i)
         print(t)
         i+=1
-    return all_text, text_split
+    return all_text, text_split, headings, para_texts
     
     
 #all_text, text_split = readdoc_splittext()
@@ -139,7 +139,7 @@ def remove_newlines(serie):
     return serie
 
 #----------------CREATE CONTEXT-----------------------#
-def create_context(query, text_split):
+def create_context(query, text_split,headings, para_texts):
     """
     Create a context for a question by finding the most similar context from the dataframe
     """
@@ -224,7 +224,7 @@ def create_context(query, text_split):
     return "\n\n###\n\n".join(returns), keywords
 
 #------------------------SLIM KAR BASED CHATBOT----------------------------#
-def chatbot_slim(query, text_split):
+def chatbot_slim(query, text_split,headings, para_texts):
     """
     Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response 
     with little to almost no hallucinations. Here, openai's davnci-003 has been used to generate the response. 
@@ -233,7 +233,7 @@ def chatbot_slim(query, text_split):
 
         stime= time.time()
 
-        context, keywords = create_context(query, text_split)
+        context, keywords = create_context(query, text_split,headings, para_texts)
 
         ctype=['stuff', 'map_reduce', 'refine', 'map_rerank']
         template= '''
