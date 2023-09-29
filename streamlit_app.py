@@ -182,7 +182,9 @@ if uploaded_file is not None:
     # To read file as string:
     #string_data = StringIO.read()
     #st.write(string_data)
-    all_text, text_split = readdoc_splittext()
+    st.write("Filename:", uploaded_file.name)
+    all_text, text_split = readdoc_splittext(uploaded_file.name)
+   
 
 
 #----------------------------------------------------------#
