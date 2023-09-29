@@ -32,7 +32,6 @@ openai
 faiss-cpu
 unstructured
 htbuilder
-pprint 
 time
 gtts
 os
