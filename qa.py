@@ -140,7 +140,6 @@ def readdoc_splittext(filename = "rank_new.docx"):
     
 all_text, text_split = readdoc_splittext()
 
-
 #print(headings)
 def remove_newlines(serie):
     serie = serie.replace('\n', ' ')
