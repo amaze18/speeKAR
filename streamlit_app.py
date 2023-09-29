@@ -182,14 +182,14 @@ if uploaded_file is not None:
     # To read file as string:
     #string_data = StringIO.read()
     #st.write(string_data)
-    st.write("Filename:", uploaded_file.name)
+    #st.write("Filename:", uploaded_file.name)
     all_text, text_split, headings, para_texts = readdoc_splittext(uploaded_file.name)
     #----------------------------------------------------------#
     #-------------START INTERACTING WITH THE CHATBOT------------#
     #----------------------------------------------------------#
     
     ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
-    st.write(ans)
+    
     st.markdown("""
             <style>
             .big-font {
@@ -199,26 +199,14 @@ if uploaded_file is not None:
             """, unsafe_allow_html=True)
         
     #st.markdown("Your question in text ::")
-    st.markdown('<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True)
-    
+    st.markdown('<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True)
+    st.write(ans)
     #-----------text to speech--------------------------#
     texttospeech_raw(ans, language="en")
     audio_file = open('answer.wav', 'rb')
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format='audio/wav')
 
-
-# User-provided prompt
-page_bg_img = '''
-<style>
-body {
-background-image: url("https://csrbox.org/media/Hero-Image.png");
-background-size: cover;
-}
-</style>
-'''
-
-st.markdown(page_bg_img, unsafe_allow_html=True)
 
 #if prompt := st.chat_input():
 #   st.session_state.messages.append({"role": "user", "content": prompt})
@@ -240,8 +228,12 @@ myargs = [
     "Made in India",""
     " with ❤️ by ",
     link("https://www.linkedin.com/in/anupamisb/", "@Anupam"),
+    br(),
+    link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
+    br(),
+    link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
      br(),
-     link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
+     link("https://github.com/RahulSundar", "SpeeKAR ChatBoT"),
     ]
 
 def footer():
@@ -250,7 +242,9 @@ def footer():
     " with ❤️ by ",
     link("https://www.linkedin.com/in/anupamisb/", " Anupam for "),
     link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
-    ]
+    ", and"    
+    link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
+    link("https://github.com/RahulSundar", "SpeeKAR ChatBoT")]
     layout(*myargs)
   
 footer()
