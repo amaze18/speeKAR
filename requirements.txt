@@ -18,6 +18,7 @@ requests
 ffmpeg-python
 mutagen
 docx
+audio-recorder-streamlit
 SpeechRecognition
 pandas
 numpy
