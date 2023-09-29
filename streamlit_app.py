@@ -242,7 +242,7 @@ def footer():
     " with ❤️ by ",
     link("https://www.linkedin.com/in/anupamisb/", " Anupam for "),
     link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
-    ", and"    
+    ", and" ,   
     link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
     link("https://github.com/RahulSundar", "SpeeKAR ChatBoT")]
     layout(*myargs)
