@@ -10,7 +10,8 @@ from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, class
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
 
-
+import streamlit as st
+from audiorecorder import audiorecorder
 
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
@@ -80,8 +81,22 @@ openai.api_key = SECRET_TOKEN
 
 
 # App title
-st.set_page_config(page_title="🤗💬 I-Venture @ ISB AI-Chat Bot")
-st.header("I-Venture @ ISB AI-Chat Bot")
+st.set_page_config(page_title="🤗💬 SpeeKAR @ Gen AI-Chat Bot")
+st.header("SpeeKAR @ Gen AI-Chat Bot")
+st.title("Audio Recorder")
+audio = audiorecorder("Click to record", "Click to stop recording")
+
+if not audio.empty():
+    # To play audio in frontend:
+    st.audio(audio.export().read())  
+
+    # To save audio to a file, use pydub export method:
+    audio.export("audio.wav", format="wav")
+
+    # To get audio properties, use pydub AudioSegment properties:
+    st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
+
+
 
 # Hugging Face Credentials
 with st.sidebar:
