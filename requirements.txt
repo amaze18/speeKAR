@@ -32,7 +32,6 @@ openai
 faiss-cpu
 unstructured
 htbuilder
-time
 gtts
 os
 speech_recognition
