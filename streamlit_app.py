@@ -1,13 +1,22 @@
 from collections import namedtuple
 import altair as alt
+
+import os, time
+import pandas as pd
 import math
 import glob
-import pandas as pd
-import streamlit as st
+
+from io import StringIO
+
 import openai
-from qa import speechtotext
+
+#-------------IMPORTING CORE FUNCTIONALITIES OF THE SpeeKAR_BOT------------- 
+from qa import speechtotext, readdoc_splittext, create_context, chatbot_slim
+
+#-------------------AUDIO FUNCTIONALITY-------------------------
 from mutagen.wave import WAVE
-import os
+
+#--------------------HTML BUILDER AND FUNCTIONALITIES-----------------------------------#
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
 from htbuilder.funcs import rgba, rgb
@@ -15,21 +24,21 @@ from htbuilder.funcs import rgba, rgb
 import streamlit as st
 from audiorecorder import audiorecorder
 
+
+from PIL import Image
+
+
+#------------------DEFAULTS--------------------#
+SECRET_TOKEN = os.environ["SECRET_TOKEN"] 
+openai.api_key = SECRET_TOKEN
+
+
+#-----------------------HELPER FUNCTIONS--------------------------#
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
 
-# Function for generating LLM response
-def generate_response(speech_input, email, passwd):
-     question0=speech_input
-     question=speech_input
-     query = speechtotext(speech_input)
-     
-     #ans, context, keys = chatbot_slim(query, text_split)
-     return query
-    
 def link(link, text, **style):
     return a(_href=link, _target="_blank", style=styles(**style))(text)
-
 
 def layout(*args):
 
@@ -80,14 +89,19 @@ def layout(*args):
 
     st.markdown(str(foot), unsafe_allow_html=True)
 
- 
-from PIL import Image
 
+#-------------------------------FUNCTIONS FOR KAR BASED RESPONSE GENERATION-------------#
+def process_query(speech_input, email, passwd):
+     question0=speech_input
+     question=speech_input
+     query = speechtotext(speech_input)
+     
+     #ans, context, keys = chatbot_slim(query, text_split)
+     return query
 
-import os
-SECRET_TOKEN = os.environ["SECRET_TOKEN"] 
-openai.api_key = SECRET_TOKEN
-
+def generate_kARanswer(query, text_split):
+    ans, context, keys = chatbot_slim(query, text_split)
+    return ans,context,keys 
 
 #-------------------------------------------------------------------------#
 #--------------------------GUI CONFIGS------------------------------------#
@@ -111,7 +125,7 @@ with st.sidebar:
 
 
 #------------------------------------------------------------------------------#
-#-------------------------QUERY AUDIO INPUT------------------------------------#
+#-------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 #------------------------------------------------------------------------------#
 if not audio.empty():
     # To play audio in frontend:
@@ -134,14 +148,19 @@ if not audio.empty():
             }
             </style>
             """, unsafe_allow_html=True)
+        
         #st.markdown("Your question in text ::")
         st.markdown('<p class="big-font"> Your question in text :: </p>', unsafe_allow_html=True)
+        if "messages" not in st.session_state.keys():
+            st.session_state.messages = [{"role": "assistant", "content": query}]
+        #st.write(query)
 
-        st.write(query)
 
-
-
+#---------------------------------------------------------#
+#-----------------UPLOAD THE SRC DOCUMENT-----------------#
+#---------------------------------------------------------#
 # Store LLM generated responses
+
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "assistant", "content": "Ask anything about uploaded document ..."}]
 
@@ -149,8 +168,6 @@ if "messages" not in st.session_state.keys():
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
-
-from io import StringIO
 
 uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
@@ -165,8 +182,12 @@ if uploaded_file is not None:
     # To read file as string:
     string_data = stringio.read()
     #st.write(string_data)
+    all_text, text_split = readdoc_splittext()
 
 
+#----------------------------------------------------------#
+#-------------START INTERACTING WITH THE CHATBOT------------#
+#----------------------------------------------------------#
 
 
 # User-provided prompt
@@ -179,22 +200,23 @@ background-size: cover;
 </style>
 '''
 
-#st.markdown(page_bg_img, unsafe_allow_html=True)
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 #if prompt := st.chat_input():
-#    st.session_state.messages.append({"role": "user", "content": prompt})
+#   st.session_state.messages.append({"role": "user", "content": prompt})
 #    with st.chat_message("user"):
 #        st.write(prompt)
 
 # Generate a new response if last message is not from assistant
-#if st.session_state.messages[-1]["role"] != "assistant":
-#    with st.chat_message("assistant"):
-#        with st.spinner("Thinking..."):
-#            query = generate_response("query.wav",hf_email,hf_pass) 
-#            st.write(query) 
-#    message = {"role": "assistant", "content": query}
-#    st.session_state.messages.append(message)
-#if not audio.empty():
+if st.session_state.messages[-1]["role"] != "assistant":
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            #query = generate_response("query.wav",hf_email,hf_pass) 
+            ans, context, keys = chatbot_slim(query, text_split)
+            st.write(ans)
+    message = {"role": "assistant", "content": query}
+    st.session_state.messages.append(message)
+
 
 
 myargs = [
