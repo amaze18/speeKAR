@@ -283,7 +283,7 @@ def chatbot_slim(query, text_split,headings, para_texts):
 
         question = query
 
-        openai.api_key = "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"
+        openai.api_key = SECRET_TOKEN
         model="text-davinci-003"
         chat  = openai.Completion.create(
             prompt=f"You answer question based on context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
