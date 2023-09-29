@@ -15,6 +15,9 @@ sentencepiece==0.1.99
 torch==2.0.1
 transformers==4.31.0
 requests
+ffmpeg-python
+mutagen
+docx
 pandas
 numpy
 html-parser
@@ -29,3 +32,15 @@ openai
 faiss-cpu
 unstructured
 htbuilder
+pprint 
+time
+gtts
+os
+from IPython.display import Audio, display
+speech_recognition
+soundfile
+pydub
+mutagen.mp3
+pydub.playback
+scipy.io.wavfile
+
