@@ -140,7 +140,7 @@ if not audio.empty():
     #st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
     querywav = WAVE("query.wav")
     if querywav.info.length > 0:
-        query = generate_response("query.wav",hf_email,hf_pass) 
+        query = process_query("query.wav",hf_email,hf_pass) 
         st.markdown("""
             <style>
             .big-font {
