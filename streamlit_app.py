@@ -125,15 +125,15 @@ uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
     # To read file as bytes:
     bytes_data = uploaded_file.getvalue()
-    st.write(bytes_data)
+    #st.write(bytes_data)
 
     # To convert to a string based IO:
-    stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-    st.write(stringio)
+    #stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+    #st.write(stringio)
 
     # To read file as string:
     string_data = stringio.read()
-    st.write(string_data)
+    #st.write(string_data)
 
 
 # Function for generating LLM response
@@ -157,20 +157,22 @@ background-size: cover;
 
 #st.markdown(page_bg_img, unsafe_allow_html=True)
 
-if prompt := st.chat_input():
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.write(prompt)
+#if prompt := st.chat_input():
+#    st.session_state.messages.append({"role": "user", "content": prompt})
+#    with st.chat_message("user"):
+#        st.write(prompt)
 
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            query = generate_response("query.wav",hf_email,hf_pass) 
-            st.write(query) 
-    message = {"role": "assistant", "content": query}
-    st.session_state.messages.append(message)
+#if st.session_state.messages[-1]["role"] != "assistant":
+#    with st.chat_message("assistant"):
+#        with st.spinner("Thinking..."):
+#            query = generate_response("query.wav",hf_email,hf_pass) 
+#            st.write(query) 
+#    message = {"role": "assistant", "content": query}
+#    st.session_state.messages.append(message)
 
+query = generate_response("query.wav",hf_email,hf_pass) 
+st.write(query) 
 
 myargs = [
     "Made in India",""
