@@ -180,7 +180,7 @@ if uploaded_file is not None:
     #st.write(stringio)
 
     # To read file as string:
-    string_data = stringio.read()
+    #string_data = StringIO.read()
     #st.write(string_data)
     all_text, text_split = readdoc_splittext()
 
