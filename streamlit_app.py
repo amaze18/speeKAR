@@ -183,12 +183,12 @@ if uploaded_file is not None:
     #string_data = StringIO.read()
     #st.write(string_data)
     st.write("Filename:", uploaded_file.name)
-    all_text, text_split = readdoc_splittext(uploaded_file.name)
+    all_text, text_split, headings, para_texts = readdoc_splittext(uploaded_file.name)
     #----------------------------------------------------------#
     #-------------START INTERACTING WITH THE CHATBOT------------#
     #----------------------------------------------------------#
     
-    ans, context, keys = chatbot_slim(query, text_split)
+    ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
     st.write(ans)
     #-----------text to speech--------------------------#
     texttospeech_raw(ans, language="en")
