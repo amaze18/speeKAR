@@ -4,9 +4,7 @@ import math
 import pandas as pd
 import streamlit as st
 import openai
-from qa import answer_question
-#from hugchat import hugchat
-#from hugchat.login import Login
+from qa import speechtotext
 import os
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
@@ -79,51 +77,55 @@ import os
 SECRET_TOKEN = os.environ["SECRET_TOKEN"] 
 openai.api_key = SECRET_TOKEN
 
+
+
 # App title
 st.set_page_config(page_title="🤗💬 I-Venture @ ISB AI-Chat Bot")
 st.header("I-Venture @ ISB AI-Chat Bot")
 
 # Hugging Face Credentials
 with st.sidebar:
-    st.title('🤗💬I-Venture @ ISB Chat Bot')
+    st.title('🤗💬SpeeKAR @ Gen-AI Chat Bot')
     st.success('Access to this Gen-AI Powered Chatbot is provided by  [Anupam](https://www.linkedin.com/in/anupamisb/)!!', icon='✅')
     hf_email = 'anupam_purwar2019@pgp.isb.edu'
     hf_pass = 'PASS'
-    st.markdown('📖 This app is hosted by I-Venture @ ISB [website](https://i-venture.org/)!')
+    st.markdown('📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!')
     image = Image.open('isbdlabs.jpg')
     st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
 #
     
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "Ask anything about I-Venture @ ISB ..."}]
+    st.session_state.messages = [{"role": "assistant", "content": "Ask anything about uploaded document ..."}]
 
 # Display chat messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
+from io import StringIO
+
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+    # To read file as bytes:
+    bytes_data = uploaded_file.getvalue()
+    st.write(bytes_data)
+
+    # To convert to a string based IO:
+    stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+    st.write(stringio)
+
+    # To read file as string:
+    string_data = stringio.read()
+    st.write(string_data)
+
+
 # Function for generating LLM response
 def generate_response(prompt_input, email, passwd):
      question0=prompt_input
      question=prompt_input
-     ans = answer_question(prompt_input)
-     # st.write(ans)
-     if (ans=='I don\'t know.' or ans=='I don\'t know' or ans== 'I could not find an answer.' or 'I could not find' in ans  or ' I couldn\'t find'  in ans  ):
-           question=question0+ " ISB DLabs"
-           ans=answer_question(question)
-           if (ans=='I don\'t know.'  or ans=='I don\'t know' or ans== 'I could not find an answer.' or 'I could not find' in ans or ' I couldn\'t find'  in ans  ):
-             question=question0+ " ISB"
-             ans=answer_question(question)
-             if (ans=='I don\'t know.'  or ans=='I don\'t know'  or ans== 'I could not find an answer.' or 'I could not find' in ans or ' I couldn\'t find'  in ans  ):
-               question=question0+ " I-Venture @ ISB"
-               ans=answer_question(question)
-               if (ans=='I don\'t know.'  or ans=='I don\'t know'  or ans== 'I could not find an answer.' or 'I could not find' in ans or ' I couldn\'t find'  in ans  ):
-                   question=question0+ "Dlabs ISB"
-                   ans=answer_question(question)
-                   if (ans=='I don\'t know.'  or ans=='I don\'t know'  or ans== 'I could not find an answer.' or 'I could not find' in ans or ' I couldn\'t find'  in ans  ):
-                       question=question0+ "Indian School of Business"
-                       ans=answer_question(question)
+     ans = speechtotext(prompt_input)
+    
      return ans
 
 # User-provided prompt
@@ -158,7 +160,7 @@ myargs = [
     " with ❤️ by ",
     link("https://www.linkedin.com/in/anupamisb/", "@Anupam"),
      br(),
-     link("https://i-venture.org/chatbot/", "ISB ChatBoT"),
+     link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
     ]
 
 def footer():
@@ -166,7 +168,7 @@ def footer():
     "Made in India",""
     " with ❤️ by ",
     link("https://www.linkedin.com/in/anupamisb/", " Anupam for "),
-    link("https://i-venture.org/chatbot/", "I-Venture @ ISB"),
+    link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
     ]
     layout(*myargs)
   
