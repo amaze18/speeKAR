@@ -311,7 +311,7 @@ def texttospeech_raw(text,language,savename="answer",slow=False):
   # Saving the converted audio in a mp3 file
   myobj.save(savename+".mp3")
   sound = AudioSegment.from_mp3(savename + ".mp3")
-  sound.export(answer+".wav", format="wav")
+  sound.export(savename+".wav", format="wav")
 
 
 #---------------SPEECH RECOGNITION---------#
