@@ -25,7 +25,7 @@ import ffmpeg
 from gtts import gTTS
 import os, time
 #from IPython.display import Audio, display
-from IPython.display import HTML, Audio
+#from IPython.display import HTML, Audio
 import speech_recognition as sr
 import soundfile as sf
 from pydub import AudioSegment
