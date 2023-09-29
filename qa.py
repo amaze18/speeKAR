@@ -1,4 +1,3 @@
-#-----------FUNDAMENTAL DEPENDENCIES-------------#
 import time, os
 import io
 import scipy
