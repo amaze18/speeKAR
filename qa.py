@@ -78,7 +78,7 @@ import time
 from keybert import KeyBERT
 import time
 
-def readdoc_splittext(filename = "./rank_new.docx")
+def readdoc_splittext(filename = "./rank_new.docx"):
     """
     This functions takes in an input document and finds the headings, and
     splits them based on the chunks needed. 
