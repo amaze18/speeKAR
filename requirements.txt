@@ -19,7 +19,6 @@ ffmpeg-python
 mutagen
 docx
 SpeechRecognition
-PyAudio
 pandas
 numpy
 html-parser
