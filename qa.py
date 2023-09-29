@@ -7,6 +7,28 @@ import os
 
 RESULTS_DIR = "scraped_files/"
 os.makedirs(RESULTS_DIR, exist_ok=True)
+import time, os
+
+from pydub import AudioSegment
+from pydub.playback import play
+from mutagen.mp3 import MP3
+
+import scipy
+import speech_recognition as sr
+
+from google.colab.output import eval_js
+from base64 import b64decode
+import numpy as np
+from scipy.io.wavfile import read as wav_read
+import io
+import ffmpeg
+from gtts import gTTS
+import os, time
+#from IPython.display import Audio, display
+from IPython.display import HTML, Audio
+import speech_recognition as sr
+import soundfile as sf
+from pydub import AudioSegment
 import streamlit as st
 import requests
 import re
@@ -18,7 +40,8 @@ from urllib.parse import urlparse
 import os
 import pandas as pd
 import numpy as np
-
+from docx import Document
+from docx.shared import Inches
 # -*- coding: utf-8 -*-
 """SpeechIntegrated_KeywordAugmentedRetrieval_ChatBot.ipynb
 
@@ -113,8 +136,6 @@ print(text_split[0])
 
 """### Find headings for each para in a new document"""
 
-from docx import Document
-from docx.shared import Inches
 
 document = Document("sample_data/rank_new.docx")
 headings = []
@@ -398,16 +419,6 @@ def chatbot_slim(query, text_split):
 First converted the designed queries into speech.Then convert the speech to text. Then use the available text to speech functions to read out the answers.
 """
 
-from gtts import gTTS
-import os, time
-from IPython.display import Audio, display
-import speech_recognition as sr
-import soundfile as sf
-from IPython.display import Audio, display
-
-
-from pydub import AudioSegment
-
 LANGUAGE = 'en'
 
 QUERIES=["tell me important facts about expandrank", "tell me important facts about positionrank"," what is  positionrank",
@@ -465,13 +476,7 @@ def speechtotext(query_audio):
 Note that this might not be needed if one were to use a desktop/laptop/edge devide with a microphone and speaker inbuilt.
 """
 
-from IPython.display import HTML, Audio
-from google.colab.output import eval_js
-from base64 import b64decode
-import numpy as np
-from scipy.io.wavfile import read as wav_read
-import io
-import ffmpeg
+
 
 AUDIO_HTML = """
 <script>
@@ -588,9 +593,6 @@ def get_audio():
 audio = MP3("answer.mp3")
 print(audio.info.length)'''
 
-import scipy
-import speech_recognition as sr
-
 def speechtotextuserinput():
   audio, sample_rate = get_audio()
   scipy.io.wavfile.write('query.wav', sample_rate, audio)
@@ -608,11 +610,8 @@ def speechtotextuserinput():
   print(text)
   return text
 
-import time, os
 
-from pydub import AudioSegment
-from pydub.playback import play
-from mutagen.mp3 import MP3
+
 
 #Here, a user's speech interface is considered and looped in conjunction with the KAR based speech response.
 
