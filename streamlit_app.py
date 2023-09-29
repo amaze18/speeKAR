@@ -107,7 +107,7 @@ with st.sidebar:
     hf_pass = 'PASS'
     st.markdown('📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!')
     image = Image.open('Diagram(1).jpg')
-    #st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
+    st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
 
 
 #------------------------------------------------------------------------------#
@@ -127,6 +127,13 @@ if not audio.empty():
     querywav = WAVE("query.wav")
     if querywav.info.length > 0:
         query = generate_response("query.wav",hf_email,hf_pass) 
+        st.markdown("""
+            <style>
+            .big-font {
+                font-size:30px !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
         st.markdown("Your question in text ::")
         st.write(query)
 
