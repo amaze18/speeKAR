@@ -144,16 +144,16 @@ if not audio.empty():
         st.markdown("""
             <style>
             .big-font {
-                font-size:30px !important;
+                font-size:20px !important;
             }
             </style>
             """, unsafe_allow_html=True)
         
         #st.markdown("Your question in text ::")
-        st.markdown('<p class="big-font"> Your question in text :: </p>', unsafe_allow_html=True)
-        if "messages" not in st.session_state.keys():
-            st.session_state.messages = [{"role": "assistant", "content": query}]
-        #st.write(query)
+        st.markdown('<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True)
+        #if "messages" not in st.session_state.keys():
+        #    st.session_state.messages = [{"role": "assistant", "content": query}]
+        st.write(query)
 
 
 #---------------------------------------------------------#
@@ -184,12 +184,17 @@ if uploaded_file is not None:
     #st.write(string_data)
     st.write("Filename:", uploaded_file.name)
     all_text, text_split = readdoc_splittext(uploaded_file.name)
-   
-
-
-#----------------------------------------------------------#
-#-------------START INTERACTING WITH THE CHATBOT------------#
-#----------------------------------------------------------#
+    #----------------------------------------------------------#
+    #-------------START INTERACTING WITH THE CHATBOT------------#
+    #----------------------------------------------------------#
+    
+    ans, context, keys = chatbot_slim(query, text_split)
+    st.write(ans)
+    #-----------text to speech--------------------------#
+    texttospeech_raw(ans, language="en")
+    audio_file = open('answer.wav', 'rb')
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format='audio/wav')
 
 
 # User-provided prompt
@@ -213,10 +218,8 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            #query = generate_response("query.wav",hf_email,hf_pass) 
-            ans, context, keys = chatbot_slim(query, text_split)
-            st.write(ans)
-    message = {"role": "assistant", "content": query}
+            
+    message = {"role": "assistant", "content": ans}
     st.session_state.messages.append(message)
 
 
