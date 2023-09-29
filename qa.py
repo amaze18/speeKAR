@@ -231,6 +231,7 @@ def chatbot_slim(query, text_split,headings, para_texts):
     Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response 
     with little to almost no hallucinations. Here, openai's davnci-003 has been used to generate the response. 
     """
+    
     if input:
 
         stime= time.time()
@@ -297,8 +298,7 @@ def chatbot_slim(query, text_split,headings, para_texts):
         )
 
         reply = chat["choices"][0]["text"].strip() # ['choices'][0]['message']['content']
-        messages.append({"role": "assistant", "content": reply})
-
+        
         return reply, context, keywords
 
 #----------------TEXT TO SPEECH FUNCTION FOR ANSWER READOUT---------#
