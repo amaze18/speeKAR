@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 import openai
 from qa import speechtotext
+from mutagen.wave import WAVE
 import os
 from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
 from htbuilder.units import percent, px
@@ -121,8 +122,10 @@ if not audio.empty():
 
     # To get audio properties, use pydub AudioSegment properties:
     st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
-    query = generate_response("query.wav",hf_email,hf_pass) 
-    st.write(query)
+    querywav = WAVE("query.wav")
+    if querywav.info.length > 0:
+        query = generate_response("query.wav",hf_email,hf_pass) 
+        st.write(query)
 
 
 
