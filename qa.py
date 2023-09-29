@@ -465,11 +465,6 @@ def speechtotext(query_audio):
 Note that this might not be needed if one were to use a desktop/laptop/edge devide with a microphone and speaker inbuilt.
 """
 
-
-
-!pip install ffmpeg-python
-!pip install mutagen
-
 from IPython.display import HTML, Audio
 from google.colab.output import eval_js
 from base64 import b64decode
