@@ -106,7 +106,7 @@ with st.sidebar:
     hf_email = 'anupam_purwar2019@pgp.isb.edu'
     hf_pass = 'PASS'
     st.markdown('📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!')
-    #image = Image.open('isbdlabs.jpg')
+    image = Image.open('Diagram(1).jpg')
     #st.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels='RGB', output_format='auto')
 
 
@@ -121,10 +121,13 @@ if not audio.empty():
     audio.export("query.wav", format="wav")
 
     # To get audio properties, use pydub AudioSegment properties:
-    st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
+    st.write(f"Duration: {audio.duration_seconds} seconds")
+    
+    #st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
     querywav = WAVE("query.wav")
     if querywav.info.length > 0:
         query = generate_response("query.wav",hf_email,hf_pass) 
+        st.markdown("Your question in text ::")
         st.write(query)
 
 
