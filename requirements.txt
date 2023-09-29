@@ -36,11 +36,7 @@ pprint
 time
 gtts
 os
-from IPython.display import Audio, display
 speech_recognition
 soundfile
 pydub
-mutagen.mp3
-pydub.playback
-scipy.io.wavfile
-
+audiorecorder
