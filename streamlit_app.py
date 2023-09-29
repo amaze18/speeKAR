@@ -17,7 +17,15 @@ from audiorecorder import audiorecorder
 def image(src_as_string, **style):
     return img(src=src_as_string, style=styles(**style))
 
-
+# Function for generating LLM response
+def generate_response(speech_input, email, passwd):
+     question0=speech_input
+     question=speech_input
+     query = speechtotext(speech_input)
+     
+     #ans, context, keys = chatbot_slim(query, text_split)
+     return query
+    
 def link(link, text, **style):
     return a(_href=link, _target="_blank", style=styles(**style))(text)
 
@@ -96,7 +104,8 @@ if not audio.empty():
 
     # To get audio properties, use pydub AudioSegment properties:
     st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
-
+    query = generate_response("query.wav",hf_email,hf_pass) 
+    st.write(query)
 
 
 # Hugging Face Credentials
@@ -136,14 +145,7 @@ if uploaded_file is not None:
     #st.write(string_data)
 
 
-# Function for generating LLM response
-def generate_response(speech_input, email, passwd):
-     question0=speech_input
-     question=speech_input
-     query = speechtotext(speech_input)
-     
-     #ans, context, keys = chatbot_slim(query, text_split)
-     return query
+
 
 # User-provided prompt
 page_bg_img = '''
@@ -170,9 +172,8 @@ background-size: cover;
 #            st.write(query) 
 #    message = {"role": "assistant", "content": query}
 #    st.session_state.messages.append(message)
-if audio != None:
-    query = generate_response("query.wav",hf_email,hf_pass) 
-    st.write(query) 
+#if not audio.empty():
+
 
 myargs = [
     "Made in India",""
