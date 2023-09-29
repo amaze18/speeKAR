@@ -17,7 +17,7 @@ transformers==4.31.0
 requests
 ffmpeg-python
 mutagen
-docx
+python-docx
 audio-recorder-streamlit
 SpeechRecognition
 streamlit-audiorecorder
