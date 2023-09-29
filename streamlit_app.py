@@ -11,7 +11,7 @@ from io import StringIO
 import openai
 
 #-------------IMPORTING CORE FUNCTIONALITIES OF THE SpeeKAR_BOT------------- 
-from qa import speechtotext, readdoc_splittext, create_context, chatbot_slim
+from qa import speechtotext, readdoc_splittext, create_context, chatbot_slim, texttospeech_raw
 
 #-------------------AUDIO FUNCTIONALITY-------------------------
 from mutagen.wave import WAVE
@@ -190,6 +190,17 @@ if uploaded_file is not None:
     
     ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
     st.write(ans)
+    st.markdown("""
+            <style>
+            .big-font {
+                font-size:20px !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+        
+    #st.markdown("Your question in text ::")
+    st.markdown('<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True)
+    
     #-----------text to speech--------------------------#
     texttospeech_raw(ans, language="en")
     audio_file = open('answer.wav', 'rb')
