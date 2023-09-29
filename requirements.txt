@@ -33,7 +33,6 @@ faiss-cpu
 unstructured
 htbuilder
 gtts
-os
 speech_recognition
 soundfile
 pydub
