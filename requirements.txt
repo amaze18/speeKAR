@@ -34,6 +34,10 @@ pdfminer.six
 openai
 faiss-cpu
 unstructured
+keybert[flair]
+keybert[gensim]
+keybert[spacy]
+keybert[use]
 htbuilder
 gtts
 soundfile
