@@ -66,6 +66,8 @@ from keybert import KeyBERT
 #----------DEFAULTS:------------#
 LANGUAGE = 'en'
 
+SECRET_TOKEN = os.environ["SECRET_TOKEN"] 
+openai.api_key = SECRET_TOKEN
 
 #---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------# 
 def readdoc_splittext(filename):
