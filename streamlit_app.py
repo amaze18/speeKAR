@@ -187,9 +187,9 @@ if uploaded_file is not None:
     #----------------------------------------------------------#
     #-------------START INTERACTING WITH THE CHATBOT------------#
     #----------------------------------------------------------#
-    print(headings)
-    print(para_texts)
-    print(text_split)
+    print("HEADINGS:", headings)
+    print("PARAS:", para_texts)
+    print("TEXT_SPLIT:", text_split)
     ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
     
     st.markdown("""
