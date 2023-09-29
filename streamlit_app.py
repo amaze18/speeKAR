@@ -134,7 +134,9 @@ if not audio.empty():
             }
             </style>
             """, unsafe_allow_html=True)
-        st.markdown("Your question in text ::")
+        #st.markdown("Your question in text ::")
+        st.markdown('<p class="big-font"> Your question in text :: </p>', unsafe_allow_html=True)
+
         st.write(query)
 
 
