@@ -120,8 +120,17 @@ def readdoc_splittext(filename):
     for text in para_texts:
       all_text+=text
 
-    line = all_text
-    text_split=[line[i:i+n] for i in range(0, len(line), n)]
+    text_split =[]
+    start_idx = 0
+    length = 1023
+    end_idx = 0
+    while end_idx < len(all_text):
+            #print(f"end_idx:{end_idx} | len{len(text)}")
+            end_idx = text.rfind(".", start_idx, length + start_idx) + 1
+            text_split.append(text[start_idx:end_idx])
+            start_idx = end_idx
+    #line = all_text
+    #text_split=[line[i:i+n] for i in range(0, len(line), n)]
     i=0
     for t in  para_texts:
         print(i)
