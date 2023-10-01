@@ -7,7 +7,6 @@ openapi-schema-pydantic==1.2.4
 streamlit
 python-dotenv==1.0.0
 accelerate==0.21.0
-bitsandbytes==0.40.2
 gradio==3.37.0
 protobuf==3.20.3
 scipy==1.11.1
