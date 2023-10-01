@@ -108,7 +108,7 @@ def readdoc_splittext(filename):
                 t=''
                 #print(i)
             except:
-              print("reached doc end")
+              #print("reached doc end")
               para_texts.append(t)
               #print(i)
         j+=1
@@ -119,18 +119,10 @@ def readdoc_splittext(filename):
     for text in para_texts:
       all_text+=text
 
-    text_split =[]
-    start_idx = 0
-    length = 1023
-    end_idx = 0
-    while end_idx < len(all_text):
-            #print(f"end_idx:{end_idx} | len{len(text)}")
-            end_idx = text.rfind(".", start_idx, length + start_idx) + 1
-            text_split.append(text[start_idx:end_idx])
-            start_idx = end_idx
+    
 
     a=glob.glob("*.docx")
-    print(a)
+
     chunk_size = 1024
     chunk_overlap=10
     text_splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -211,14 +203,7 @@ def create_context(query, text_split,headings, para_texts):
                               print("contains")
                               # Add the heading of  the para corresponding to the sentence
                               keyword_doc_sent.append(h)
-                              print("sent ::",sent)
-                              print("heading::", h)
-
-                      #if(sent in pt):
-                          #keyword_doc_sent.append(h)
-                          #print("sent ::",sent)
-                          #print("heading::", h)
-                          #print("para text ::",pt)
+                     
             if(keywords[j][1]> 0.35): # and keywords[j][0] not in keyword_doc ):
                if(keywords[j][0] not in keyword_doc_sent ):
                  keyword_doc_sent.append(keywords[j][0])
@@ -226,8 +211,6 @@ def create_context(query, text_split,headings, para_texts):
 
       i+=1
 
-    #print("doc keywords:: ",keyword_doc)
-    #print("q keywords::",keywords_q)
     search_start= time.time()
 
     for i in range(len(keyword_doc)):
@@ -352,12 +335,13 @@ def speechtotext(query_audio):
   r = sr.Recognizer()
 
   audio_ex = sr.AudioFile(query_audio)
-  type(audio_ex)
+  #type(audio_ex)
 
   # Create audio data
   with audio_ex as source:
       audiodata = r.record(audio_ex)
-  type(audiodata)
+  #type(audiodata)
   # Extract text
   text = r.recognize_google(audio_data=audiodata, language='en-US')
+  print("stotext ::", text)
   return text
