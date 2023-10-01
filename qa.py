@@ -112,9 +112,7 @@ def readdoc_splittext(filename):
               #print(i)
         j+=1
 
-    print(len(para_texts), len(headings))
-    for h, t in zip(headings, para_texts):
-        print(h, t)
+    
 
     all_text=''
     for text in para_texts:
@@ -129,13 +127,22 @@ def readdoc_splittext(filename):
             end_idx = text.rfind(".", start_idx, length + start_idx) + 1
             text_split.append(text[start_idx:end_idx])
             start_idx = end_idx
-    #line = all_text
-    #text_split=[line[i:i+n] for i in range(0, len(line), n)]
-    i=0
-    for t in  para_texts:
-        print(i)
-        print(t)
-        i+=1
+
+    a=glob.glob("*.docx")
+    texts_isb=[]
+    for i in range(len(a)):
+    
+                documents.extend(UnstructuredWordDocumentLoader(a[i]).load())
+                for j in range(len(text_splitter.split_documents( UnstructuredWordDocumentLoader(a[i]).load() ))):
+               
+                   text_chunk=text_splitter.split_documents(UnstructuredWordDocumentLoader(a[i]).load() )[j]
+                   text_chunk.page_content = text_chunk.page_content.replace('\n', ' ')
+                   text_chunk.page_content = text_chunk.page_content.replace('\\n', ' ')
+                   text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
+                   text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
+                   texts_isb.append(text_chunk.page_content)
+                
+    text_split=texts_isb
     return all_text, text_split, headings, para_texts
     
     
@@ -169,6 +176,7 @@ def create_context(query, text_split,headings, para_texts):
 
     keywords_query = kw_model.extract_keywords(query)
     keywords = []
+
 
     for j in range(len(keywords_query)):
 
