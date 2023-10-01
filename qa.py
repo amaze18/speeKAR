@@ -193,8 +193,17 @@ def create_context(query, text_split,headings, para_texts):
               keyword_doc_sent.append(keywords[j][0])
               for h, pt in zip(headings, para_texts):
 
-                      if(sent in pt):
-                          keyword_doc_sent.append(h)
+                      pt=pt.lower()
+                      index = pt.find(sent.lower())
+                      if index != -1:
+                              print("contains")
+                              # Add the heading of  the para corresponding to the sentence
+                              keyword_doc_sent.append(h)
+                              print("sent ::",sent)
+                              print("heading::", h)
+
+                      #if(sent in pt):
+                          #keyword_doc_sent.append(h)
                           #print("sent ::",sent)
                           #print("heading::", h)
                           #print("para text ::",pt)
