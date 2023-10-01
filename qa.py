@@ -129,7 +129,11 @@ def readdoc_splittext(filename):
             start_idx = end_idx
 
     a=glob.glob("*.docx")
+    chunk_size = 1024
+    chunk_overlap=10
+    text_splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     texts_isb=[]
+    documents=[]
     for i in range(len(a)):
     
                 documents.extend(UnstructuredWordDocumentLoader(a[i]).load())
@@ -143,10 +147,8 @@ def readdoc_splittext(filename):
                    texts_isb.append(text_chunk.page_content)
                 
     text_split=texts_isb
-    return all_text, text_split, headings, para_texts
+return all_text, text_split, headings, para_texts
     
-    
-#all_text, text_split = readdoc_splittext()
 
 
 def remove_newlines(serie):
