@@ -41,7 +41,8 @@ import glob
 import openai
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
-from langchain import HuggingFacePipeline
+# from langchain import HuggingFacePipeline
+from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
