@@ -46,6 +46,7 @@ from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.chains import LLMChain
 from dotenv import find_dotenv, load_dotenv
@@ -125,7 +126,7 @@ def readdoc_splittext(filename):
 
     chunk_size = 1024
     chunk_overlap=10
-    text_splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     texts_isb=[]
     documents=[]
     for i in range(len(a)):
