@@ -47,6 +47,7 @@ from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.document_loaders import UnstructuredWordDocumentLoader
 from langchain.vectorstores import FAISS
 from langchain.chains import LLMChain
 from dotenv import find_dotenv, load_dotenv
