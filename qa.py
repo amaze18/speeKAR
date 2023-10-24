@@ -3,7 +3,7 @@ import io
 import scipy
 import numpy as np
 
-#----------------SPEECH RECOGNITION /AUDIO/TEXT TO SPEECH DEPENDENCIES-------------#
+# ----------------SPEECH RECOGNITION /AUDIO/TEXT TO SPEECH DEPENDENCIES-------------#
 from scipy.io.wavfile import read as wav_read
 from pydub import AudioSegment
 from pydub.playback import play
@@ -14,20 +14,20 @@ import ffmpeg
 from gtts import gTTS
 import soundfile as sf
 
-#----STREAMLIT RELATED----#
+# ----STREAMLIT RELATED----#
 import streamlit as st
 import requests
 import re
 import urllib.request
 
 
-#---------DOCUMENT/WEBSITE PARSING---------#
+# ---------DOCUMENT/WEBSITE PARSING---------#
 from bs4 import BeautifulSoup
 from collections import deque
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-#-------DATA FRAME/DOCX/TEXT HANDLING----------$
+# -------DATA FRAME/DOCX/TEXT HANDLING----------$
 import pandas as pd
 import pprint as pp
 from docx import Document
@@ -35,12 +35,13 @@ from docx.shared import Inches
 import textwrap
 import glob
 
-#-----------------------------------------------------------------------------------------#
-#---------------------------------OPENAI and LANGCHAIN DEPENDENCIES-----------------------#
-#-----------------------------------------------------------------------------------------#
+# -----------------------------------------------------------------------------------------#
+# ---------------------------------OPENAI and LANGCHAIN DEPENDENCIES-----------------------#
+# -----------------------------------------------------------------------------------------#
 import openai
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
+
 # from langchain import HuggingFacePipeline
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain.chains import RetrievalQA
@@ -62,246 +63,244 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
 
-#--------------KEYBERT MODEL ---------------#
+# --------------KEYBERT MODEL ---------------#
 from keybert import KeyBERT
 
 
-#----------DEFAULTS:------------#
-LANGUAGE = 'en'
+# ----------DEFAULTS:------------#
+LANGUAGE = "en"
 
-SECRET_TOKEN = os.environ["SECRET_TOKEN"] 
+SECRET_TOKEN = os.environ["SECRET_TOKEN"]
 openai.api_key = SECRET_TOKEN
 
-#---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------# 
+
+# ---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------#
 def readdoc_splittext(filename):
     """
     This functions takes in an input document and finds the headings, and
-    splits them based on the chunks needed. 
+    splits them based on the chunks needed.
     """
     document = Document(filename)
     headings = []
     para_texts = []
-    i=0
-    j=0
-    n = 1500 #Number of characters to be included in a single chunk of text  
-    t=''
+    i = 0
+    j = 0
+    n = 1500  # Number of characters to be included in a single chunk of text
+    t = ""
     for paragraph in document.paragraphs:
-
         if paragraph.style.name == "Heading 2":
             no_free_text = "".join(filter(lambda x: not x.isdigit(), paragraph.text))
-            k = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            k = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
             getVals = list(filter(lambda x: x in k, no_free_text))
             result = "".join(getVals)
             headings.append(result.lower())
-            i=1
-            #print(paragraph.text)
+            i = 1
+            # print(paragraph.text)
 
-        elif paragraph.style.name == "normal" and i==1   :
-            t+=paragraph.text
-
+        elif paragraph.style.name == "normal" and i == 1:
+            t += paragraph.text
 
             try:
-              if(document.paragraphs[j+1].style.name=="Heading 2"):
-                i=0
-                # to remove numeric digits from string
+                if document.paragraphs[j + 1].style.name == "Heading 2":
+                    i = 0
+                    # to remove numeric digits from string
 
-                para_texts.append(t)
-                t=''
-                #print(i)
+                    para_texts.append(t)
+                    t = ""
+                    # print(i)
             except:
-              #print("reached doc end")
-              para_texts.append(t)
-              #print(i)
-        j+=1
+                # print("reached doc end")
+                para_texts.append(t)
+                # print(i)
+        j += 1
 
-    
-
-    all_text=''
+    all_text = ""
     for text in para_texts:
-      all_text+=text
+        all_text += text
 
-    
-
-    a=glob.glob("*.docx")
+    a = glob.glob("*.docx")
 
     chunk_size = 1024
-    chunk_overlap=10
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    texts_isb=[]
-    documents=[]
+    chunk_overlap = 10
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size, chunk_overlap=chunk_overlap
+    )
+    texts_isb = []
+    documents = []
     for i in range(len(a)):
-    
-                documents.extend(UnstructuredWordDocumentLoader(a[i]).load())
-                for j in range(len(text_splitter.split_documents( UnstructuredWordDocumentLoader(a[i]).load() ))):
-               
-                   text_chunk=text_splitter.split_documents(UnstructuredWordDocumentLoader(a[i]).load() )[j]
-                   text_chunk.page_content = text_chunk.page_content.replace('\n', ' ')
-                   text_chunk.page_content = text_chunk.page_content.replace('\\n', ' ')
-                   text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
-                   text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
-                   texts_isb.append(text_chunk.page_content)
-                
-    text_split=texts_isb
+        documents.extend(UnstructuredWordDocumentLoader(a[i]).load())
+        for j in range(
+            len(
+                text_splitter.split_documents(
+                    UnstructuredWordDocumentLoader(a[i]).load()
+                )
+            )
+        ):
+            text_chunk = text_splitter.split_documents(
+                UnstructuredWordDocumentLoader(a[i]).load()
+            )[j]
+            text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            texts_isb.append(text_chunk.page_content)
+
+    text_split = texts_isb
     return all_text, text_split, headings, para_texts
-    
 
 
 def remove_newlines(serie):
-    serie = serie.replace('\n', ' ')
-    serie = serie.replace('\\n', ' ')
-    serie = serie.replace('  ', ' ')
-    serie = serie.replace('  ', ' ')
+    serie = serie.replace("\n", " ")
+    serie = serie.replace("\\n", " ")
+    serie = serie.replace("  ", " ")
+    serie = serie.replace("  ", " ")
     return serie
 
-#----------------CREATE CONTEXT-----------------------#
-def create_context(query, text_split,headings, para_texts):
+
+# ----------------CREATE CONTEXT-----------------------#
+def create_context(query, text_split, headings, para_texts):
     """
     Create a context for a question by finding the most similar context from the dataframe
     """
 
     # Get the embeddings for the question
     # Get the distances from the embeddings
-    #i=0
+    # i=0
     kw_model = KeyBERT()
 
-    sentences = text_split #[i for i in nlp(text).sents]
+    sentences = text_split  # [i for i in nlp(text).sents]
 
-    returns =[]
-    keystart= time.time()
-    keywords_q =[]
-
+    returns = []
+    keystart = time.time()
+    keywords_q = []
 
     keywords_query = kw_model.extract_keywords(query)
     keywords = []
 
-
     for j in range(len(keywords_query)):
+        if keywords_query[j][1] > 0.35:
+            if keywords_query[j][0] not in keywords_q:
+                # print(keywords[j][0], keywords[j][1])
+                keywords_q.append(keywords_query[j][0])
 
-          if(keywords_query[j][1]> 0.35 ):
-            if( keywords_query[j][0] not in keywords_q):
-              #print(keywords[j][0], keywords[j][1])
-              keywords_q.append(keywords_query[j][0])
-
-
-    i=0
-    keyword_doc={}
-    keyend= time.time()
+    i = 0
+    keyword_doc = {}
+    keyend = time.time()
 
     for sent in sentences:
-      if(isinstance(sent, str) and len(sent)>6):
-        keywords = kw_model.extract_keywords(sent)
-        keyword_doc_sent=[]
+        if isinstance(sent, str) and len(sent) > 6:
+            keywords = kw_model.extract_keywords(sent)
+            keyword_doc_sent = []
 
-        for j in range(len(keywords)):
-            # Add the heading of  the para corresponding to the sentence
-            if(j ==0):
-              keyword_doc_sent.append(keywords[j][0])
-              for h, pt in zip(headings, para_texts):
+            for j in range(len(keywords)):
+                # Add the heading of  the para corresponding to the sentence
+                if j == 0:
+                    keyword_doc_sent.append(keywords[j][0])
+                    for h, pt in zip(headings, para_texts):
+                        pt = pt.lower()
+                        index = pt.find(sent.lower())
+                        if index != -1:
+                            print("contains")
+                            # Add the heading of  the para corresponding to the sentence
+                            keyword_doc_sent.append(h)
 
-                      pt=pt.lower()
-                      index = pt.find(sent.lower())
-                      if index != -1:
-                              print("contains")
-                              # Add the heading of  the para corresponding to the sentence
-                              keyword_doc_sent.append(h)
-                     
-            if(keywords[j][1]> 0.35): # and keywords[j][0] not in keyword_doc ):
-               if(keywords[j][0] not in keyword_doc_sent ):
-                 keyword_doc_sent.append(keywords[j][0])
-      keyword_doc[i]=keyword_doc_sent
+                if keywords[j][1] > 0.35:  # and keywords[j][0] not in keyword_doc ):
+                    if keywords[j][0] not in keyword_doc_sent:
+                        keyword_doc_sent.append(keywords[j][0])
+        keyword_doc[i] = keyword_doc_sent
 
-      i+=1
+        i += 1
 
-    search_start= time.time()
+    search_start = time.time()
 
     for i in range(len(keyword_doc)):
-          for k in range(len(keywords_q)):
-                  match_count= 0
-                  if(keywords_q[k] in keyword_doc[i]):
-                    match_count+=1
-                    keywords.append(keywords_q[k])
-                    #print(keywords_q[k],keyword_doc[i] )
-                    #print("match_count::",match_count)
-                    if( (match_count>=1 or match_count>=len(keywords_q)  ) ):
-                      #print("Document matched :",i, "::")
-                      if(remove_newlines(text_split[i]) not in returns ):
-                        #context_q+=remove_newlines(sent)
+        for k in range(len(keywords_q)):
+            match_count = 0
+            if keywords_q[k] in keyword_doc[i]:
+                match_count += 1
+                keywords.append(keywords_q[k])
+                # print(keywords_q[k],keyword_doc[i] )
+                # print("match_count::",match_count)
+                if match_count >= 1 or match_count >= len(keywords_q):
+                    # print("Document matched :",i, "::")
+                    if remove_newlines(text_split[i]) not in returns:
+                        # context_q+=remove_newlines(sent)
                         returns.append(remove_newlines(text_split[i]))
-                        #print(returns,match_count )
+                        # print(returns,match_count )
 
-
-    searchend= time.time()
-    search_time = searchend-search_start
+    searchend = time.time()
+    search_time = searchend - search_start
 
     cur_len = 0
-
 
     # Return the context
     return "\n\n###\n\n".join(returns), keywords
 
-#------------------------SLIM KAR BASED CHATBOT----------------------------#
-def chatbot_slim(query, text_split,headings, para_texts):
+
+# ------------------------SLIM KAR BASED CHATBOT----------------------------#
+def chatbot_slim(query, text_split, headings, para_texts):
     """
-    Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response 
-    with little to almost no hallucinations. Here, openai's davnci-003 has been used to generate the response. 
+    Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response
+    with little to almost no hallucinations. Here, openai's davnci-003 has been used to generate the response.
     """
-    
+
     if input:
+        stime = time.time()
 
-        stime= time.time()
+        context, keywords = create_context(query, text_split, headings, para_texts)
 
-        context, keywords = create_context(query, text_split,headings, para_texts)
-
-        ctype=['stuff', 'map_reduce', 'refine', 'map_rerank']
-        template= '''
+        ctype = ["stuff", "map_reduce", "refine", "map_rerank"]
+        template = """
               You are a helpful assistant who answers question based on context provided: {context}
 
               If you don't have enough information to answer the question, say: "Sorry, I cannot answer that".
 
-              '''
-        template= '''
+              """
+        template = """
                   You are a helpful assistant who answers question based on context provided: {context}
 
                   If you don't have enough information to answer the question, say: "I cannot answer".
 
-                  '''
-        template= ''' You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} '''
+                  """
+        template = """ You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} """
 
-        system_message_prompt= SystemMessagePromptTemplate.from_template(template)
+        system_message_prompt = SystemMessagePromptTemplate.from_template(template)
 
-        #Human question prompt
+        # Human question prompt
 
-        human_template= 'Answer following question: {question}'
+        human_template = "Answer following question: {question}"
 
-        template= ''' Answer question {question} based on context below, and if question can't be answered based on context,
+        template = """ Answer question {question} based on context below, and if question can't be answered based on context,
         say \"I don't know\"\n\nContext: {context}
 
         Answer:
-        '''
+        """
 
-        template= ''' Use following pieces of context to answer the question. Provide answer in full detail using provided context.
+        template = """ Use following pieces of context to answer the question. Provide answer in full detail using provided context.
         If you don't know the answer, say I don't know
         {context}
         Question : {question}
-        Answer:'''
+        Answer:"""
 
+        human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
 
-        human_message_prompt= HumanMessagePromptTemplate.from_template(human_template)
-
-        chat_prompt= ChatPromptTemplate.from_messages(
-            [system_message_prompt, human_message_prompt])
+        chat_prompt = ChatPromptTemplate.from_messages(
+            [system_message_prompt, human_message_prompt]
+        )
 
         chunk_size = 1024
-        PROMPT = PromptTemplate(input_variables=["context", "question"],  template=template)
+        PROMPT = PromptTemplate(
+            input_variables=["context", "question"], template=template
+        )
 
         chain_type_kwargs = {"prompt": PROMPT}
 
         question = query
 
         openai.api_key = SECRET_TOKEN
-        model="text-davinci-003"
-        chat  = openai.Completion.create(
+        model = "text-davinci-003"
+        chat = openai.Completion.create(
             prompt=f"You answer question based on context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
             temperature=0,
             max_tokens=1000,
@@ -312,38 +311,41 @@ def chatbot_slim(query, text_split,headings, para_texts):
             model=model,
         )
 
-        reply = chat["choices"][0]["text"].strip() # ['choices'][0]['message']['content']
-        
+        reply = chat["choices"][0][
+            "text"
+        ].strip()  # ['choices'][0]['message']['content']
+
         return reply, context, keywords
 
-#----------------TEXT TO SPEECH FUNCTION FOR ANSWER READOUT---------#
-def texttospeech_raw(text,language,savename="answer",slow=False):
-  """
-  This function here, calls the google text to speech engine to read out the answer generated by the KAR framework. 
-  """
-  myobj = gTTS(text=text, lang=language, slow=False)
 
-  # Saving the converted audio in a mp3 file
-  myobj.save(savename+".mp3")
-  sound = AudioSegment.from_mp3(savename + ".mp3")
-  sound.export(savename+".wav", format="wav")
+# ----------------TEXT TO SPEECH FUNCTION FOR ANSWER READOUT---------#
+def texttospeech_raw(text, language, savename="answer", slow=False):
+    """
+    This function here, calls the google text to speech engine to read out the answer generated by the KAR framework.
+    """
+    myobj = gTTS(text=text, lang=language, slow=False)
+
+    # Saving the converted audio in a mp3 file
+    myobj.save(savename + ".mp3")
+    sound = AudioSegment.from_mp3(savename + ".mp3")
+    sound.export(savename + ".wav", format="wav")
 
 
-#---------------SPEECH RECOGNITION---------#
+# ---------------SPEECH RECOGNITION---------#
 def speechtotext(query_audio):
-  """
-  This function takes in a ".wav" audio file as input and converts into text. 
-  """  
-  r = sr.Recognizer()
+    """
+    This function takes in a ".wav" audio file as input and converts into text.
+    """
+    r = sr.Recognizer()
 
-  audio_ex = sr.AudioFile(query_audio)
-  #type(audio_ex)
+    audio_ex = sr.AudioFile(query_audio)
+    # type(audio_ex)
 
-  # Create audio data
-  with audio_ex as source:
-      audiodata = r.record(audio_ex)
-  #type(audiodata)
-  # Extract text
-  text = r.recognize_google(audio_data=audiodata, language='en-US')
-  print("stotext ::", text)
-  return text
+    # Create audio data
+    with audio_ex as source:
+        audiodata = r.record(audio_ex)
+    # type(audiodata)
+    # Extract text
+    text = r.recognize_google(audio_data=audiodata, language="en-US")
+    print("stotext ::", text)
+    return text
