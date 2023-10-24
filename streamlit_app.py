@@ -258,20 +258,23 @@ if uploaded_file is not None:
     st.write(ans)
     # -----------text to speech--------------------------#
     texttospeech_raw(ans, language="en")
-    audio_file = open("answer.wav", "rb")
-    #st.audio(audio_bytes, format="audio/wav")
-    audio_bytes = audio_file.read()
-    b64 = base64.b64encode(audio_bytes).decode()
-    md = f"""
-         <audio controls autoplay="true">
-         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-         </audio>
-         """
-    st.markdown(
-         md,
-         unsafe_allow_html=True,
-    )
-    
+    mymidia_placeholder = st.empty()
+    with open("answer.wav", "rb") as audio_file:
+        #st.audio(audio_bytes, format="audio/wav")
+        audio_bytes = audio_file.read()
+        b64 = base64.b64encode(audio_bytes).decode()
+        md = f"""
+             <audio controls autoplay="true">
+             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+             </audio>
+             """
+        #st.markdown(
+        #     md,
+        #     unsafe_allow_html=True,
+        #)
+        mymidia_placeholder.empty()
+        time.sleep(1)
+        mymidia_placeholder.markdown(md, unsafe_allow_html=True)
     #autoplay_audio("answer.wav")
 
 # if prompt := st.chat_input():
