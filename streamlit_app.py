@@ -117,6 +117,19 @@ def generate_kARanswer(query, text_split):
     ans, context, keys = chatbot_slim(query, text_split)
     return ans, context, keys
 
+def autoplay_audio(file_path: str):
+    with open(file_path, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode()
+        md = f"""
+            <audio controls autoplay="true">
+            <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+            </audio>
+            """
+        st.markdown(
+            md,
+            unsafe_allow_html=True,
+        )
 
 # -------------------------------------------------------------------------#
 # --------------------------GUI CONFIGS------------------------------------#
@@ -248,7 +261,7 @@ if uploaded_file is not None:
     audio_file = open("answer.wav", "rb")
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format="audio/wav")
-
+    autoplay_audio(audio_file)
 
 # if prompt := st.chat_input():
 #   st.session_state.messages.append({"role": "user", "content": prompt})
