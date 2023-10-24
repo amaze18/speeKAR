@@ -191,7 +191,7 @@ if "messages" not in st.session_state.keys():
 #        st.write(message["content"])
 
 
-st.title("Interact with the bot, here!")
+#st.title("Interact with the bot, here!")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
 
