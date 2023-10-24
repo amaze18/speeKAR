@@ -156,7 +156,7 @@ with st.sidebar:
 # -----------------UPLOAD THE SRC DOCUMENT-----------------#
 # ---------------------------------------------------------#
 st.title("Provide your context here by choosing a file!")
-uploaded_file = st.file_uploader()
+uploaded_file = st.file_uploader(label = None)
 
 if uploaded_file is not None :
     # To read file as bytes:
