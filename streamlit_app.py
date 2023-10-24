@@ -229,9 +229,9 @@ if "messages" not in st.session_state.keys():
     ]
 
 # Display chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+#for message in st.session_state.messages:
+#    with st.chat_message(message["role"]):
+#        st.write(message["content"])
 # ---------------------------------------------------------#
 # -----------------LLM RESPONSES-----------------#
 # ---------------------------------------------------------#
