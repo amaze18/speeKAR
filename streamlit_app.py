@@ -155,6 +155,7 @@ with st.sidebar:
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
+query = None
 if not audio.empty():
     # To play audio in frontend:
     st.audio(audio.export().read())
