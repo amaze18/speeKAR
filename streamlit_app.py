@@ -180,20 +180,22 @@ if uploaded_file is not None :
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [
-        {"role": "assistant", "content": st.title("Now, let's talk about anything based on the context provided!")}
-    ]
-
-# Display chat messages
-#for message in st.session_state.messages:
-#    with st.chat_message(message["role"]):
-#        st.write(message["content"])
 
 
+
+st.title("Now, let's talk!")
 #st.title("Interact with the bot, here!")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [
+        {"role": "assistant", "content": st.title("Ask anything from the document!")}
+    ]
+
+# Display chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
 
 query = None
 if not audio.empty():
