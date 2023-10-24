@@ -205,7 +205,8 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 uploaded_file = st.file_uploader("Choose a file")
-if uploaded_file is not None:
+
+if uploaded_file is not None :
     # To read file as bytes:
     bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -225,6 +226,8 @@ if uploaded_file is not None:
     print("HEADINGS:", headings)
     print("PARAS:", para_texts)
     print("TEXT_SPLIT:", text_split)
+
+if (uploaded_file is not None) and (query is not None):
     ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
 
     st.markdown(
