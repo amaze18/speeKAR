@@ -152,6 +152,33 @@ with st.sidebar:
     )
 
 
+# ---------------------------------------------------------#
+# -----------------UPLOAD THE SRC DOCUMENT-----------------#
+# ---------------------------------------------------------#
+st.title("Provide your context here by choosing a file!")
+uploaded_file = st.file_uploader()
+
+if uploaded_file is not None :
+    # To read file as bytes:
+    bytes_data = uploaded_file.getvalue()
+    # st.write(bytes_data)
+
+    # To convert to a string based IO:
+    # stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+    # st.write(stringio)
+
+    # To read file as string:
+    # string_data = StringIO.read()
+    # st.write(string_data)
+    # st.write("Filename:", uploaded_file.name)
+    all_text, text_split, headings, para_texts = readdoc_splittext(uploaded_file.name)
+    # ----------------------------------------------------------#
+    # -------------START INTERACTING WITH THE CHATBOT------------#
+    # ----------------------------------------------------------#
+    print("HEADINGS:", headings)
+    print("PARAS:", para_texts)
+    print("TEXT_SPLIT:", text_split)
+
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
@@ -191,7 +218,7 @@ if not audio.empty():
 
 
 # ---------------------------------------------------------#
-# -----------------UPLOAD THE SRC DOCUMENT-----------------#
+# -----------------LLM RESPONSES-----------------#
 # ---------------------------------------------------------#
 # Store LLM generated responses
 
@@ -205,28 +232,6 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-uploaded_file = st.file_uploader("Choose a file")
-
-if uploaded_file is not None :
-    # To read file as bytes:
-    bytes_data = uploaded_file.getvalue()
-    # st.write(bytes_data)
-
-    # To convert to a string based IO:
-    # stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-    # st.write(stringio)
-
-    # To read file as string:
-    # string_data = StringIO.read()
-    # st.write(string_data)
-    # st.write("Filename:", uploaded_file.name)
-    all_text, text_split, headings, para_texts = readdoc_splittext(uploaded_file.name)
-    # ----------------------------------------------------------#
-    # -------------START INTERACTING WITH THE CHATBOT------------#
-    # ----------------------------------------------------------#
-    print("HEADINGS:", headings)
-    print("PARAS:", para_texts)
-    print("TEXT_SPLIT:", text_split)
 
 if (uploaded_file is not None) and (query is not None):
     ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
@@ -242,7 +247,7 @@ if (uploaded_file is not None) and (query is not None):
         unsafe_allow_html=True,
     )
 
-    # st.markdown("Your question in text ::")
+    
     st.markdown(
         '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
     )
