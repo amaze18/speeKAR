@@ -180,7 +180,18 @@ if uploaded_file is not None :
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-st.title("Audio Recorder")
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [
+        {"role": "assistant", "content": st.title("Ask anything about uploaded document")}
+    ]
+
+# Display chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
+
+
+#st.title("Interact with the bot, here!")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
 
@@ -223,16 +234,6 @@ if not audio.empty():
 # -----------------LLM RESPONSES-----------------#
 # ---------------------------------------------------------#
 # Store LLM generated responses
-
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Ask anything about uploaded document ..."}
-    ]
-
-# Display chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
 
 
 if (uploaded_file is not None) and (query is not None):
