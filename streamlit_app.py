@@ -183,7 +183,7 @@ if uploaded_file is not None :
 
 
 
-st.title("Ask me anything!")
+st.title("Ask me anything about the document!")
 #st.title("Interact with the bot, here!")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
