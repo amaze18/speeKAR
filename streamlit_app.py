@@ -180,10 +180,10 @@ if uploaded_file is not None :
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-#if "messages" not in st.session_state.keys():
-#    st.session_state.messages = [
-#        {"role": "assistant", "content": st.title("Ask anything about uploaded document")}
-#    ]
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [
+        {"role": "assistant", "content": st.title("Ask anything about uploaded document")}
+    ]
 
 # Display chat messages
 #for message in st.session_state.messages:
