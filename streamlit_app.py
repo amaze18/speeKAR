@@ -261,7 +261,7 @@ if uploaded_file is not None:
     audio_file = open("answer.wav", "rb")
     audio_bytes = audio_file.read()
     #st.audio(audio_bytes, format="audio/wav")
-    autoplay_audio(audio_file)
+    autoplay_audio("answer.wav")
 
 # if prompt := st.chat_input():
 #   st.session_state.messages.append({"role": "user", "content": prompt})
