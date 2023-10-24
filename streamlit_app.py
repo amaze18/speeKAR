@@ -153,7 +153,7 @@ with st.sidebar:
 # ---------------------------------------------------------#
 # -----------------UPLOAD THE SRC DOCUMENT-----------------#
 # ---------------------------------------------------------#
-st.title("Provide your context here by choosing a file!")
+st.title("Let me know what you want to talk about by choosing a file below")
 uploaded_file = st.file_uploader(label = "")
 
 if uploaded_file is not None :
@@ -182,7 +182,7 @@ if uploaded_file is not None :
 # ------------------------------------------------------------------------------#
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "assistant", "content": st.title("Ask anything about uploaded document")}
+        {"role": "assistant", "content": st.title("Now, let's talk about anything based on the context provided!")}
     ]
 
 # Display chat messages
