@@ -5,7 +5,7 @@ import os, time
 import pandas as pd
 import math
 import glob
-
+import base64
 from io import StringIO
 
 import openai
