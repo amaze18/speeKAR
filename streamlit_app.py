@@ -260,7 +260,7 @@ if uploaded_file is not None:
     texttospeech_raw(ans, language="en")
     audio_file = open("answer.wav", "rb")
     audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format="audio/wav")
+    #st.audio(audio_bytes, format="audio/wav")
     autoplay_audio(audio_file)
 
 # if prompt := st.chat_input():
