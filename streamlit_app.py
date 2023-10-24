@@ -124,8 +124,6 @@ def generate_kARanswer(query, text_split):
 # App title
 st.set_page_config(page_title="🤗💬 SpeeKAR @ Gen AI-Chat Bot")
 st.header("SpeeKAR @ Gen AI-Chat Bot")
-st.title("Audio Recorder")
-audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 # Hugging Face Credentials
@@ -156,7 +154,7 @@ with st.sidebar:
 # -----------------UPLOAD THE SRC DOCUMENT-----------------#
 # ---------------------------------------------------------#
 st.title("Provide your context here by choosing a file!")
-uploaded_file = st.file_uploader(label = None)
+uploaded_file = st.file_uploader(label = "")
 
 if uploaded_file is not None :
     # To read file as bytes:
@@ -182,6 +180,10 @@ if uploaded_file is not None :
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
+st.title("Audio Recorder")
+audio = audiorecorder("Click to record", "Click to stop recording")
+
+
 query = None
 if not audio.empty():
     # To play audio in frontend:
