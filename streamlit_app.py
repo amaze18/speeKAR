@@ -153,7 +153,7 @@ with st.sidebar:
 # ---------------------------------------------------------#
 # -----------------UPLOAD THE SRC DOCUMENT-----------------#
 # ---------------------------------------------------------#
-st.title("Let me know what you want to talk about by choosing a file below")
+st.title("Please let me know what you want to talk about by choosing a file below!")
 uploaded_file = st.file_uploader(label = "")
 
 if uploaded_file is not None :
@@ -183,7 +183,7 @@ if uploaded_file is not None :
 
 
 
-st.title("Now, let's talk!")
+st.title("Ask me anything!")
 #st.title("Interact with the bot, here!")
 audio = audiorecorder("Click to record", "Click to stop recording")
 
