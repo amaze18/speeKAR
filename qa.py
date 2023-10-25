@@ -309,9 +309,8 @@ def readdoc_splittext_pdf(filename):
     print(filename)
     print(os.path.realpath("./"), os.getcwd())
     print(os.listdir("./"))
-    for file in os.listdir(os.getcwd()):
-        if fnmatch.fnmatch(file, '*.pdf'):
-            document = os.path.join(os.getcwd(), file)
+    #for file in os.listdir(os.getcwd()):
+    document = os.path.join(os.getcwd(), filename)
     doc = fitz.open(document)
     
     
