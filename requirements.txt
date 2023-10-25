@@ -42,7 +42,7 @@ gtts
 soundfile
 pydub
 audiorecorder
-pymupdf
+PyMuPDF
 unidecode
 arxiv==0.5.3
 tex2py
