@@ -173,9 +173,10 @@ if uploaded_file is not None :
     # string_data = StringIO.read()
     # st.write(string_data)
     # st.write("Filename:", uploaded_file.name)
+    print(".docx" in uploaded_file.name)
     if ".docx" in uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(uploaded_file.name)
-    if ".pdf" in uploaded_file.name:
+    elif ".pdf" in uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(uploaded_file.name)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
