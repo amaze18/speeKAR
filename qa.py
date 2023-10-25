@@ -312,7 +312,7 @@ def readdoc_splittext_pdf(filename):
     for file in os.listdir(os.getcwd()):
         if fnmatch.fnmatch(file, '*.pdf'):
             document = os.path.join(os.getcwd(), file)
-    doc = fitz.open(filename)
+    doc = fitz.open(document)
     
     
     block_dict = get_block_dict_fromDoc(doc)
