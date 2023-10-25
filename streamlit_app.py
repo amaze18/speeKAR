@@ -9,6 +9,9 @@ import base64
 from io import StringIO
 
 import openai
+import tiktoken
+encoding = tiktoken.get_encoding("cl100k_base")
+encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
 # -------------IMPORTING CORE FUNCTIONALITIES OF THE SpeeKAR_BOT-------------
 from qa import (
@@ -245,8 +248,12 @@ if "messages" not in st.session_state.keys():
 if (uploaded_file is not None) and (query is not None):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
-    if context >
-    hf, db = create_db(text_chunk)
+    
+    num_tokens = len(encoding.encode(context))
+
+    if num_tokens > 4000:
+        hf, db = create_db(text_chunk)
+    #else:
     try:
         ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
     except:
