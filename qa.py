@@ -303,8 +303,14 @@ def readdoc_splittext_pdf(filename):
     """
     This functions takes in an input document in pdf form and finds the headings, and
     splits them based on the chunks needed. 
+    
     """
+    print("reading files")
+    print(filename)
+    print(os.listdir())
     doc = fitz.open(filename)
+    
+    
     block_dict = get_block_dict_fromDoc(doc)
     span_df = get_docfeature_dataframe(block_dict)
     doc_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
