@@ -14,8 +14,10 @@ import openai
 from qa import (
     speechtotext,
     readdoc_splittext,
+    readdoc_splittext_pdf,
     create_context,
     chatbot_slim,
+    chatbot,
     texttospeech_raw,
 )
 
@@ -109,7 +111,6 @@ def process_query(speech_input, email, passwd):
     question = speech_input
     query = speechtotext(speech_input)
 
-    # ans, context, keys = chatbot_slim(query, text_split)
     return query
 
 
@@ -169,7 +170,10 @@ if uploaded_file is not None :
     # string_data = StringIO.read()
     # st.write(string_data)
     # st.write("Filename:", uploaded_file.name)
-    all_text, text_split, headings, para_texts = readdoc_splittext(uploaded_file.name)
+    if ".docx" in uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(uploaded_file.name)
+    if ".pdf" in uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(uploaded_file.name)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
@@ -239,8 +243,14 @@ if "messages" not in st.session_state.keys():
 
 
 if (uploaded_file is not None) and (query is not None):
-    ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
-
+    
+    context, keywords = create_context(query, text_split, headings, para_texts)
+    if context >
+    hf, db = create_db(text_chunk)
+    try:
+        ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
+    except:
+        ans = chatbot(query,db)
     st.markdown(
         """
             <style>
