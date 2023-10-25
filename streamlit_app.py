@@ -159,8 +159,8 @@ with st.sidebar:
 # ---------------------------------------------------------#
 st.title("Please let me know what you want to talk about by choosing a file below!")
 uploaded_file = st.file_uploader(label = "")
-
-if uploaded_file is not None :
+uploaded_status = 0
+if uploaded_status==0:
     # To read file as bytes:
     bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -180,7 +180,7 @@ if uploaded_file is not None :
     # string_data = StringIO.read()
     # st.write(string_data)
     # st.write("Filename:", uploaded_file.name)
-    print(".docx" in filename)#uploaded_file.name)
+    #print(".docx" in filename)#uploaded_file.name)
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
@@ -188,10 +188,10 @@ if uploaded_file is not None :
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
-    print("HEADINGS:", headings)
-    print("PARAS:", para_texts)
-    print("TEXT_SPLIT:", text_split)
-
+    #print("HEADINGS:", headings)
+    #print("PARAS:", para_texts)
+    #print("TEXT_SPLIT:", text_split)
+    uploaded_status = 1
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
