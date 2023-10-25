@@ -255,7 +255,7 @@ if (uploaded_file is not None) and (query is not None):
         hf, db = create_db(text_chunk)
     #else:
     try:
-        ans, context, keys = chatbot_slim(query, text_split, headings, para_texts)
+        ans, context, keys = chatbot_slim(query, context, keywords)
     except:
         ans = chatbot(query,db)
     st.markdown(
