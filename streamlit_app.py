@@ -264,7 +264,8 @@ if (uploaded_file is not None) and (query is not None):
     #else:
     try:
         ans, context, keys = chatbot_slim(query, context, keywords)
-    except:
+    except Exception as e:
+        print(e)
         ans = chatbot(query,db)
     st.markdown(
         """
