@@ -305,13 +305,13 @@ def readdoc_splittext_pdf(filename):
     splits them based on the chunks needed. 
     
     """
-    print("reading files")
-    print(filename)
-    print(os.path.realpath("./"), os.getcwd())
-    print(os.listdir("tempDir/"))
+    #print("reading files")
+    #print(filename)
+    #print(os.path.realpath("./"), os.getcwd())
+    print(os.listdir("./"))
     #for file in os.listdir(os.getcwd()):
-    document = os.path.join("tempDir/", filename)
-    doc = fitz.open(document)
+    #document = os.path.join("tempDir/", filename)
+    doc = fitz.open(filename)
     
     
     block_dict = get_block_dict_fromDoc(doc)
