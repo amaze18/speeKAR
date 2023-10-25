@@ -307,11 +307,11 @@ def readdoc_splittext_pdf(filename):
     """
     print("reading files")
     print(filename)
-    print(os.path.realpath())
-    print(os.listdir())
-    for file in os.listdir('PDFS'):
+    print(os.path.realpath("./"), os.getcwd())
+    print(os.listdir("./"))
+    for file in os.listdir(os.getcwd()):
         if fnmatch.fnmatch(file, '*.pdf'):
-            document = os.path.join('PDFS', file)
+            document = os.path.join(os.getcwd(), file)
     doc = fitz.open(filename)
     
     
