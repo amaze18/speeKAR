@@ -165,6 +165,13 @@ if uploaded_file is not None :
     bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
 
+    file_path = os.path.join( os.getcwd(), uploaded_file.name)
+    with open(file_path,"wb") as f: 
+        f.write(uploaded_file.getbuffer())         
+    st.success("Saved File")
+
+    print(file_path)
+    filename = file_path
     # To convert to a string based IO:
     # stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
     # st.write(stringio)
@@ -173,11 +180,11 @@ if uploaded_file is not None :
     # string_data = StringIO.read()
     # st.write(string_data)
     # st.write("Filename:", uploaded_file.name)
-    print(".docx" in uploaded_file.name)
-    if ".docx" in uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(uploaded_file.name)
-    elif ".pdf" in uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(uploaded_file.name)
+    print(".docx" in filename)#uploaded_file.name)
+    if ".docx" in filename #uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+    elif ".pdf" in filename #uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
