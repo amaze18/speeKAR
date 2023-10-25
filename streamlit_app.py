@@ -181,9 +181,9 @@ if uploaded_file is not None :
     # st.write(string_data)
     # st.write("Filename:", uploaded_file.name)
     print(".docx" in filename)#uploaded_file.name)
-    if ".docx" in filename #uploaded_file.name:
+    if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
-    elif ".pdf" in filename #uploaded_file.name:
+    elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
