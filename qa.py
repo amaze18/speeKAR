@@ -489,7 +489,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
 
         question = query
         context = context
-        openai.api_key = "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"
+        openai.api_key = SECRET_TOKEN
         model = "text-davinci-003"
         chat = openai.Completion.create(
             prompt=f"You answer question based on context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
@@ -518,7 +518,7 @@ def create_db(text_chunk):
     
 def chatbot(question, db):
 
-    openai.api_key = "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"
+    openai.api_key = SECRET_TOKEN
     
     ctype=['stuff', 'map_reduce', 'refine', 'map_rerank']
 
