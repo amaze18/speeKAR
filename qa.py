@@ -19,7 +19,7 @@ import streamlit as st
 import requests
 import re
 import urllib.request
-
+import fnmatch
 
 # ---------DOCUMENT/WEBSITE PARSING---------#
 from bs4 import BeautifulSoup
