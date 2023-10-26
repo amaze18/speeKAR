@@ -194,7 +194,7 @@ if uploaded_status==0 and uploaded_file is not None:
     #print("TEXT_SPLIT:", text_split)
     #num_tokens = len(encoding.encode(context))
     #if num_tokens > 4000:
-    st.write("Hi! Getting your contexts ready for query! Please wait))
+    st.write("Hi! Getting your contexts ready for query! Please wait!")
     hf, db = create_db(text_chunk)
     
     #else:
