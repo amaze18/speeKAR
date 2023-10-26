@@ -246,11 +246,11 @@ if not audio.empty():
             #)
             # if "messages" not in st.session_state.keys():
             #    st.session_state.messages = [{"role": "assistant", "content": query}]
-        with st.chat_message("assistant"):
-            st.write("If I heard you write, your question is as follows ")
-        with st.chat_message("user"):
-            st.write(query)
-        query_status = 1
+    with st.chat_message("assistant"):
+        st.write("If I heard you write, your question is as follows ")
+    with st.chat_message("user"):
+        st.write(query)
+    query_status = 1
 
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
