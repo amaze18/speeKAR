@@ -214,7 +214,7 @@ audio = audiorecorder("Click to record", "Click to stop recording")
 
 #query = None
 query_status = 0
-while not audio.empty() and query_status == 0:
+if not audio.empty() and query_status == 0:
     # To play audio in frontend:
     with st.chat_message("user"):
         st.audio(audio.export().read())
