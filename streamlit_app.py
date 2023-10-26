@@ -191,6 +191,9 @@ if uploaded_status==0 and uploaded_file is not None:
     #print("HEADINGS:", headings)
     #print("PARAS:", para_texts)
     #print("TEXT_SPLIT:", text_split)
+    #if num_tokens > 4000:
+    hf, db = create_db(text_chunk)
+    #else:
     uploaded_status = 1
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
@@ -205,6 +208,7 @@ audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 query = None
+query_status = 0
 if not audio.empty():
     # To play audio in frontend:
     st.audio(audio.export().read())
@@ -237,6 +241,7 @@ if not audio.empty():
         # if "messages" not in st.session_state.keys():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
         st.write(query)
+        query_status = 1
 
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
@@ -253,16 +258,14 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-if (uploaded_file is not None) and (query is not None):
+if (uploaded_status == 1) and (query_status == 1):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
     
     num_tokens = len(encoding.encode(context))
 
-    if num_tokens > 4000:
-        hf, db = create_db(text_chunk)
-    #else:
     try:
+        print(context)
         ans, context, keys = chatbot_slim(query, context, keywords)
     except Exception as e:
         print(e)
