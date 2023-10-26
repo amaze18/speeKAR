@@ -19,6 +19,7 @@ from qa import (
     readdoc_splittext,
     readdoc_splittext_pdf,
     create_context,
+    create_db,
     chatbot_slim,
     chatbot,
     texttospeech_raw,
