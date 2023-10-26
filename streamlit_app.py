@@ -244,7 +244,8 @@ if not audio.empty():
         )
         # if "messages" not in st.session_state.keys():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
-        st.write(query)
+        with st.chat_message("user"):
+            st.write(query)
         query_status = 1
 
 if "messages" not in st.session_state.keys():
@@ -290,41 +291,41 @@ if (uploaded_status == 1) and (query_status == 1):
 
         message = {"role": "assistant", "content": ans}
         st.session_state.messages.append(message)
-            
+        # -----------text to speech--------------------------#
+        texttospeech_raw(ans, language="en")
+        mymidia_placeholder = st.empty()
+        with open("answer.wav", "rb") as audio_file:
+            #st.audio(audio_bytes, format="audio/wav")
+            audio_bytes = audio_file.read()
+            b64 = base64.b64encode(audio_bytes).decode()
+            md = f"""
+                 <audio controls autoplay="true">
+                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                 </audio>
+                 """
+            mymidia_placeholder.empty()
+            time.sleep(1)
+            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+    
 
     
-    st.markdown(
-        """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-        unsafe_allow_html=True,
-    )
+    #st.markdown(
+    #    """
+    #        <style>
+    #        .big-font {
+    #            font-size:20px !important;
+    #        }
+    #        </style>
+    #        """,
+    #    unsafe_allow_html=True,
+    #)
 
     
-    st.markdown(
-        '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
-    )
+    #st.markdown(
+    #    '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
+    #)
     #st.write(ans)
-    # -----------text to speech--------------------------#
-    texttospeech_raw(ans, language="en")
-    mymidia_placeholder = st.empty()
-    with open("answer.wav", "rb") as audio_file:
-        #st.audio(audio_bytes, format="audio/wav")
-        audio_bytes = audio_file.read()
-        b64 = base64.b64encode(audio_bytes).decode()
-        md = f"""
-             <audio controls autoplay="true">
-             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-             </audio>
-             """
-        mymidia_placeholder.empty()
-        time.sleep(1)
-        mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-
+    
 
 # if prompt := st.chat_input():
 #   st.session_state.messages.append({"role": "user", "content": prompt})
