@@ -265,20 +265,30 @@ if "messages" not in st.session_state.keys():
 if (uploaded_status == 1) and (query_status == 1):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
-    with st.chat_message("assistant"):
-        st.write(context)
+    #with st.chat_message("assistant"):
+    #    st.write(context)
+
+    # Generate a new response if last message is not from assistant
+    if st.session_state.messages[-1]["role"] != "assistant":
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                try:
+                    #print(context)
+                    #st.write("Using KAR")
+                    ans, context, keys = chatbot_slim(query, context, keywords)
+                    if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                        #st.write("Using StdRAG")
+                        ans = chatbot(query,db)
+                except Exception as e:
+                    st.write(e)
+                    #st.write("Using StdRAG")
+                    ans = chatbot(query,db)
+
+        message = {"role": "assistant", "content": ans}
+        st.session_state.messages.append(message)
+            
+
     
-    try:
-        #print(context)
-        st.write("Using KAR")
-        ans, context, keys = chatbot_slim(query, context, keywords)
-        if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-            st.write("Using StdRAG")
-            ans = chatbot(query,db)
-    except Exception as e:
-        st.write(e)
-        st.write("Using StdRAG")
-        ans = chatbot(query,db)
     st.markdown(
         """
             <style>
