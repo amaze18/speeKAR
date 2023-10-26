@@ -194,7 +194,8 @@ if uploaded_status==0 and uploaded_file is not None:
     #print("TEXT_SPLIT:", text_split)
     #num_tokens = len(encoding.encode(context))
     #if num_tokens > 4000:
-    st.write("Hi! Getting your contexts ready for query! Please wait!")
+    with st.chat_message("assistant"):
+        st.write("Hi! Getting your contexts ready for query! Please wait!")
     hf, db = create_db(text_chunk)
     
     #else:
@@ -215,35 +216,38 @@ query = None
 query_status = 0
 if not audio.empty():
     # To play audio in frontend:
-    st.audio(audio.export().read())
-
-    # To save audio to a file, use pydub export method:
-    audio.export("query.wav", format="wav")
-
-    # To get audio properties, use pydub AudioSegment properties:
-    st.write(f"Duration: {audio.duration_seconds} seconds")
-
-    # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
-    querywav = WAVE("query.wav")
-    if querywav.info.length > 0:
-        query = process_query("query.wav", hf_email, hf_pass)
-        st.markdown(
-            """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # st.markdown("Your question in text ::")
-        st.markdown(
-            '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
-        )
-        # if "messages" not in st.session_state.keys():
-        #    st.session_state.messages = [{"role": "assistant", "content": query}]
+    with st.chat_message("user"):
+        st.audio(audio.export().read())
+    
+        # To save audio to a file, use pydub export method:
+        audio.export("query.wav", format="wav")
+    with st.chat_message("assistant"):
+        # To get audio properties, use pydub AudioSegment properties:
+        st.write(f"Duration: {audio.duration_seconds} seconds")
+    
+        # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
+        querywav = WAVE("query.wav")
+        if querywav.info.length > 0:
+            query = process_query("query.wav", hf_email, hf_pass)
+            st.markdown(
+                """
+                <style>
+                .big-font {
+                    font-size:20px !important;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
+    
+            # st.markdown("Your question in text ::")
+            #st.markdown(
+            #    '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
+            #)
+            # if "messages" not in st.session_state.keys():
+            #    st.session_state.messages = [{"role": "assistant", "content": query}]
+        with st.chat_message("assistant"):
+            st.write("If I heard you write, your question is as follows ")
         with st.chat_message("user"):
             st.write(query)
         query_status = 1
