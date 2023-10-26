@@ -194,7 +194,9 @@ if uploaded_status==0 and uploaded_file is not None:
     #print("TEXT_SPLIT:", text_split)
     #num_tokens = len(encoding.encode(context))
     #if num_tokens > 4000:
+    st.write("Hi! Getting your contexts ready for query! Please wait))
     hf, db = create_db(text_chunk)
+    
     #else:
     uploaded_status = 1
 # ------------------------------------------------------------------------------#
@@ -263,7 +265,7 @@ if "messages" not in st.session_state.keys():
 if (uploaded_status == 1) and (query_status == 1):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
-    
+    st.write(context)
     
     try:
         print(context)
