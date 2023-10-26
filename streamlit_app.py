@@ -246,7 +246,7 @@ while not audio.empty() and query_status == 0:
         #)
         # if "messages" not in st.session_state.keys():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
-    query_status = 1
+        query_status = 1
         
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
