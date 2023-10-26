@@ -214,7 +214,7 @@ audio = audiorecorder("Click to record", "Click to stop recording")
 
 #query = None
 query_status = 0
-if not audio.empty():
+while not audio.empty() and query_status == 0:
     # To play audio in frontend:
     with st.chat_message("user"):
         st.audio(audio.export().read())
@@ -263,7 +263,7 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-if (uploaded_status == 1) and (query_status == 1):
+while (uploaded_status == 1) and (query_status == 1):
     
     with st.chat_message("assistant"):
         st.write("If I heard you right, your question is as follows ")
@@ -311,8 +311,8 @@ if (uploaded_status == 1) and (query_status == 1):
             mymidia_placeholder.empty()
             time.sleep(1)
             mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-    
-
+        
+    query_status = 0
     
     #st.markdown(
     #    """
