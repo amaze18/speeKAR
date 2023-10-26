@@ -160,9 +160,9 @@ with st.sidebar:
 st.title("Please let me know what you want to talk about by choosing a file below!")
 uploaded_file = st.file_uploader(label = "")
 uploaded_status = 0
-if uploaded_status==0:
+if uploaded_status==0 and uploaded_file is not None:
     # To read file as bytes:
-    bytes_data = uploaded_file.getvalue()
+    #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
 
     file_path = os.path.join( os.getcwd(), uploaded_file.name)
