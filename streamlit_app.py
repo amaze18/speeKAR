@@ -273,15 +273,20 @@ if (uploaded_status == 1) and (query_status == 1):
         with st.spinner("Thinking..."):
             try:
                 #print(context)
-                st.write("Using KAR")
+                #st.write("Using KAR")
                 ans, context, keys = chatbot_slim(query, context, keywords)
+                
                 if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                    st.write("Using StdRAG")
+                    #st.write("Using StdRAG")
                     ans = chatbot(query,db)
+                    st.write(ans)
+                else:
+                    st.write(ans)
             except Exception as e:
-                st.write(e)
-                st.write("Using StdRAG")
+                #st.write(e)
+                #st.write("Using StdRAG")
                 ans = chatbot(query,db)
+                st.write(ans)
 
         message = {"role": "assistant", "content": ans}
         st.session_state.messages.append(message)
@@ -303,7 +308,7 @@ if (uploaded_status == 1) and (query_status == 1):
     st.markdown(
         '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
     )
-    st.write(ans)
+    #st.write(ans)
     # -----------text to speech--------------------------#
     texttospeech_raw(ans, language="en")
     mymidia_placeholder = st.empty()
