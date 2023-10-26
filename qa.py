@@ -308,7 +308,7 @@ def readdoc_splittext_pdf(filename):
     #print("reading files")
     #print(filename)
     #print(os.path.realpath("./"), os.getcwd())
-    print(os.listdir("./"))
+    #print(os.listdir("./"))
     #for file in os.listdir(os.getcwd()):
     #document = os.path.join("tempDir/", filename)
     doc = fitz.open(filename)
@@ -319,9 +319,9 @@ def readdoc_splittext_pdf(filename):
     doc_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
     #doc_clean.head()
     paragraphs = doc_clean.text[doc_clean.font_size == span_df.font_size.mode()[0]]
-    print(paragraphs.values,paragraphs.index)
+    #print(paragraphs.values,paragraphs.index)
     headings = doc_clean.text[doc_clean.font_size > span_df.font_size.mode()[0]]
-    print(headings.values, headings.index)
+    #print(headings.values, headings.index)
     paragraph_list = get_paragraphs(headings, paragraphs)
     headings_list = headings.values.tolist()
 
@@ -334,7 +334,7 @@ def readdoc_splittext_pdf(filename):
     
 
     a=glob.glob(filename)
-    print(a)
+    #print(a)
     chunk_size = 1024
     chunk_overlap=10
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -350,7 +350,7 @@ def readdoc_splittext_pdf(filename):
             text_chunk.page_content = text_chunk.page_content.replace('\\n', ' ')
             text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
             text_chunk.page_content = text_chunk.page_content.replace('  ', ' ')
-            print(text_chunk)
+            # print(text_chunk)
             
             texts_isb.append(text_chunk.page_content)
             texts_raw.append(text_chunk)
@@ -534,8 +534,8 @@ def chatbot(question, db):
     retriever = db.as_retriever(search_type='similarity', search_kwargs={"k": 5} )#do not increase k beyond 3, else
     docs_and_scores = db.similarity_search_with_score(question)
 
-    for doc, score in  docs_and_scores:
-        print(f"Metadata: {doc.metadata}, Score: {score}")
+    #for doc, score in  docs_and_scores:
+     #   print(f"Metadata: {doc.metadata}, Score: {score}")
         
     
     llm = OpenAI(model='text-davinci-003',temperature=0, openai_api_key=openai.api_key)
@@ -585,5 +585,5 @@ def speechtotext(query_audio):
     # type(audiodata)
     # Extract text
     text = r.recognize_google(audio_data=audiodata, language="en-US")
-    print("stotext ::", text)
+    #print("stotext ::", text)
     return text
