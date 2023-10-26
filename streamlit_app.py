@@ -223,7 +223,7 @@ if not audio.empty():
         audio.export("query.wav", format="wav")
     with st.chat_message("assistant"):
         # To get audio properties, use pydub AudioSegment properties:
-        st.write(f"Duration: {audio.duration_seconds} seconds")
+        #st.write(f"Duration: {audio.duration_seconds} seconds")
     
         # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
         querywav = WAVE("query.wav")
