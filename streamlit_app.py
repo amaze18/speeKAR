@@ -247,12 +247,7 @@ if not audio.empty():
         # if "messages" not in st.session_state.keys():
         #    st.session_state.messages = [{"role": "assistant", "content": query}]
     query_status = 1
-    if query_status == 1:
-        with st.chat_message("assistant"):
-            st.write("If I heard you right, your question is as follows ")
-        with st.chat_message("user"):
-            st.write(query)
-    
+        
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
         {"role": "assistant", "content": "Ask anything from the document!"}
@@ -270,6 +265,11 @@ if "messages" not in st.session_state.keys():
 
 if (uploaded_status == 1) and (query_status == 1):
     
+    with st.chat_message("assistant"):
+        st.write("If I heard you right, your question is as follows ")
+    with st.chat_message("user"):
+        st.write(query)
+
     context, keywords = create_context(query, text_split, headings, para_texts)
     #with st.chat_message("assistant"):
     #    st.write(context)
