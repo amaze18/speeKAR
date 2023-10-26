@@ -265,7 +265,8 @@ if "messages" not in st.session_state.keys():
 if (uploaded_status == 1) and (query_status == 1):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
-    st.write(context)
+    with st.chat_message("assistant"):
+        st.write(context)
     
     try:
         print(context)
