@@ -212,7 +212,7 @@ audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 
-query = None
+#query = None
 query_status = 0
 if not audio.empty():
     # To play audio in frontend:
