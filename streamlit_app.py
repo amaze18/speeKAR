@@ -192,6 +192,7 @@ if uploaded_status==0 and uploaded_file is not None:
     #print("HEADINGS:", headings)
     #print("PARAS:", para_texts)
     #print("TEXT_SPLIT:", text_split)
+    #num_tokens = len(encoding.encode(context))
     #if num_tokens > 4000:
     hf, db = create_db(text_chunk)
     #else:
@@ -263,8 +264,7 @@ if (uploaded_status == 1) and (query_status == 1):
     
     context, keywords = create_context(query, text_split, headings, para_texts)
     
-    num_tokens = len(encoding.encode(context))
-
+    
     try:
         print(context)
         ans, context, keys = chatbot_slim(query, context, keywords)
