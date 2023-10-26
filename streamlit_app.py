@@ -269,20 +269,19 @@ if (uploaded_status == 1) and (query_status == 1):
     #    st.write(context)
 
     # Generate a new response if last message is not from assistant
-    if st.session_state.messages[-1]["role"] != "assistant":
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                try:
-                    #print(context)
-                    #st.write("Using KAR")
-                    ans, context, keys = chatbot_slim(query, context, keywords)
-                    if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                        #st.write("Using StdRAG")
-                        ans = chatbot(query,db)
-                except Exception as e:
-                    st.write(e)
-                    #st.write("Using StdRAG")
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            try:
+                #print(context)
+                st.write("Using KAR")
+                ans, context, keys = chatbot_slim(query, context, keywords)
+                if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                    st.write("Using StdRAG")
                     ans = chatbot(query,db)
+            except Exception as e:
+                st.write(e)
+                st.write("Using StdRAG")
+                ans = chatbot(query,db)
 
         message = {"role": "assistant", "content": ans}
         st.session_state.messages.append(message)
