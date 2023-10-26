@@ -221,31 +221,31 @@ if not audio.empty():
     
         # To save audio to a file, use pydub export method:
         audio.export("query.wav", format="wav")
-    with st.chat_message("assistant"):
+    #with st.chat_message("assistant"):
         # To get audio properties, use pydub AudioSegment properties:
         #st.write(f"Duration: {audio.duration_seconds} seconds")
     
         # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
-        querywav = WAVE("query.wav")
-        if querywav.info.length > 0:
-            query = process_query("query.wav", hf_email, hf_pass)
-            st.markdown(
-                """
-                <style>
-                .big-font {
-                    font-size:20px !important;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-    
-            # st.markdown("Your question in text ::")
-            #st.markdown(
-            #    '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
-            #)
-            # if "messages" not in st.session_state.keys():
-            #    st.session_state.messages = [{"role": "assistant", "content": query}]
+    querywav = WAVE("query.wav")
+    if querywav.info.length > 0:
+        query = process_query("query.wav", hf_email, hf_pass)
+        st.markdown(
+            """
+            <style>
+            .big-font {
+                font-size:20px !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # st.markdown("Your question in text ::")
+        #st.markdown(
+        #    '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
+        #)
+        # if "messages" not in st.session_state.keys():
+        #    st.session_state.messages = [{"role": "assistant", "content": query}]
     with st.chat_message("assistant"):
         st.write("If I heard you right, your question is as follows ")
     with st.chat_message("user"):
