@@ -269,10 +269,12 @@ if (uploaded_status == 1) and (query_status == 1):
         st.write(context)
     
     try:
-        print(context)
+        #print(context)
+        st.write("Using KAR")
         ans, context, keys = chatbot_slim(query, context, keywords)
     except Exception as e:
         print(e)
+        st.write("Using StdRAG")
         ans = chatbot(query,db)
     st.markdown(
         """
