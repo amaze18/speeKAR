@@ -213,7 +213,7 @@ st.title("Ask me anything about the document!")
 query_status = 0
 text_input_status = 0
 audio_input_status = 0
-if not audio.empty() and query_status == 0 and text_input_status == 0:
+if query_status == 0 and text_input_status == 0:
     with st.chat_message("user"):
         query = st.text_area()
     if query != "":
@@ -225,7 +225,7 @@ if not audio.empty() and query_status == 0 and text_input_status == 0:
 
 if query_status == 0 and audio_input_status == 0:
     audio = audiorecorder("Click to record", "Click to stop recording")            
-    if not audio.empty() and 
+    if not audio.empty():
         # To play audio in frontend:
         with st.chat_message("user"):
         
