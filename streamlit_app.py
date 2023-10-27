@@ -215,7 +215,7 @@ text_input_status = 0
 audio_input_status = 0
 if query_status == 0 and text_input_status == 0:
     with st.chat_message("user"):
-        query = st.text_area()
+        query = st.text_area(label = "Let me know what you have in mind!")
     if query != "":
         query_status = 1
         text_input_status = 1
