@@ -217,7 +217,7 @@ if not audio.empty() and query_status == 0 and text_input_status == 0:
     with st.chat_message("user"):
         query = st.text_area()
 
-    if query = "":
+    if query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
     text_input_status = 1
