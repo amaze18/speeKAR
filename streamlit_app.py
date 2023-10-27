@@ -213,7 +213,7 @@ st.title("Ask me anything about the document!")
 query_status = 0
 text_input_status = 0
 audio_input_status = 0
-if audio.empty() and query_status == 0 and text_input_status == 0:
+if not audio.empty() and query_status == 0 and text_input_status == 0:
     with st.chat_message("user"):
         query = st.text_area()
 
