@@ -223,36 +223,39 @@ if not audio.empty() and query_status == 0 and text_input_status == 0:
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
 
+if query_status == 0 and audio_input_status == 0:
+    audio = audiorecorder("Click to record", "Click to stop recording")            
+    if not audio.empty() and 
+        # To play audio in frontend:
+        with st.chat_message("user"):
+        
             
-if not audio.empty() and query_status == 0 and audio_input_status == 0:
-    # To play audio in frontend:
-    with st.chat_message("user"):
-    
-        audio = audiorecorder("Click to record", "Click to stop recording")
-        st.audio(audio.export().read())
-        # To save audio to a file, use pydub export method:
-        audio.export("query.wav", format="wav")
+            st.audio(audio.export().read())
+            # To save audio to a file, use pydub export method:
+            audio.export("query.wav", format="wav")
+            
+            
+        querywav = WAVE("query.wav")
+        if querywav.info.length > 0:
+            
+            query = process_query("query.wav", hf_email, hf_pass)
+            st.markdown(
+                """
+                <style>
+                .big-font {
+                    font-size:20px !important;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
         
+            query_status = 1
+            audio_input_status = 1
+        else:
+            with st.chat_message("assistant"):
+                st.write("Let me know if you have any questions!")
         
-    querywav = WAVE("query.wav")
-    if querywav.info.length > 0:
-        query = process_query("query.wav", hf_email, hf_pass)
-        st.markdown(
-            """
-            <style>
-            .big-font {
-                font-size:20px !important;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-    
-        query_status = 1
-    else:
-        with st.chat_message("assistant"):
-            st.write("Let me know if you have any questions!")
-    audio_input_status = 1
         
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
@@ -314,8 +317,9 @@ while (uploaded_status == 1) and (query_status == 1):
             mymidia_placeholder.markdown(md, unsafe_allow_html=True)
         
     query_status = 0
+    text_input_status = 0
+    audio_input_status = 0
     
-
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
