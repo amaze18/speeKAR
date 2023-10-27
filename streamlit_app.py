@@ -161,7 +161,7 @@ with st.sidebar:
 st.title("Please let me know what you want to talk about by choosing a file below!")
 uploaded_file = st.file_uploader(label = "")
 uploaded_status = 0
-if uploaded_status==0 and uploaded_file is not None:
+while uploaded_status==0 and uploaded_file is not None:
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -189,11 +189,8 @@ if uploaded_status==0 and uploaded_file is not None:
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
-    #print("HEADINGS:", headings)
-    #print("PARAS:", para_texts)
-    #print("TEXT_SPLIT:", text_split)
-    #num_tokens = len(encoding.encode(context))
-    #if num_tokens > 4000:
+
+
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
     hf, db = create_db(text_chunk)
@@ -207,25 +204,34 @@ if uploaded_status==0 and uploaded_file is not None:
 
 
 st.title("Ask me anything about the document!")
-#st.title("Interact with the bot, here!")
-audio = audiorecorder("Click to record", "Click to stop recording")
 
 
 
-#query = None
+
+
+
 query_status = 0
-if not audio.empty() and query_status == 0:
+text_input_status = 0
+audio_input_status = 0
+if audio.empty() and query_status == 0 and text_input_status == 0:
+    with st.chat_message("user"):
+        query = st.text_area()
+
+    if query = "":
+        with st.chat_message("assistant"):
+            st.write("You could choose to speak into the mic as well, if you wish!")
+    text_input_status = 1
+            
+if not audio.empty() and query_status == 0 and audio_input_status == 0:
     # To play audio in frontend:
     with st.chat_message("user"):
-        st.audio(audio.export().read())
     
+        audio = audiorecorder("Click to record", "Click to stop recording")
+        st.audio(audio.export().read())
         # To save audio to a file, use pydub export method:
         audio.export("query.wav", format="wav")
-    #with st.chat_message("assistant"):
-        # To get audio properties, use pydub AudioSegment properties:
-        #st.write(f"Duration: {audio.duration_seconds} seconds")
-    
-        # st.write(f"Frame rate: {audio.frame_rate}, Frame width: {audio.frame_width}, Duration: {audio.duration_seconds} seconds")
+        
+        
     querywav = WAVE("query.wav")
     if querywav.info.length > 0:
         query = process_query("query.wav", hf_email, hf_pass)
@@ -239,24 +245,18 @@ if not audio.empty() and query_status == 0:
             """,
             unsafe_allow_html=True,
         )
-
-        # st.markdown("Your question in text ::")
-        #st.markdown(
-        #    '<p class="big-font"> Your question in text : </p>', unsafe_allow_html=True
-        #)
-        # if "messages" not in st.session_state.keys():
-        #    st.session_state.messages = [{"role": "assistant", "content": query}]
+    
         query_status = 1
+    else:
+        with st.chat_message("assistant"):
+            st.write("Let me know if you have any questions!")
+    audio_input_status = 1
         
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
         {"role": "assistant", "content": "Ask anything from the document!"}
     ]
 
-# Display chat messages
-#for message in st.session_state.messages:
-#    with st.chat_message(message["role"]):
-#        st.write(message["content"])
 # ---------------------------------------------------------#
 # -----------------LLM RESPONSES-----------------#
 # ---------------------------------------------------------#
@@ -271,8 +271,7 @@ while (uploaded_status == 1) and (query_status == 1):
         st.write(query)
 
     context, keywords = create_context(query, text_split, headings, para_texts)
-    #with st.chat_message("assistant"):
-    #    st.write(context)
+
 
     # Generate a new response if last message is not from assistant
     with st.chat_message("assistant"):
@@ -314,28 +313,6 @@ while (uploaded_status == 1) and (query_status == 1):
         
     query_status = 0
     
-    #st.markdown(
-    #    """
-    #        <style>
-    #        .big-font {
-    #            font-size:20px !important;
-    #        }
-    #        </style>
-    #        """,
-    #    unsafe_allow_html=True,
-    #)
-
-    
-    #st.markdown(
-    #    '<p class="big-font"> Play your answer below! </p>', unsafe_allow_html=True
-    #)
-    #st.write(ans)
-    
-
-# if prompt := st.chat_input():
-#   st.session_state.messages.append({"role": "user", "content": prompt})
-#    with st.chat_message("user"):
-#        st.write(prompt)
 
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
