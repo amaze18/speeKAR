@@ -195,7 +195,7 @@ if st.session_state["uploaded_status"] == True:
     print(file_path)
     filename = file_path
 
-    if st.session_state["db_created"]==False:
+    while st.session_state["db_created"]==False:
         if ".docx" in filename: #uploaded_file.name:
             all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
             print(text_split)
@@ -210,13 +210,9 @@ if st.session_state["uploaded_status"] == True:
         with st.chat_message("assistant"):
             st.write("Hi! Getting your contexts ready for query! Please wait!")
     
-            
-    
-        hf, db = create_db(text_chunk)
-        st.session_state["db_created"]==False
+        hf, db = create_db(text_chunk)    
         
-        
-    st.session_state["db_created"] = True    
+        st.session_state["db_created"] = True    
 
 if st.session_state["db_created"] = True:
     st.title("Ask me anything about the document!")
