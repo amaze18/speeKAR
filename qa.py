@@ -520,7 +520,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
 
         return reply, context, keywords
 
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=True)
 def create_db(_text_chunk):
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
