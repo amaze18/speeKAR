@@ -214,10 +214,12 @@ if st.session_state["uploaded_status"] == True:
     
         hf, db = create_db(text_chunk)
         st.session_state["db_created"]==False
-        st.title("Ask me anything about the document!")
+        
         
     st.session_state["db_created"] = True    
 
+if st.session_state["db_created"] = True:
+    st.title("Ask me anything about the document!")
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
@@ -227,7 +229,7 @@ if st.session_state["uploaded_status"] == True:
 
 
 
-if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False):
+if (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False):
     
     with st.chat_message("user"):
         query = st.text_area(label = "Let me know what you have in mind!")
@@ -238,7 +240,7 @@ if (st.session_state["uploaded_status"] == True) and (st.session_state["query_st
     elif query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
-if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):   
+if (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):   
     audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
@@ -284,7 +286,7 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-while (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:
+while (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:
     
     if st.session_state["audio_input_status"] == True:
         with st.chat_message("assistant"):
@@ -336,7 +338,7 @@ while (st.session_state["uploaded_status"] == True) and (st.session_state["query
         st.session_state["text_input_status"] = False
         st.session_state["audio_input_status"] = False
 
-st.session_state["quer_counter"] = 0
+st.session_state["query_counter"] = 0
 
 
 
