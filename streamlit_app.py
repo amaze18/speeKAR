@@ -236,6 +236,7 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
             query = query_text
+            print(query)
         elif query_text == "" and audio.empty():
             with st.chat_message("assistant"):
                 st.write("You could choose to speak into the mic as well, if you wish!")
@@ -271,7 +272,8 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
                 
                 with st.chat_message("assistant"):
                     st.write("If I heard you right, your question is as follows:\n {query}")
-        print(query)
+            print(query)
+        
         context, keywords = create_context(query, text_split, headings, para_texts)
         # Generate a new response if last message is not from assistant
         with st.chat_message("assistant"):
