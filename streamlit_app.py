@@ -275,7 +275,7 @@ while (st.session_state["uploaded_status"] == True) and (st.session_state["query
     with st.chat_message("user"):
         st.write(query)
 
-    if text_split != []
+    if text_split != []:
         context, keywords = create_context(query, text_split, headings, para_texts)
 
 
