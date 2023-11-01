@@ -208,14 +208,15 @@ if st.session_state["uploaded_status"] == True:
 
     #st.session_state["uploaded_status"] = True    
     hf, db = create_db(text_chunk)
-    
+
+    st.title("Ask me anything about the document!")
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 
 
 
-st.title("Ask me anything about the document!")
+
 
 
 if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False):
