@@ -234,7 +234,7 @@ if st.session_state["db_created"] == True:
 
 
 
-while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False):
+while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
     
     with st.chat_message("user"):
         query = st.text_area(label = "Let me know what you have in mind!")
@@ -245,7 +245,7 @@ while (uploaded_file is not None) and (st.session_state["db_created"] == True) a
     elif query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
-while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):   
+
     audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
