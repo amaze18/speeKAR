@@ -161,28 +161,28 @@ with st.sidebar:
 st.title("Please let me know what you want to talk about by choosing a file below!")
 if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
-
+#if st.session_state["uploaded_status"] == False:
 uploaded_file = st.file_uploader(label = "")
 #uploaded_status = 0
 
-#if "query_counter" not in st.session_state:
-st.session_state["query_counter"] = 0
-#if "query_status" not in st.session_state:
-st.session_state["query_status"] = False
-#if "audio_input_status" not in st.session_state:
-st.session_state["audio_input_status"] = False
-#if "text_input_status" not in st.session_state:
-st.session_state["text_input_status"] = False
+if "query_counter" not in st.session_state:
+    st.session_state["query_counter"] = 0
+if "query_status" not in st.session_state:
+    st.session_state["query_status"] = False
+if "audio_input_status" not in st.session_state:
+    st.session_state["audio_input_status"] = False
+if "text_input_status" not in st.session_state:
+    st.session_state["text_input_status"] = False
 
-#if "db_created" not in st.session_state:
-st.session_state["db_created"] = False
+if "db_created" not in st.session_state:
+    st.session_state["db_created"] = False
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
 elif uploaded_file is None:
     st.session_state["uploaded_status"] = False
     
-if st.session_state["uploaded_status"] == True and st.session_state["db_created"] == False and st.session_state["query_counter"]==0:
+if (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -236,12 +236,11 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):   
-    audio = audiorecorder("Click to record", "Click to stop recording")            
+               
     if not audio.empty():
         # To play audio in frontend:
         with st.chat_message("user"):
-        
-            
+            audio = audiorecorder("Click to record", "Click to stop recording") 
             st.audio(audio.export().read())
             # To save audio to a file, use pydub export method:
             audio.export("query.wav", format="wav")
