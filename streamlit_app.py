@@ -167,7 +167,7 @@ uploaded_file = st.file_uploader(label = "")
 
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
-st.write(st.session_state["query_counter"])
+#st.write(st.session_state["query_counter"])
 if "query_status" not in st.session_state:
     st.session_state["query_status"] = False
 if "audio_input_status" not in st.session_state:
@@ -308,7 +308,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
 
                 
                 with st.chat_message("assistant"):
-                    st.write("If I heard you right, your question is as follows:\n {query}")
+                    st.write("If I heard you right, your question is as follows:\n {}".%(query))
                 print(query)
         
                 context, keywords = create_context(query, text_split, headings, para_texts)
