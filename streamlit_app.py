@@ -188,7 +188,7 @@ elif uploaded_file is None:
     st.session_state["query_status"] = False
     st.session_state["audio_input_status"] = False
     
-if (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
+while (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
