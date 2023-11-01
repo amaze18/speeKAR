@@ -198,9 +198,7 @@ while (st.session_state["uploaded_status"]==False) and (uploaded_file is not Non
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
 
-    st.session_state["uploaded_status"] = True
-    
-if (st.session_state["uploaded_status"] == True) and (uploaded_file is not None) and (st.session_state["query_counter"] == 0):
+    st.session_state["uploaded_status"] = True    
     hf, db = create_db(text_chunk)
     
 # ------------------------------------------------------------------------------#
