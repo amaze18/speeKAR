@@ -163,7 +163,7 @@ uploaded_file = st.file_uploader(label = "")
 #uploaded_status = 0
 
 if "uploaded_status" not in st.session_state:
-    st.session_state["uploaded_state"] = False
+    st.session_state["uploaded_status"] = False
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
 if "query_status" not in st.session_state:
