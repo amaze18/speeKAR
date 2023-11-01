@@ -160,8 +160,20 @@ with st.sidebar:
 # ---------------------------------------------------------#
 st.title("Please let me know what you want to talk about by choosing a file below!")
 uploaded_file = st.file_uploader(label = "")
-uploaded_status = 0
-while uploaded_status==0 and uploaded_file is not None:
+#uploaded_status = 0
+
+if "uploaded_status" not in st.session_state:
+    st.session_state["uploaded_state"] = False
+if "query_counter" not in st.session_state:
+    st.session_state["query_counter"] = 0
+if "query_status" not in st.session_state:
+    st.sesstion_state["query_status"] = False
+if "audio_input_status" not in st.session_state:
+    st.session_state["audio_input_status"] = False
+if "text_input_status" not in st.session_state:
+    st.session_state["text_input_status"] = False
+    
+while (st.session_state["uploaded_status"]==False) and (uploaded_file is not None) and (st.session_state["query_counter"] == 0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -173,15 +185,7 @@ while uploaded_status==0 and uploaded_file is not None:
 
     print(file_path)
     filename = file_path
-    # To convert to a string based IO:
-    # stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-    # st.write(stringio)
 
-    # To read file as string:
-    # string_data = StringIO.read()
-    # st.write(string_data)
-    # st.write("Filename:", uploaded_file.name)
-    #print(".docx" in filename)#uploaded_file.name)
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
@@ -189,14 +193,16 @@ while uploaded_status==0 and uploaded_file is not None:
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
-
-
+    
+    
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
+
+    st.sesstion_state["uploaded_status"] = True
+    
+if (st.session_state["uploaded_status"] == True) and (uploaded_file is not None) and (st.session_state["query_counter"] == 0):
     hf, db = create_db(text_chunk)
     
-    #else:
-    uploaded_status = 1
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
@@ -206,24 +212,18 @@ while uploaded_status==0 and uploaded_file is not None:
 st.title("Ask me anything about the document!")
 
 
-
-
-
-
-query_status = 0
-text_input_status = 0
-audio_input_status = 0
-if query_status == 0 and text_input_status == 0:
+if st.session_state["query_status"] == False and st.session_state["text_input_status"] == False:
     with st.chat_message("user"):
         query = st.text_area(label = "Let me know what you have in mind!")
     if query != "":
-        query_status = 1
-        text_input_status = 1
-    if query == "":
+        st.session_state["query_status"] = True
+        st.sesstion_state["text_input_status"] = True
+        st.sssion_state["query_counter"] += 1
+    elif query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
 
-if query_status == 0 and audio_input_status == 0:
+if st.session_state["query_status"] == False and st.session_state["audio_input_status"] == False:
     audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
@@ -250,8 +250,9 @@ if query_status == 0 and audio_input_status == 0:
                 unsafe_allow_html=True,
             )
         
-            query_status = 1
-            audio_input_status = 1
+            st.sesion_state["query_status"] = True
+            st.session_state["audio_input_status"] = True
+            st.session_state["query_counter"] += 1
         else:
             with st.chat_message("assistant"):
                 st.write("Let me know if you have any questions!")
@@ -268,10 +269,11 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-while (uploaded_status == 1) and (query_status == 1):
+while (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:
     
-    with st.chat_message("assistant"):
-        st.write("If I heard you right, your question is as follows ")
+    if st.session_state["audio_input_status"] == True:
+        with st.chat_message("assistant"):
+            st.write("If I heard you right, your question is as follows ")
     with st.chat_message("user"):
         st.write(query)
 
@@ -281,7 +283,7 @@ while (uploaded_status == 1) and (query_status == 1):
     # Generate a new response if last message is not from assistant
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            try:
+            if len(context) < 2000:
                 #print(context)
                 #st.write("Using KAR")
                 ans, context, keys = chatbot_slim(query, context, keywords)
@@ -292,9 +294,7 @@ while (uploaded_status == 1) and (query_status == 1):
                     st.write(ans)
                 else:
                     st.write(ans)
-            except Exception as e:
-                #st.write(e)
-                #st.write("Using StdRAG")
+            else:
                 ans = chatbot(query,db)
                 st.write(ans)
 
@@ -316,9 +316,9 @@ while (uploaded_status == 1) and (query_status == 1):
             time.sleep(1)
             mymidia_placeholder.markdown(md, unsafe_allow_html=True)
         
-    query_status = 0
-    text_input_status = 0
-    audio_input_status = 0
+    st.session_state["query_status"] = False
+    st.session_state["text_input_status"] = False
+    st.session_state["audio_input_status"] = False
     
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
