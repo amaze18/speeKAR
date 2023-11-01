@@ -215,7 +215,7 @@ if st.session_state["uploaded_status"] == True:
 st.title("Ask me anything about the document!")
 
 
-if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False))
+if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False):
     
     with st.chat_message("user"):
         query = st.text_area(label = "Let me know what you have in mind!")
