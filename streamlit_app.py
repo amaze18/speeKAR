@@ -352,6 +352,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 st.session_state["query_status"] = False
                 st.session_state["text_input_status"] = False
                 st.session_state["audio_input_status"] = False
+                del audio 
 
     else:
         with st.chat_message("assistant"):
