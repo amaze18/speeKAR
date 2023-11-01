@@ -226,7 +226,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
         audio = audiorecorder("Click to record", "Click to stop recording")
         query_text = st.text_area(label = "Let me know what you have in mind!")
     #with st.chat_message("user"):
-    if query_text or not audio.empty():
+    if query_text != "" or not audio.empty():
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
@@ -317,17 +317,18 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                     with st.spinner("Thinking..."):
                         if len(context) < 2000:
                             #print(context)
-                            #st.write("Using KAR")
+                            st.write("Using KAR")
                             ans, context, keys = chatbot_slim(query, context, keywords)
                             
                             if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                                #st.write("Using StdRAG")
+                                st.write("Using StdRAG")
                                 ans = chatbot(query,db)
                                 st.write(ans)
                             else:
                                 st.write(ans)
                         else:
                             ans = chatbot(query,db)
+                            st.write("Using Std RAG under extreme conditions")
                             st.write(ans)
             
                     message = {"role": "assistant", "content": ans}
