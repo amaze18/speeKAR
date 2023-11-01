@@ -173,7 +173,7 @@ if "audio_input_status" not in st.session_state:
 if "text_input_status" not in st.session_state:
     st.session_state["text_input_status"] = False
     
-while (st.session_state["uploaded_status"]==False) and (uploaded_file is not None) and (st.session_state["query_counter"] == 0):
+if (uploaded_file is not None):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -318,7 +318,10 @@ while (st.session_state["uploaded_status"] == True) and (st.session_state["query
         st.session_state["query_status"] = False
         st.session_state["text_input_status"] = False
         st.session_state["audio_input_status"] = False
-    
+
+
+
+
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
