@@ -290,7 +290,8 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:    print(st.session_state["query_counter"])
+if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:    
+    print(st.session_state["query_counter"])
     if st.session_state["audio_input_status"] == True:
         with st.chat_message("assistant"):
             st.write("If I heard you right, your question is as follows ")
