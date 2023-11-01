@@ -308,7 +308,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
 
                 
                 with st.chat_message("assistant"):
-                    st.write("If I heard you right, your question is as follows:\n {}".%(query))
+                    st.write("If I heard you right, your question is as follows:\n {}".format(query))
                 print(query)
         
                 context, keywords = create_context(query, text_split, headings, para_texts)
