@@ -174,6 +174,8 @@ if "text_input_status" not in st.session_state:
     st.session_state["text_input_status"] = False
     
 if (uploaded_file is not None):
+    st.session_state["uploaded_status"] == True:
+if st.session_state["uploaded_status"] == True:
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -188,8 +190,10 @@ if (uploaded_file is not None):
 
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+        print(text_split)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
+        print(text_split)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
@@ -198,7 +202,7 @@ if (uploaded_file is not None):
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
 
-    st.session_state["uploaded_status"] = True    
+    #st.session_state["uploaded_status"] = True    
     hf, db = create_db(text_chunk)
     
 # ------------------------------------------------------------------------------#
