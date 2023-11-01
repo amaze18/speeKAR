@@ -198,7 +198,7 @@ while (st.session_state["uploaded_status"]==False) and (uploaded_file is not Non
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
 
-    st.sesstion_state["uploaded_status"] = True
+    st.session_state["uploaded_status"] = True
     
 if (st.session_state["uploaded_status"] == True) and (uploaded_file is not None) and (st.session_state["query_counter"] == 0):
     hf, db = create_db(text_chunk)
@@ -217,8 +217,8 @@ if st.session_state["query_status"] == False and st.session_state["text_input_st
         query = st.text_area(label = "Let me know what you have in mind!")
     if query != "":
         st.session_state["query_status"] = True
-        st.sesstion_state["text_input_status"] = True
-        st.sssion_state["query_counter"] += 1
+        st.session_state["text_input_status"] = True
+        st.session_state["query_counter"] += 1
     elif query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
@@ -250,7 +250,7 @@ if st.session_state["query_status"] == False and st.session_state["audio_input_s
                 unsafe_allow_html=True,
             )
         
-            st.sesion_state["query_status"] = True
+            st.session_state["query_status"] = True
             st.session_state["audio_input_status"] = True
             st.session_state["query_counter"] += 1
         else:
