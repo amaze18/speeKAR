@@ -192,7 +192,7 @@ elif uploaded_file is None:
     st.session_state["query_status"] = False
     st.session_state["audio_input_status"] = False
     
-while (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
+if (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -233,12 +233,11 @@ if st.session_state["db_created"] == True:
 
 
 
-with st.chat_message("user"):
-    query = st.text_area(label = "Let me know what you have in mind!")
-audio = audiorecorder("Click to record", "Click to stop recording")  
 
-while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
-    
+if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
+        
+    with st.chat_message("user"):
+        query = st.text_area(label = "Let me know what you have in mind!")
     if query != "":
         st.session_state["query_status"] = True
         st.session_state["text_input_status"] = True
@@ -247,7 +246,7 @@ while (uploaded_file is not None) and (st.session_state["db_created"] == True) a
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
 
-              
+    audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
         with st.chat_message("user"):
@@ -291,8 +290,7 @@ if "messages" not in st.session_state.keys():
 # Store LLM generated responses
 
 
-while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:
-    print(st.session_state["query_counter"])
+if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:    print(st.session_state["query_counter"])
     if st.session_state["audio_input_status"] == True:
         with st.chat_message("assistant"):
             st.write("If I heard you right, your question is as follows ")
