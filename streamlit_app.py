@@ -275,48 +275,49 @@ while (st.session_state["uploaded_status"] == True) and (st.session_state["query
     with st.chat_message("user"):
         st.write(query)
 
-    context, keywords = create_context(query, text_split, headings, para_texts)
+    if text_split != []
+        context, keywords = create_context(query, text_split, headings, para_texts)
 
 
-    # Generate a new response if last message is not from assistant
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            if len(context) < 2000:
-                #print(context)
-                #st.write("Using KAR")
-                ans, context, keys = chatbot_slim(query, context, keywords)
-                
-                if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                    #st.write("Using StdRAG")
+        # Generate a new response if last message is not from assistant
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                if len(context) < 2000:
+                    #print(context)
+                    #st.write("Using KAR")
+                    ans, context, keys = chatbot_slim(query, context, keywords)
+                    
+                    if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                        #st.write("Using StdRAG")
+                        ans = chatbot(query,db)
+                        st.write(ans)
+                    else:
+                        st.write(ans)
+                else:
                     ans = chatbot(query,db)
                     st.write(ans)
-                else:
-                    st.write(ans)
-            else:
-                ans = chatbot(query,db)
-                st.write(ans)
-
-        message = {"role": "assistant", "content": ans}
-        st.session_state.messages.append(message)
-        # -----------text to speech--------------------------#
-        texttospeech_raw(ans, language="en")
-        mymidia_placeholder = st.empty()
-        with open("answer.wav", "rb") as audio_file:
-            #st.audio(audio_bytes, format="audio/wav")
-            audio_bytes = audio_file.read()
-            b64 = base64.b64encode(audio_bytes).decode()
-            md = f"""
-                 <audio controls autoplay="true">
-                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                 </audio>
-                 """
-            mymidia_placeholder.empty()
-            time.sleep(1)
-            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-        
-    st.session_state["query_status"] = False
-    st.session_state["text_input_status"] = False
-    st.session_state["audio_input_status"] = False
+    
+            message = {"role": "assistant", "content": ans}
+            st.session_state.messages.append(message)
+            # -----------text to speech--------------------------#
+            texttospeech_raw(ans, language="en")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+            
+        st.session_state["query_status"] = False
+        st.session_state["text_input_status"] = False
+        st.session_state["audio_input_status"] = False
     
 # Generate a new response if last message is not from assistant
 if st.session_state.messages[-1]["role"] != "assistant":
