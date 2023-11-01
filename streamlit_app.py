@@ -188,7 +188,7 @@ elif uploaded_file is None:
     st.session_state["query_status"] = False
     st.session_state["audio_input_status"] = False
     
-while (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
+while (uploaded_file is not None) and (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -219,8 +219,8 @@ while (st.session_state["uploaded_status"] == True) and (st.session_state["db_cr
     
     st.session_state["db_created"] = True    
 
-if st.session_state["db_created"] == True:
-    st.title("Ask me anything about the document!")
+    if uploaded_file is not None and st.session_state["db_created"] == True:
+        st.title("Ask me anything about the document!")
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
@@ -232,18 +232,18 @@ if st.session_state["db_created"] == True:
 
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
         
-    with st.chat_message("user"):
-        if query := st.text_area(label = "Let me know what you have in mind!"):
-            if query != "":
-                st.session_state["query_status"] = True
-                st.session_state["text_input_status"] = True
-                st.session_state["query_counter"] += 1
-            elif query == "":
-                with st.chat_message("assistant"):
-                    st.write("You could choose to speak into the mic as well, if you wish!")
+    #with st.chat_message("user"):
+    if query_text := st.text_area(label = "Let me know what you have in mind!") or audio := audiorecorder("Click to record", "Click to stop recording"):
+        if query_text != "":
+            st.session_state["query_status"] = True
+            st.session_state["text_input_status"] = True
+            st.session_state["query_counter"] += 1
+            query = query_text
+        elif query_text == "" and audio.empty():
+            with st.chat_message("assistant"):
+                st.write("You could choose to speak into the mic as well, if you wish!")
 
-    if audio := audiorecorder("Click to record", "Click to stop recording"):            
-        if not audio.empty():
+        elif query_text == "" and not audio.empty():
             # To play audio in frontend:
             with st.chat_message("user"):
                 
@@ -270,73 +270,55 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
                 st.session_state["query_status"] = True
                 st.session_state["audio_input_status"] = True
                 st.session_state["query_counter"] += 1
-            else:
-                with st.chat_message("assistant"):
-                    st.write("Let me know if you have any questions!")
-            
 
-
-# ---------------------------------------------------------#
-# -----------------LLM RESPONSES-----------------#
-# ---------------------------------------------------------#
-# Store LLM generated responses
-
-
-#if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:    
-if query:
-    print(st.session_state["query_counter"])
-    if st.session_state["audio_input_status"] == True:
-        with st.chat_message("assistant"):
-            st.write("If I heard you right, your question is as follows ")
-    with st.chat_message("user"):
-        st.write(query)
-
-
-    context, keywords = create_context(query, text_split, headings, para_texts)
-
-
-    # Generate a new response if last message is not from assistant
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            if len(context) < 2000:
-                #print(context)
-                #st.write("Using KAR")
-                ans, context, keys = chatbot_slim(query, context, keywords)
                 
-                if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                    #st.write("Using StdRAG")
+                with st.chat_message("assistant"):
+                    st.write("If I heard you right, your question is as follows:\n {query}")
+        context, keywords = create_context(query, text_split, headings, para_texts)
+        # Generate a new response if last message is not from assistant
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                if len(context) < 2000:
+                    #print(context)
+                    #st.write("Using KAR")
+                    ans, context, keys = chatbot_slim(query, context, keywords)
+                    
+                    if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                        #st.write("Using StdRAG")
+                        ans = chatbot(query,db)
+                        st.write(ans)
+                    else:
+                        st.write(ans)
+                else:
                     ans = chatbot(query,db)
                     st.write(ans)
-                else:
-                    st.write(ans)
-            else:
-                ans = chatbot(query,db)
-                st.write(ans)
+    
+            message = {"role": "assistant", "content": ans}
+            st.session_state.messages.append(message)
+            # -----------text to speech--------------------------#
+            texttospeech_raw(ans, language="en")
+            mymidia_placeholder = st.empty()
+            with open("answer.wav", "rb") as audio_file:
+                #st.audio(audio_bytes, format="audio/wav")
+                audio_bytes = audio_file.read()
+                b64 = base64.b64encode(audio_bytes).decode()
+                md = f"""
+                     <audio controls autoplay="true">
+                     <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                     </audio>
+                     """
+                mymidia_placeholder.empty()
+                time.sleep(1)
+                mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+            
+        st.session_state["query_status"] = False
+        st.session_state["text_input_status"] = False
+        st.session_state["audio_input_status"] = False
 
-        message = {"role": "assistant", "content": ans}
-        st.session_state.messages.append(message)
-        # -----------text to speech--------------------------#
-        texttospeech_raw(ans, language="en")
-        mymidia_placeholder = st.empty()
-        with open("answer.wav", "rb") as audio_file:
-            #st.audio(audio_bytes, format="audio/wav")
-            audio_bytes = audio_file.read()
-            b64 = base64.b64encode(audio_bytes).decode()
-            md = f"""
-                 <audio controls autoplay="true">
-                 <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                 </audio>
-                 """
-            mymidia_placeholder.empty()
-            time.sleep(1)
-            mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-        
-    st.session_state["query_status"] = False
-    st.session_state["text_input_status"] = False
-    st.session_state["audio_input_status"] = False
-
-st.session_state["query_counter"] = 0
-
+    else:
+        with st.chat_message("assistant"):
+            st.write("Let me know if you have any questions!")
+    
 
 
 # Generate a new response if last message is not from assistant
