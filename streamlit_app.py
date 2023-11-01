@@ -322,13 +322,13 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
 
 
 # Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            pass
-        pass
-    message = {"role": "assistant", "content": ans}
-    st.session_state.messages.append(message)
+#if st.session_state.messages[-1]["role"] != "assistant":
+#    with st.chat_message("assistant"):
+#        with st.spinner("Thinking..."):
+#            pass
+#        pass
+#    message = {"role": "assistant", "content": ans}
+#    st.session_state.messages.append(message)
 
 
 myargs = [
