@@ -159,11 +159,12 @@ with st.sidebar:
 # -----------------UPLOAD THE SRC DOCUMENT-----------------#
 # ---------------------------------------------------------#
 st.title("Please let me know what you want to talk about by choosing a file below!")
+if "uploaded_status" not in st.session_state:
+    st.session_state["uploaded_status"] = False
+
 uploaded_file = st.file_uploader(label = "")
 #uploaded_status = 0
 
-if "uploaded_status" not in st.session_state:
-    st.session_state["uploaded_status"] = False
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
 if "query_status" not in st.session_state:
@@ -175,7 +176,9 @@ if "text_input_status" not in st.session_state:
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
-
+elif uploaded_file is None:
+    st.session_state["uploaded_status"] = False
+    
 if st.session_state["uploaded_status"] == True:
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
