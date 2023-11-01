@@ -214,7 +214,7 @@ if st.session_state["uploaded_status"] == True:
         
         st.session_state["db_created"] = True    
 
-if st.session_state["db_created"] = True:
+if st.session_state["db_created"] == True:
     st.title("Ask me anything about the document!")
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
