@@ -228,7 +228,7 @@ while (uploaded_file is not None) and (st.session_state["uploaded_status"] == Tr
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False):
     with st.chat_message("user"):
         audio = audiorecorder("Click to record", "Click to stop recording")
-        query_text := st.text_area(label = "Let me know what you have in mind!")
+        query_text = st.text_area(label = "Let me know what you have in mind!")
     #with st.chat_message("user"):
     if query_text != "" or not audio.empty():
         if query_text != "":
