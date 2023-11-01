@@ -165,17 +165,17 @@ if "uploaded_status" not in st.session_state:
 uploaded_file = st.file_uploader(label = "")
 #uploaded_status = 0
 
-if "query_counter" not in st.session_state:
-    st.session_state["query_counter"] = 0
-if "query_status" not in st.session_state:
-    st.session_state["query_status"] = False
-if "audio_input_status" not in st.session_state:
-    st.session_state["audio_input_status"] = False
-if "text_input_status" not in st.session_state:
-    st.session_state["text_input_status"] = False
+#if "query_counter" not in st.session_state:
+st.session_state["query_counter"] = 0
+#if "query_status" not in st.session_state:
+st.session_state["query_status"] = False
+#if "audio_input_status" not in st.session_state:
+st.session_state["audio_input_status"] = False
+#if "text_input_status" not in st.session_state:
+st.session_state["text_input_status"] = False
 
-if "db_created" not in st.session_state:
-    st.session_state["db_created"] = False
+#if "db_created" not in st.session_state:
+st.session_state["db_created"] = False
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
