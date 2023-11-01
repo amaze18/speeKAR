@@ -179,8 +179,18 @@ if "db_created" not in st.session_state:
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
+    st.session_state["query_counter"] = 0
+    st.session_state["db_created"] = False
+    st.session_state["text_input_status"] = False
+    st.session_state["query_status"] = False
+    st.session_state["audio_input_status"] = False
 elif uploaded_file is None:
     st.session_state["uploaded_status"] = False
+    st.session_state["query_counter"] = 0
+    st.session_state["db_created"] = False
+    st.session_state["text_input_status"] = False
+    st.session_state["query_status"] = False
+    st.session_state["audio_input_status"] = False
     
 while (st.session_state["uploaded_status"] == True) and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
