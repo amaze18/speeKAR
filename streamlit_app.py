@@ -225,17 +225,18 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     
     
     with st.chat_message("user"):
-        query_audio_placeholder = st.empty()
+        #query_audio_placeholder = st.empty()
         audio = audiorecorder("Click to record", "Click to stop recording")
-        query_placeholder = st.empty()
+        #query_placeholder = st.empty()
         query_text = st.text_area(label = "Let me know what you have in mind!")
-        query_placeholder.markdown(query_text)
+        #query_placeholder.markdown(query_text)
     #with st.chat_message("user"):
     if query_text != "" or not audio.empty():
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
+            del audio
             
             query = query_text
             
@@ -285,16 +286,35 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
             with st.chat_message("assistant"):
                 st.write("You could choose to speak into the mic as well, if you wish!")
 
+        elif query_text != "" and not audio.empty():
+            del query_text
+            del audio
+            
         elif query_text == "" and not audio.empty():
             # To play audio in frontend:
             with st.chat_message("user"):
                 
-                st.audio(audio.export().read())
+                #st.audio(audio.export().read())
                 # To save audio to a file, use pydub export method:
                 audio.export("query.wav", format="wav")
                 
-                
+                myquery_placeholder = st.empty()
+                with open("query.wav", "rb") as audio_file:
+                    #st.audio(audio_bytes, format="audio/wav")
+                    audio_bytes = audio_file.read()
+                    b64 = base64.b64encode(audio_bytes).decode()
+                    md = f"""
+                         <audio controls autoplay="false">
+                         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                         </audio>
+                         """
+                    myquery_placeholder.empty()
+                    time.sleep(1)
+                    myquery_placeholder.markdown(md, unsafe_allow_html=True)
+                    myquery_placeholder.empty()
+
             querywav = WAVE("query.wav")
+            
             if querywav.info.length > 0:
                 
                 query = process_query("query.wav", hf_email, hf_pass)
@@ -359,6 +379,9 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 st.session_state["query_status"] = False
                 st.session_state["text_input_status"] = False
                 st.session_state["audio_input_status"] = False
+                del audio
+                del querywav
+                os.remove("query.wav")
                 
 
     else:
