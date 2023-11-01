@@ -173,6 +173,9 @@ if "audio_input_status" not in st.session_state:
     st.session_state["audio_input_status"] = False
 if "text_input_status" not in st.session_state:
     st.session_state["text_input_status"] = False
+
+if "db_created" not in st.session_state:
+    st.session_state["db_created"] = False
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
@@ -192,24 +195,29 @@ if st.session_state["uploaded_status"] == True:
     print(file_path)
     filename = file_path
 
-    if ".docx" in filename: #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
-        print(text_split)
-    elif ".pdf" in filename: #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
-        print(text_split)
-    # ----------------------------------------------------------#
-    # -------------START INTERACTING WITH THE CHATBOT------------#
-    # ----------------------------------------------------------#
+    if st.session_state["db_created"]==False:
+        if ".docx" in filename: #uploaded_file.name:
+            all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+            print(text_split)
+        elif ".pdf" in filename: #uploaded_file.name:
+            all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
+            print(text_split)
+        # ----------------------------------------------------------#
+        # -------------START INTERACTING WITH THE CHATBOT------------#
+        # ----------------------------------------------------------#
+        
+        
+        with st.chat_message("assistant"):
+            st.write("Hi! Getting your contexts ready for query! Please wait!")
     
+            
     
-    with st.chat_message("assistant"):
-        st.write("Hi! Getting your contexts ready for query! Please wait!")
+        hf, db = create_db(text_chunk)
+        st.session_state["db_created"]==False
+        st.title("Ask me anything about the document!")
+        
+    st.session_state["db_created"] = True    
 
-    #st.session_state["uploaded_status"] = True    
-    hf, db = create_db(text_chunk)
-
-    st.title("Ask me anything about the document!")
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
