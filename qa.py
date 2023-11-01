@@ -524,7 +524,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
 def create_db(_text_chunk):
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
-    db = FAISS.from_documents(text_chunk, hf)
+    db = FAISS.from_documents(_text_chunk, hf)
     db.save_local("faiss_index_anupam")
     db=FAISS.load_local("faiss_index_anupam", hf)
     return hf, db
