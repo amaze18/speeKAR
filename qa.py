@@ -127,6 +127,7 @@ openai.api_key = SECRET_TOKEN
 
 
 # ---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------#
+@st.cache_resource(show_spinner=True)
 def readdoc_splittext(filename):
     """
     This functions takes in an input document and finds the headings, and
@@ -299,9 +300,11 @@ def get_paragraphs(headings, paragraph_sentences):
 
         return  paragraph_list
 
+@st.cache_resource(show_spinner=True)
 def readdoc_splittext_pdf(filename):
     """
-    This functions takes in an input document in pdf form and finds the headings, and
+    This functi
+    ons takes in an input document in pdf form and finds the headings, and
     splits them based on the chunks needed. 
     
     """
