@@ -236,11 +236,11 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):   
-               
+    audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
         with st.chat_message("user"):
-            audio = audiorecorder("Click to record", "Click to stop recording") 
+            
             st.audio(audio.export().read())
             # To save audio to a file, use pydub export method:
             audio.export("query.wav", format="wav")
@@ -281,7 +281,7 @@ if "messages" not in st.session_state.keys():
 
 
 while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == True) and st.session_state["query_counter"]>0:
-    
+    print(st.session_state["query_counter"])
     if st.session_state["audio_input_status"] == True:
         with st.chat_message("assistant"):
             st.write("If I heard you right, your question is as follows ")
