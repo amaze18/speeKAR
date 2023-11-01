@@ -167,7 +167,7 @@ if "uploaded_status" not in st.session_state:
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
 if "query_status" not in st.session_state:
-    st.sesstion_state["query_status"] = False
+    st.session_state["query_status"] = False
 if "audio_input_status" not in st.session_state:
     st.session_state["audio_input_status"] = False
 if "text_input_status" not in st.session_state:
