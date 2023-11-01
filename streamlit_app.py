@@ -215,7 +215,8 @@ if st.session_state["uploaded_status"] == True:
 st.title("Ask me anything about the document!")
 
 
-if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False):
+if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False))
+    
     with st.chat_message("user"):
         query = st.text_area(label = "Let me know what you have in mind!")
     if query != "":
@@ -225,8 +226,7 @@ if (st.session_state["uploaded_status"] == True) and (st.session_state["query_st
     elif query == "":
         with st.chat_message("assistant"):
             st.write("You could choose to speak into the mic as well, if you wish!")
-
-if (st.session_state["uploaded_status"] == True) and (st.session_state["query_status"] == False) and (st.session_state["audio_input_status"] == False):
+    
     audio = audiorecorder("Click to record", "Click to stop recording")            
     if not audio.empty():
         # To play audio in frontend:
