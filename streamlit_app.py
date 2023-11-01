@@ -239,7 +239,6 @@ audio = audiorecorder("Click to record", "Click to stop recording")
 
 while (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
     
-    
     if query != "":
         st.session_state["query_status"] = True
         st.session_state["text_input_status"] = True
