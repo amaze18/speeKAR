@@ -222,16 +222,23 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     if uploaded_file is not None and st.session_state["db_created"] == True:
         st.title("Ask me anything about the document!")
 
+    
+    
     with st.chat_message("user"):
+        query_audio_placeholder = st.empty()
         audio = audiorecorder("Click to record", "Click to stop recording")
+        query_placeholder = st.empty()
         query_text = st.text_area(label = "Let me know what you have in mind!")
+        query_placeholder.markdown(query_text)
     #with st.chat_message("user"):
     if query_text != "" or not audio.empty():
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
+            
             query = query_text
+            
             print(query)
             context, keywords = create_context(query, text_split, headings, para_texts)
             # Generate a new response if last message is not from assistant
@@ -317,18 +324,18 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                     with st.spinner("Thinking..."):
                         if len(context) < 2000:
                             #print(context)
-                            st.write("Using KAR")
+                            #st.write("Using KAR")
                             ans, context, keys = chatbot_slim(query, context, keywords)
                             
                             if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                                st.write("Using StdRAG")
+                                #st.write("Using StdRAG")
                                 ans = chatbot(query,db)
                                 st.write(ans)
                             else:
                                 st.write(ans)
                         else:
                             ans = chatbot(query,db)
-                            st.write("Using Std RAG under extreme conditions")
+                            #st.write("Using Std RAG under extreme conditions")
                             st.write(ans)
             
                     message = {"role": "assistant", "content": ans}
@@ -352,7 +359,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 st.session_state["query_status"] = False
                 st.session_state["text_input_status"] = False
                 st.session_state["audio_input_status"] = False
-                del audio 
+                
 
     else:
         with st.chat_message("assistant"):
