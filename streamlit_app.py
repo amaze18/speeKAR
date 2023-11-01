@@ -174,7 +174,7 @@ if "text_input_status" not in st.session_state:
     st.session_state["text_input_status"] = False
     
 if (uploaded_file is not None):
-    st.session_state["uploaded_status"] == True
+    st.session_state["uploaded_status"] = True
 
 if st.session_state["uploaded_status"] == True:
     # To read file as bytes:
