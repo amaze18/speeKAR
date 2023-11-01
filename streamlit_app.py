@@ -182,7 +182,7 @@ if (uploaded_file is not None):
 elif uploaded_file is None:
     st.session_state["uploaded_status"] = False
     
-if st.session_state["uploaded_status"] == True:
+if st.session_state["uploaded_status"] == True and st.session_state["db_created"] == False and st.session_state["query_counter"]==0:
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
@@ -195,24 +195,23 @@ if st.session_state["uploaded_status"] == True:
     print(file_path)
     filename = file_path
 
-    while st.session_state["db_created"]==False:
-        if ".docx" in filename: #uploaded_file.name:
-            all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
-            print(text_split)
-        elif ".pdf" in filename: #uploaded_file.name:
-            all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
-            print(text_split)
-        # ----------------------------------------------------------#
-        # -------------START INTERACTING WITH THE CHATBOT------------#
-        # ----------------------------------------------------------#
-        
-        
-        with st.chat_message("assistant"):
-            st.write("Hi! Getting your contexts ready for query! Please wait!")
+    if ".docx" in filename: #uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+        print(text_split)
+    elif ".pdf" in filename: #uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
+        print(text_split)
+    # ----------------------------------------------------------#
+    # -------------START INTERACTING WITH THE CHATBOT------------#
+    # ----------------------------------------------------------#
     
-        hf, db = create_db(text_chunk)    
-        
-        st.session_state["db_created"] = True    
+    
+    with st.chat_message("assistant"):
+        st.write("Hi! Getting your contexts ready for query! Please wait!")
+
+    hf, db = create_db(text_chunk)    
+    
+    st.session_state["db_created"] = True    
 
 if st.session_state["db_created"] == True:
     st.title("Ask me anything about the document!")
