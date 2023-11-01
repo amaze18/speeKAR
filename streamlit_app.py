@@ -167,6 +167,7 @@ uploaded_file = st.file_uploader(label = "")
 
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
+st.write(st.session_state["query_counter"])
 if "query_status" not in st.session_state:
     st.session_state["query_status"] = False
 if "audio_input_status" not in st.session_state:
@@ -179,11 +180,6 @@ if "db_created" not in st.session_state:
     
 if (uploaded_file is not None):
     st.session_state["uploaded_status"] = True
-    st.session_state["query_counter"] = 0
-    st.session_state["db_created"] = False
-    st.session_state["text_input_status"] = False
-    st.session_state["query_status"] = False
-    st.session_state["audio_input_status"] = False
 elif uploaded_file is None:
     st.session_state["uploaded_status"] = False
     st.session_state["query_counter"] = 0
@@ -278,11 +274,7 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
             with st.chat_message("assistant"):
                 st.write("Let me know if you have any questions!")
         
-        
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Ask anything from the document!"}
-    ]
+
 
 # ---------------------------------------------------------#
 # -----------------LLM RESPONSES-----------------#
