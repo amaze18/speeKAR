@@ -272,7 +272,7 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
                 
                 with st.chat_message("assistant"):
                     st.write("If I heard you right, your question is as follows:\n {query}")
-            print(query)
+                print(query)
         
         context, keywords = create_context(query, text_split, headings, para_texts)
         # Generate a new response if last message is not from assistant
