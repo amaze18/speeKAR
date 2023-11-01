@@ -228,7 +228,7 @@ while (uploaded_file is not None) and (st.session_state["uploaded_status"] == Tr
 
 
 
-
+'''
 
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
     audio = audiorecorder("Click to record", "Click to stop recording")    
@@ -318,7 +318,7 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
     else:
         with st.chat_message("assistant"):
             st.write("Let me know if you have any questions!")
-    
+'''    
 
 
 # Generate a new response if last message is not from assistant
