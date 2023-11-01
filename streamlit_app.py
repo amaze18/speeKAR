@@ -233,7 +233,7 @@ if st.session_state["db_created"] == True:
 if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False) and (st.session_state["text_input_status"] == False) and (st.session_state["audio_input_status"] == False):
         
     with st.chat_message("user"):
-        if query := st.text_area(label = "Let me know what you have in mind!")
+        if query := st.text_area(label = "Let me know what you have in mind!"):
             if query != "":
                 st.session_state["query_status"] = True
                 st.session_state["text_input_status"] = True
@@ -242,38 +242,38 @@ if (uploaded_file is not None) and (st.session_state["db_created"] == True) and 
                 with st.chat_message("assistant"):
                     st.write("You could choose to speak into the mic as well, if you wish!")
 
-    audio = audiorecorder("Click to record", "Click to stop recording")            
-    if not audio.empty():
-        # To play audio in frontend:
-        with st.chat_message("user"):
+    if audio := audiorecorder("Click to record", "Click to stop recording"):            
+        if not audio.empty():
+            # To play audio in frontend:
+            with st.chat_message("user"):
+                
+                st.audio(audio.export().read())
+                # To save audio to a file, use pydub export method:
+                audio.export("query.wav", format="wav")
+                
+                
+            querywav = WAVE("query.wav")
+            if querywav.info.length > 0:
+                
+                query = process_query("query.wav", hf_email, hf_pass)
+                st.markdown(
+                    """
+                    <style>
+                    .big-font {
+                        font-size:20px !important;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
             
-            st.audio(audio.export().read())
-            # To save audio to a file, use pydub export method:
-            audio.export("query.wav", format="wav")
+                st.session_state["query_status"] = True
+                st.session_state["audio_input_status"] = True
+                st.session_state["query_counter"] += 1
+            else:
+                with st.chat_message("assistant"):
+                    st.write("Let me know if you have any questions!")
             
-            
-        querywav = WAVE("query.wav")
-        if querywav.info.length > 0:
-            
-            query = process_query("query.wav", hf_email, hf_pass)
-            st.markdown(
-                """
-                <style>
-                .big-font {
-                    font-size:20px !important;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-        
-            st.session_state["query_status"] = True
-            st.session_state["audio_input_status"] = True
-            st.session_state["query_counter"] += 1
-        else:
-            with st.chat_message("assistant"):
-                st.write("Let me know if you have any questions!")
-        
 
 
 # ---------------------------------------------------------#
