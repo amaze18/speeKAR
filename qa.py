@@ -521,12 +521,12 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         return reply, context, keywords
 
 @st.cache_resource(show_spinner=True)
-def create_db(_text_chunk):
+def create_db(_text_chunk, _uploaded_file_name):
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
     db = FAISS.from_documents(_text_chunk, hf)
-    db.save_local("faiss_index_anupam")
-    db=FAISS.load_local("faiss_index_anupam", hf)
+    db.save_local("faiss_index_anupam" + _uploaded_file_name)
+    db=FAISS.load_local("faiss_index_anupam" + _uploaded_file_name, hf)
     return hf, db
     
 def chatbot(question, db):
