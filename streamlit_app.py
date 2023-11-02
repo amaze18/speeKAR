@@ -164,6 +164,9 @@ if "uploaded_status" not in st.session_state:
 #if st.session_state["uploaded_status"] == False:
 uploaded_file = st.file_uploader(label = "")
 #uploaded_status = 0
+st.write("Dear user, clearing unnecesary data fo you to start afresh!!")
+st.cache_data.clear()
+st.write("You can upload your document now!")
 
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
@@ -187,9 +190,6 @@ elif uploaded_file is None:
     st.session_state["text_input_status"] = False
     st.session_state["query_status"] = False
     st.session_state["audio_input_status"] = False
-    st.write("Dear user, clearing unnecesary data fo you to start afresh!!")
-    st.cache_data.clear()
-    st.write("You can upload your document now!")
     
 if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == True): #and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
