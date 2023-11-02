@@ -307,24 +307,24 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
             # To play audio in frontend:
             with st.chat_message("user"):
                 
-                #st.audio(audio.export().read())
+                st.audio(audio.export().read())
                 # To save audio to a file, use pydub export method:
                 audio.export("query.wav", format="wav")
                 
-                myquery_placeholder = st.empty()
-                with open("query.wav", "rb") as audio_file:
-                    #st.audio(audio_bytes, format="audio/wav")
-                    audio_bytes = audio_file.read()
-                    b64 = base64.b64encode(audio_bytes).decode()
-                    md = f"""
-                         <audio controls autoplay="false">
-                         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                         </audio>
-                         """
-                    myquery_placeholder.empty()
-                    time.sleep(1)
-                    myquery_placeholder.markdown(md, unsafe_allow_html=True)
-                    myquery_placeholder.empty()
+                #myquery_placeholder = st.empty()
+                #with open("query.wav", "rb") as audio_file:
+                #    #st.audio(audio_bytes, format="audio/wav")
+                #    audio_bytes = audio_file.read()
+                #    b64 = base64.b64encode(audio_bytes).decode()
+                #    md = f"""
+                #         <audio controls autoplay="false">
+                #         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                #         </audio>
+                #         """
+                #    myquery_placeholder.empty()
+                #    time.sleep(1)
+                #    myquery_placeholder.markdown(md, unsafe_allow_html=True)
+                #    myquery_placeholder.empty()
 
             querywav = WAVE("query.wav")
             
