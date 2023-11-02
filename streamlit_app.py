@@ -286,10 +286,10 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
             with st.chat_message("assistant"):
                 st.write("You could choose to speak into the mic as well, if you wish!")
 
-        elif query_text != "" and not audio.empty() and os.path.exists("query.wav"):
-            del query_text
-            del audio
-            os.remove("query.wav")
+        #elif query_text != "" and not audio.empty() and os.path.exists("query.wav"):
+        #    del query_text
+        #    del audio
+        #    os.remove("query.wav")
             
         elif query_text == "" and not audio.empty() and not os.path.exists("query.wav"):
             # To play audio in frontend:
@@ -334,9 +334,9 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 st.session_state["audio_input_status"] = True
                 st.session_state["query_counter"] += 1
 
-                del audio
-                del querywav
-                os.remove("query.wav")
+                #del audio
+                #del querywav
+                #os.remove("query.wav")
                 with st.chat_message("assistant"):
                     st.write("If I heard you right, your question is as follows:\n {}".format(query))
                 print(query)
@@ -384,8 +384,8 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 st.session_state["audio_input_status"] = False
 
                 
-    elif os.path.exists("query.wav"):
-        os.remove("query.wav")
+    #elif os.path.exists("query.wav"):
+    #    os.remove("query.wav")
     else:
         with st.chat_message("assistant"):
             st.write("Let me know if you have any questions!")   
