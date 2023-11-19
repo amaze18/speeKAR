@@ -210,15 +210,18 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
         f.write(uploaded_file.getbuffer())         
     st.success("Saved File")
 
-    print(file_path)
+    # print(file_path)
     filename = file_path
 
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
-        print(text_split)
+        # print(text_split)
+    elif ".doc" in filename: #uploaded_file.name:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+        # print(text_split)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
-        print(text_split)
+        # print(text_split)
     # ----------------------------------------------------------#
     # -------------START INTERACTING WITH THE CHATBOT------------#
     # ----------------------------------------------------------#
