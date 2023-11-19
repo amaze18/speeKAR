@@ -103,6 +103,7 @@ from langchain.document_loaders import (
 import os
 import glob
 import argparse
+import textract
 import openai
 from time import sleep
 chunk_size = 512 #512
@@ -133,7 +134,10 @@ def readdoc_splittext(filename):
     This functions takes in an input document and finds the headings, and
     splits them based on the chunks needed.
     """
-    document = Docxreader(filename)
+    try:
+        document = Docxreader(filename)
+    except:
+        document = textract.process(filename) 
     headings = []
     para_texts = []
     i = 0
