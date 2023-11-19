@@ -141,7 +141,7 @@ with st.sidebar:
     hf_email = "anupam_purwar2019@pgp.isb.edu"
     hf_pass = "PASS"
     st.markdown(
-        "📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/)!"
+        "📖 This app is hosted by Anupam Purwar [website](https://anupam-purwar.github.io/page/) and supports only pdf/doc files!"
     )
     image = Image.open("speekar_logo.png")
     st.image(
