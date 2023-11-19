@@ -261,17 +261,17 @@ def get_paragraphs(headings, paragraph_sentences):
     Unifies the sentences under the section headings as a single paragraph.
     """
     paragraph_list = len(headings.index)*[""]
-    print(paragraph_list)
-    print(len(headings.index))
+    #print(paragraph_list)
+    #print(len(headings.index))
 
     if len(headings.index) > 1:
-        print("Length is more than 1")
+        #print("Length is more than 1")
         for i in range(len(headings.index)):
 
             paragraph = paragraph_list[i]
-            print(len(paragraph))
+            #print(len(paragraph))
             if i < len(headings.index) - 1:
-                print(headings.index[i], headings.index[i+1])
+                #print(headings.index[i], headings.index[i+1])
                 for j in range(headings.index[i]+1,headings.index[i+1]):
                     if j in paragraph_sentences.index:
                         paragraph += paragraph_sentences.loc[j]
@@ -283,14 +283,14 @@ def get_paragraphs(headings, paragraph_sentences):
                     if j in paragraph_sentences.index:
                         paragraph += paragraph_sentences.loc[j]
                 paragraph_list[i] = paragraph
-            print(i)
+            #print(i)
 
         return  paragraph_list
 
     elif len(headings.index) == 1:
-        print("Length is 1")
+       # print("Length is 1")
         paragraph = paragraph_list[0]
-        print(len(paragraph))
+        #print(len(paragraph))
 
         for j in range(headings.index[0]+1, paragraph_sentences.index[-1]):
             if j in paragraph_sentences.index:
