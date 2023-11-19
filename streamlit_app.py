@@ -406,10 +406,10 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 
-#if "messages" not in st.session_state.keys():
- #   st.session_state.messages = [
-  #      {"role": "assistant", "content": "Ask anything from the document!"}
-   # ]
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = [
+        {"role": "assistant", "content": "Ask anything from the document!"}
+    ]
     
 #if (uploaded_file is not None) and (st.session_state["db_created"] == True) and (st.session_state["query_status"] == False):
 
