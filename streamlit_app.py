@@ -252,7 +252,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
             
             query = query_text
             
-            print(query)
+            # print(query)
             context, keywords = create_context(query, text_split, headings, para_texts)
             # Generate a new response if last message is not from assistant
             with st.chat_message("assistant"):
@@ -267,7 +267,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                             ans = chatbot(query,db)
                             #st.write(ans)
                         else:
-                            #st.write(ans)
+                            st.write(ans)
                     else:
                         ans = chatbot(query,db)
                         #st.write(ans)
