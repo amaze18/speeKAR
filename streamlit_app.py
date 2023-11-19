@@ -423,6 +423,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
     message = {"role": "assistant", "content": ans}
     st.session_state.messages.append(message)
 
+# Display chat messages
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
+
 
 myargs = [
     "Made in India",
