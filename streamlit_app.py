@@ -265,12 +265,12 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                         if (ans=='I don\'t know.' or ans=='I don\'t know' ):
                             #st.write("Using StdRAG")
                             ans = chatbot(query,db)
-                            #st.write(ans)
+                            st.write(ans)
                         else:
                             st.write(ans)
                     else:
                         ans = chatbot(query,db)
-                        #st.write(ans)
+                        st.write(ans)
         
                 message = {"role": "assistant", "content": ans}
                 st.session_state.messages.append(message)
