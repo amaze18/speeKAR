@@ -269,15 +269,20 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                         if (ans=='I don\'t know.' or ans=='I don\'t know' ):
                             #st.write("Using StdRAG")
                             ans = chatbot(query,db)
-                            st.write(ans)
+                            #st.write(ans)
+                            message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append(message)
                         else:
-                            st.write(ans)
+                            #st.write(ans)
+                            message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append(message)
                     else:
                         ans = chatbot(query,db)
-                        st.write(ans)
+                        #st.write(ans)
+                        message = {"role": "assistant", "content": ans}
+                        st.session_state.messages.append(message)
         
-                message = {"role": "assistant", "content": ans}
-                st.session_state.messages.append(message)
+                
                 # -----------text to speech--------------------------#
                 texttospeech_raw(ans, language="en")
                 mymidia_placeholder = st.empty()
