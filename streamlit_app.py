@@ -216,7 +216,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
         # print(text_split)
-    elif ".doc" in filename: #uploaded_file.name:
+    elif (".doc" in filename) and ".docx" not in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
         # print(text_split)
     elif ".pdf" in filename: #uploaded_file.name:
