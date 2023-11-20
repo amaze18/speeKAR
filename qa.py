@@ -135,9 +135,9 @@ def readdoc_splittext(filename):
     This functions takes in an input document and finds the headings, and
     splits them based on the chunks needed.
     """
-    try:
+    if ".docx" in filename:
         document = Docxreader(filename)
-    except:
+    elif (".doc" in filename) and (".docx" not in filename):
         document = Document()
         # Load a Word DOC file
         document.LoadFromFile(filename)
