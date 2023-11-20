@@ -36,7 +36,6 @@ import textwrap
 import glob
 from spire.doc import *
 from spire.doc.common import *
-import aspose.words as aw
 import fitz
 from unidecode import unidecode
 import pandas as pd
