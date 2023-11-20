@@ -136,17 +136,17 @@ def readdoc_splittext(filename):
     """
     if ".docx" in filename:
         document = Docxreader(filename)
-    elif (".doc" in filename) and (".docx" not in filename):
-        #file_path = os.path.join( os.getcwd(), "file.docx")
-        subprocess.call(['unoconv', '-d', 'document', '--format=docx', filename])
-        #document = aw.Document("filename")
-        # Load a Word DOC file
-        #document.LoadFromFile(filename)
+    #elif (".doc" in filename) and (".docx" not in filename):
+    #    #file_path = os.path.join( os.getcwd(), "file.docx")
+    #    subprocess.call(['unoconv', '-d', 'document', '--format=docx', filename])
+    #    #document = aw.Document("filename")
+    #    # Load a Word DOC file
+    #    #document.LoadFromFile(filename)
         #        # Save the DOC file to DOCX format
         #document.save(file_path)
         # Close the Document object
-        filename = filename[:-1]
-        document = Docxreader(filename)
+    #    filename = filename[:-1]
+    #    document = Docxreader(filename)
     headings = []
     para_texts = []
     i = 0
