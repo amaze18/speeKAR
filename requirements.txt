@@ -1,6 +1,5 @@
 altair
 pandas
-textract
 hugchat==0.0.8
 beautifulsoup4==4.12.2
 openai==0.27.7
@@ -54,3 +53,4 @@ elasticsearch
 elasticsearch_dsl
 luqum
 unstructured[all-docs]
+doc2docx
