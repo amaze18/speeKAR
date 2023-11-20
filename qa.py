@@ -141,12 +141,12 @@ def readdoc_splittext(filename):
         document = Document()
         # Load a Word DOC file
         document.LoadFromFile(filename)
-        
+        file_path = os.path.join( os.getcwd(), "file.docx")
         # Save the DOC file to DOCX format
-        document.SaveToFile("file.docx", FileFormat.Docx2016)
+        document.SaveToFile(filepath, FileFormat.Docx2016)
         # Close the Document object
-        #document.Close()
-        #document = Docxreader("file.docx")
+        document.Close()
+        document = Docxreader(filepath)
     headings = []
     para_texts = []
     i = 0
