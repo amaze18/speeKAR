@@ -138,7 +138,6 @@ def readdoc_splittext(filename):
         document = Docxreader(filename)
     elif (".doc" in filename) and (".docx" not in filename):
         file_path = os.path.join( os.getcwd(), "file.docx")
-        subprocess.call(['unoconv', '-d', 'document', '--format=docx', filename])
         document = Document()
         # Load a Word DOC file
         document.LoadFromFile(filename)
