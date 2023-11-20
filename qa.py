@@ -79,10 +79,10 @@ from langchain.vectorstores import Chroma
 from langchain.llms import GPT4All, LlamaCpp
 from langchain.document_loaders import TextLoader, PDFMinerLoader, CSVLoader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.docstore.document import Document
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from langchain.docstore.document import Document
+from langchain.docstore.document import Document as DocumentLang
 from langchain import HuggingFacePipeline
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.embeddings import HuggingFaceInstructEmbeddings
@@ -115,7 +115,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.vectorstores import Chroma
 from langchain.llms import GPT4All, LlamaCpp
-from langchain.docstore.document import Document
+
 # --------------KEYBERT MODEL ---------------#
 from keybert import KeyBERT
 
@@ -136,17 +136,16 @@ def readdoc_splittext(filename):
     """
     if ".docx" in filename:
         document = Docxreader(filename)
-    #elif (".doc" in filename) and (".docx" not in filename):
-    #    #file_path = os.path.join( os.getcwd(), "file.docx")
-    #    subprocess.call(['unoconv', '-d', 'document', '--format=docx', filename])
-    #    #document = aw.Document("filename")
-    #    # Load a Word DOC file
-    #    #document.LoadFromFile(filename)
+    elif (".doc" in filename) and (".docx" not in filename):
+        file_path = os.path.join( os.getcwd(), "file.docx")
+        subprocess.call(['unoconv', '-d', 'document', '--format=docx', filename])
+        document = Document()
+        # Load a Word DOC file
+        document.LoadFromFile(filename)
         #        # Save the DOC file to DOCX format
-        #document.save(file_path)
+        document.save(file_path)
         # Close the Document object
-    #    filename = filename[:-1]
-    #    document = Docxreader(filename)
+        document = Docxreader(filename)
     headings = []
     para_texts = []
     i = 0
