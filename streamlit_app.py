@@ -12,7 +12,7 @@ import openai
 import tiktoken
 encoding = tiktoken.get_encoding("cl100k_base")
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-
+os.environ["DOTNET_SYSTEM_GLOBALIZATION_INVARIANT"]=1
 # -------------IMPORTING CORE FUNCTIONALITIES OF THE SpeeKAR_BOT-------------
 from qa import (
     speechtotext,
