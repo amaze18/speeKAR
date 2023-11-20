@@ -145,7 +145,7 @@ def readdoc_splittext(filename):
         document.SaveToFile(file_path, FileFormat.Docx2016)
         # Close the Document object
         document.Close()
-        document = Docxreader(filename)
+        document = Docxreader(file_path)
     headings = []
     para_texts = []
     i = 0
