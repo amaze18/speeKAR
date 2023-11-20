@@ -17,6 +17,7 @@ requests
 ffmpeg-python
 mutagen
 python-docx
+aspose-words
 audio-recorder-streamlit
 SpeechRecognition
 streamlit-audiorecorder
