@@ -161,7 +161,7 @@ st.title("Please let me know what you want to talk about by choosing a file belo
 if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
 #if st.session_state["uploaded_status"] == False:
-uploaded_file = st.file_uploader(label = "", key  = st.session_state["uploaded_status"])
+uploaded_file = st.file_uploader(label = "")
 if st.session_state["uploaded_status"] == False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
@@ -199,7 +199,7 @@ elif uploaded_file is None:
     st.write("You can upload your document now!")
 
 
-if (uploaded_file is not None) and (st.session_state["uploaded_status"] == True): # and (st.session_state["uploaded_status"] == True): #and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
+if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == True): #and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
     # st.write(bytes_data)
