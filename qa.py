@@ -34,6 +34,8 @@ from docx import Document as Docxreader
 from docx.shared import Inches
 import textwrap
 import glob
+from spire.doc import *
+from spire.doc.common import *
 
 import fitz
 from unidecode import unidecode
@@ -137,7 +139,15 @@ def readdoc_splittext(filename):
     try:
         document = Docxreader(filename)
     except:
-        document = textract.process(filename) 
+        document = Document()
+        # Load a Word DOC file
+        document.LoadFromFile(filename)
+        
+        # Save the DOC file to DOCX format
+        document.SaveToFile("file.docx", FileFormat.Docx2016)
+        # Close the Document object
+        document.Close()
+        document = Docxreader("file.docx")
     headings = []
     para_texts = []
     i = 0
