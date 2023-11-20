@@ -218,6 +218,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
         with st.chat_message("assistant"):
             st.write("Currently support is only for *.docx and *.pdf format documents only. Please convert your document into one of these formats!")
+            uploaded_file = None
             st.rerun()
         #all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
         # print(text_split)
