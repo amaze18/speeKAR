@@ -310,121 +310,14 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
             st.session_state["text_input_status"] = False
             st.session_state["audio_input_status"] = False
 
-        #elif query_text == "" and audio.empty() and not os.path.exists("query.wav"):
-        #    with st.chat_message("assistant"):
-        #        st.write("You could choose to speak into the mic as well, if you wish!")
-
-        #elif query_text != "" and not audio.empty() and os.path.exists("query.wav"):
-        #    del query_text
-        #    del audio
-        #    os.remove("query.wav")
-            
-        #elif query_text == "" and not audio.empty() and not os.path.exists("query.wav"):
-        #    # To play audio in frontend:
-        #    with st.chat_message("user"):
-                
-                #st.audio(audio.export().read())
-                # To save audio to a file, use pydub export method:
-                #audio.export("query.wav", format="wav")
-                
-                #myquery_placeholder = st.empty()
-                #with open("query.wav", "rb") as audio_file:
-                #    #st.audio(audio_bytes, format="audio/wav")
-                #    audio_bytes = audio_file.read()
-                #    b64 = base64.b64encode(audio_bytes).decode()
-                #    md = f"""
-                #         <audio controls autoplay="false">
-                #         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                #         </audio>
-                #         """
-                #    myquery_placeholder.empty()
-                #    time.sleep(1)
-                #    myquery_placeholder.markdown(md, unsafe_allow_html=True)
-                #    myquery_placeholder.empty()
-
-            #querywav = WAVE("query.wav")
-            
-            #if querywav.info.length > 0:
-                
-                #query = process_query("query.wav", hf_email, hf_pass)
-                #st.markdown(
-                #    """
-                #    <style>
-                #    .big-font {
-                #        font-size:20px !important;
-                #    }
-                #    </style>
-                #    """,
-                #    unsafe_allow_html=True,
-                #)
-            
-                #st.session_state["query_status"] = True
-                #st.session_state["audio_input_status"] = True
-                #st.session_state["query_counter"] += 1
-
-                #del audio
-                #del querywav
-                #os.remove("query.wav")
-                #with st.chat_message("assistant"):
-                #    st.write("If I heard you right, your question is as follows:\n {}".format(query))
-                #print(query)
-        
-                #context, keywords = create_context(query, text_split, headings, para_texts)
-                # Generate a new response if last message is not from assistant
-                #with st.chat_message("assistant"):
-                #    with st.spinner("Thinking..."):
-                #        if len(context) < 2000:
-                #            #print(context)
-                #            #st.write("Using KAR")
-                #            ans, context, keys = chatbot_slim(query, context, keywords)
-                #            
-                #            if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                #                #st.write("Using StdRAG")
-                #                ans = chatbot(query,db)
-                #                st.write(ans)
-                #            else:
-                #                st.write(ans)
-                #        else:
-                #            ans = chatbot(query,db)
-                #            #st.write("Using Std RAG under extreme conditions")
-                #            st.write(ans)
-            
-                    #message = {"role": "assistant", "content": ans}
-                    #st.session_state.messages.append(message)
-                    # -----------text to speech--------------------------#
-                    #texttospeech_raw(ans, language="en")
-                    #mymidia_placeholder = st.empty()
-                    #with open("answer.wav", "rb") as audio_file:
-                    #    #st.audio(audio_bytes, format="audio/wav")
-                    #    audio_bytes = audio_file.read()
-                    #    b64 = base64.b64encode(audio_bytes).decode()
-                    #    md = f"""
-                    #         <audio controls autoplay="true">
-                    #         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                    #         </audio>
-                    #         """
-                    #    mymidia_placeholder.empty()
-                    #    time.sleep(1)
-                    #    mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-                    
-                #st.session_state["query_status"] = False
-                #st.session_state["text_input_status"] = False
-                #st.session_state["audio_input_status"] = False
-
-                
-    #elif os.path.exists("query.wav"):
-    #    os.remove("query.wav")
-    else:
-        with st.chat_message("assistant"):
-            st.write("Let me know if you have any questions!")   
-
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 
-for message in st.session_state.messages[::-1]:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+if st.session_state.messages != []:
+    for message in st.session_state.messages[::-1]:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
 
 
