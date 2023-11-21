@@ -229,10 +229,12 @@ if (uploaded_file is not None):
     #if prompt := st.chat_input():
     
     
-    if query_text := st.chat_input():
-        st.session_state.messages.append({"role": "user", "content": query_text})
-        #with st.chat_message("user"):
-        #    st.write(query_text)
+    with st.chat_message("user"):
+        #query_audio_placeholder = st.empty()
+        #audio = audiorecorder("Click to record", "Click to stop recording")
+        #query_placeholder = st.empty()
+        query_text = st.text_area(label = "Let me know what you have in mind!")
+    st.session_state.messages.append({"role": "user", "content": query_text})
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
