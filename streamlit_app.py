@@ -421,9 +421,7 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     
 
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Ask anything from the document!"}
-    ]
+    st.session_state.messages = []
 
 
 for message in st.session_state.messages[::-1]:
