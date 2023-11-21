@@ -231,8 +231,8 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     # ----------------------------------------------------------#
     
     
-    with st.chat_message("assistant"):
-        st.write("Hi! Getting your contexts ready for query! Please wait!")
+    #with st.chat_message("assistant"):
+    st.write("Hi! Getting your contexts ready for query! Please wait!")
 
     hf, db = create_db(text_chunk, uploaded_file.name)    
     
