@@ -160,18 +160,15 @@ with st.sidebar:
 st.title("Please let me know what you want to talk about by choosing a file below!")
 if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
-#if st.session_state["uploaded_status"] == False:
+
 uploaded_file = st.file_uploader(label = "")
 if st.session_state["uploaded_status"] == False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_pdf.clear()
-#uploaded_status = 0
-
 
 if "query_counter" not in st.session_state:
     st.session_state["query_counter"] = 0
-#st.write(st.session_state["query_counter"])
 if "query_status" not in st.session_state:
     st.session_state["query_status"] = False
 if "audio_input_status" not in st.session_state:
@@ -192,7 +189,6 @@ elif uploaded_file is None:
     st.session_state["query_status"] = False
     st.session_state["audio_input_status"] = False
     st.write("Dear user, clearing unnecesary data fo you to start afresh!!")
-    #st.cache_data.clear()
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_pdf.clear()
@@ -202,12 +198,7 @@ elif uploaded_file is None:
 if "messages" not in st.session_state.keys():
     st.session_state.messages = []
 
-
-if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == True): #and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
-    # To read file as bytes:
-    #bytes_data = uploaded_file.getvalue()
-    # st.write(bytes_data)
-
+if (uploaded_file is not None):
     file_path = os.path.join( os.getcwd(), uploaded_file.name)
     with open(file_path,"wb") as f: 
         f.write(uploaded_file.getbuffer())         
@@ -218,21 +209,13 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
 
     if ".docx" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
-        # print(text_split)
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
-        #with st.chat_message("assistant"):
-        #    st.write("Currently support is only for *.docx and *.pdf format documents only. Please convert your document into one of these formats!")
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
-        # print(text_split)
-    # ----------------------------------------------------------#
-    # -------------START INTERACTING WITH THE CHATBOT------------#
-    # ----------------------------------------------------------#
     
-    
-    #with st.chat_message("assistant"):
-    st.write("Hi! Getting your contexts ready for query! Please wait!")
+    with st.chat_message("assistant"):
+        st.write("Hi! Getting your contexts ready for query! Please wait!")
 
     hf, db = create_db(text_chunk, uploaded_file.name)    
     
@@ -246,46 +229,36 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     #if prompt := st.chat_input():
     
     
-    #with st.chat_message("user"):
-        #query_audio_placeholder = st.empty()
-        #audio = audiorecorder("Click to record", "Click to stop recording")
-        #query_placeholder = st.empty()
-    query_text = st.text_area(label = "Let me know what you have in mind!")
-    st.session_state.messages.append({"role": "user", "content": query_text})
-        #query_placeholder.markdown(query_text)
-    #with st.chat_message("user"):
+    if query_text := st.chat_input():
+        st.session_state.messages.append({"role": "user", "content": query_text})
+        #with st.chat_message("user"):
+        #    st.write(query_text)
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
-            #del audio
+            
             
             query = query_text
             
-            # print(query)
             context, keywords = create_context(query, text_split, headings, para_texts)
+            
             # Generate a new response if last message is not from assistant
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
-                        #print(context)
-                        #st.write("Using KAR")
                         ans, context, keys = chatbot_slim(query, context, keywords)
                         
                         if (ans=='I don\'t know.' or ans=='I don\'t know' ):
-                            #st.write("Using StdRAG")
                             ans = chatbot(query,db)
-                            #st.write(ans)
                             message = {"role": "assistant", "content": ans}
-                            
                         else:
-                            #st.write(ans)
-                            message = {"role": "assistant", "content": ans}
                             
+                            message = {"role": "assistant", "content": ans}
                     else:
                         ans = chatbot(query,db)
-                        #st.write(ans)
+                        
                         message = {"role": "assistant", "content": ans}
                         
                 
@@ -294,7 +267,6 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
                 texttospeech_raw(ans, language="en")
                 mymidia_placeholder = st.empty()
                 with open("answer.wav", "rb") as audio_file:
-                    #st.audio(audio_bytes, format="audio/wav")
                     audio_bytes = audio_file.read()
                     b64 = base64.b64encode(audio_bytes).decode()
                     md = f"""
