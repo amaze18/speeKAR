@@ -199,6 +199,10 @@ elif uploaded_file is None:
     st.write("You can upload your document now!")
 
 
+if "messages" not in st.session_state.keys():
+    st.session_state.messages = []
+
+
 if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == True): #and (st.session_state["db_created"] == False) and (st.session_state["query_counter"]==0):
     # To read file as bytes:
     #bytes_data = uploaded_file.getvalue()
@@ -242,11 +246,11 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
     #if prompt := st.chat_input():
     
     
-    with st.chat_message("user"):
+    #with st.chat_message("user"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
-        query_text = st.text_area(label = "Let me know what you have in mind!")
+    query_text = st.text_area(label = "Let me know what you have in mind!")
     st.session_state.messages.append({"role": "user", "content": query_text})
         #query_placeholder.markdown(query_text)
     #with st.chat_message("user"):
@@ -417,12 +421,6 @@ if (uploaded_file is not None): # and (st.session_state["uploaded_status"] == Tr
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
-
-    
-
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = []
-
 
 for message in st.session_state.messages[::-1]:
     with st.chat_message(message["role"]):
