@@ -504,7 +504,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
             [system_message_prompt, human_message_prompt]
         )
 
-        chunk_size = 1024
+        chunk_size = 1500
         PROMPT = PromptTemplate(
             input_variables=["context", "question"], template=template
         )
@@ -518,7 +518,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         chat = openai.Completion.create(
             #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
             #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
-            prompt=f"You are a question answering assitant with no previous information, 
+            prompt=f"You are a question answering assistant with no previous information, 
             you answer question based on following context and if question cannot be answered based on context, 
             say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
             temperature=0,
@@ -551,11 +551,8 @@ def chatbot(question, db):
     
     ctype=['stuff', 'map_reduce', 'refine', 'map_rerank']
 
-    retriever = db.as_retriever(search_type='similarity', search_kwargs={"k": 5} )#do not increase k beyond 3, else
+    retriever = db.as_retriever(search_type='similarity', search_kwargs={"k": 4} )#do not increase k beyond 3, else
     docs_and_scores = db.similarity_search_with_score(question)
-
-    #for doc, score in  docs_and_scores:
-     #   print(f"Metadata: {doc.metadata}, Score: {score}")
         
     
     llm = OpenAI(model='text-davinci-003',temperature=0, openai_api_key=openai.api_key)
@@ -570,8 +567,7 @@ def chatbot(question, db):
     
     messages=[
         {"role": "system", 
-         "content": "You are a question-answering assitant, with no prior information. You answer questions based only on context provided, if you dont know the answer say I do not know"},  
-     #    "content": "You are a friendly chatbot who answers questions asked based only on the context provided, if you dont know the answer say I do not know"},
+         "content": "You are a question-answering assistant, with no prior information. You answer questions based on content provided, if you dont know the answer say I do not know"},  
         {"role": "user", "content": f"{res}"}
     ])
     answer= response["choices"][0]["message"]["content"]
