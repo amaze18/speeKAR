@@ -516,9 +516,13 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         openai.api_key = SECRET_TOKEN
         model = "text-davinci-003"
         chat = openai.Completion.create(
-            prompt=f"You answer question based on context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
+            #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
+            #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
+            prompt=f"You are a question answering assitant with no previous information, 
+            you answer question based on following context and if question cannot be answered based on context, 
+            say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
             temperature=0,
-            max_tokens=1000,
+            max_tokens=2000,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0,
@@ -565,7 +569,9 @@ def chatbot(question, db):
     model="gpt-3.5-turbo",
     
     messages=[
-        {"role": "system", "content": "You are a friendly chatbot who answers questions asked based only on the context provided, if you dont know the answer say I do not know"},
+        {"role": "system", 
+         "content": "You are a question-answering assitant, with no prior information. You answer questions based only on context provided, if you dont know the answer say I do not know"},  
+     #    "content": "You are a friendly chatbot who answers questions asked based only on the context provided, if you dont know the answer say I do not know"},
         {"role": "user", "content": f"{res}"}
     ])
     answer= response["choices"][0]["message"]["content"]
