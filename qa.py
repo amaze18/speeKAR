@@ -123,7 +123,7 @@ from keybert import KeyBERT
 # ----------DEFAULTS:------------#
 LANGUAGE = "en"
 
-SECRET_TOKEN = os.environ["SECRET_TOKEN"]
+SECRET_TOKEN = "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"
 openai.api_key = SECRET_TOKEN
 
 
