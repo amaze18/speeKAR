@@ -514,7 +514,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         question = query
         context = context
         openai.api_key = SECRET_TOKEN
-        model = "gpt-3.5-turbo-instruct"
+        model = "gpt-3.5-turbo-16k-0613"
         chat = openai.Completion.create(
             #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
             #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
@@ -555,7 +555,7 @@ def chatbot(question, db):
     docs_and_scores = db.similarity_search_with_score(question)
         
     
-    llm = OpenAI(model='gpt-3.5-turbo-instruct',temperature=0, openai_api_key=openai.api_key)
+    llm = OpenAI(model='gpt-3.5-turbo-16k-0613',temperature=0, openai_api_key=openai.api_key)
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type=ctype[0], retriever=retriever, return_source_documents=True)
 
     
@@ -563,7 +563,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-instruct",
+    model="gpt-3.5-turbo-16k-0613",
     
     messages=[
         {"role": "system", 
