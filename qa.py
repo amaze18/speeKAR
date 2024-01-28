@@ -125,6 +125,9 @@ LANGUAGE = "en"
 
 SECRET_TOKEN = os.environ["SECRET_TOKEN"]
 openai.api_key = SECRET_TOKEN
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 
 # ---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------#
