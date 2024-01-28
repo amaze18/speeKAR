@@ -514,7 +514,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         question = query
         context = context
         openai.api_key = SECRET_TOKEN
-        model = "text-babbage-002"
+        model = "babbage-002"
         chat = openai.Completion.create(
             #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
             #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
