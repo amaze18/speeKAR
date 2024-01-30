@@ -375,7 +375,7 @@ def readdoc_splittext_pdf(filename):
     text_split=texts_isb
     return all_text, text_split, texts_raw, headings_list, paragraph_list
 
-# ----------------CREATE CONTEXT-----------------------#
+"""# ----------------CREATE CONTEXT-----------------------#
 def create_context(query, text_split, headings, para_texts):
     """
     Create a context for a question by finding the most similar context from the dataframe
@@ -452,7 +452,66 @@ def create_context(query, text_split, headings, para_texts):
     cur_len = 0
 
     # Return the context
-    return "\n\n###\n\n".join(returns), keywords
+    return "\n\n###\n\n".join(returns), keywords"""
+# ----------------CREATE CONTEXT-----------------------#
+from keybert import KeyBERT
+import time
+
+def create_context(query, text_split, headings, para_texts, kw_model):
+    """
+    Create a context for a question by finding the most similar context from the dataframe
+    """
+
+    # Get the embeddings for the entire document
+    doc_keywords = kw_model.extract_keywords(" ".join(text_split))
+
+    returns = []
+    keywords_q = []
+
+    for keyword, score in doc_keywords:
+        if score > 0.3:
+            keywords_q.append(keyword)
+
+    keyword_doc = {}
+
+    for i, sent in enumerate(text_split):
+        if isinstance(sent, str) and len(sent) > 6:
+            keywords = kw_model.extract_keywords(sent)
+            keyword_doc_sent = []
+
+            for keyword, score in keywords:
+                if score > 0.3:
+                    keyword_doc_sent.append(keyword)
+
+            # Add the heading of the para corresponding to the sentence
+            for h, pt in zip(headings, para_texts):
+                pt = pt.lower()
+                index = pt.find(sent.lower())
+                if index != -1:
+                    keyword_doc_sent.append(h)
+
+            keyword_doc[i] = keyword_doc_sent
+
+    returns_set = set()
+
+    for i, keyword_list in keyword_doc.items():
+        if any(keyword in keywords_q for keyword in keyword_list):
+            returns_set.add(remove_newlines(text_split[i]))
+
+    returns = list(returns_set)
+
+    return "\n\n###\n\n".join(returns), keywords_q
+
+def remove_newlines(s):
+    return s.replace("\n", "")
+
+"""# Usage
+kw_model = KeyBERT()
+context, keywords = create_context(query, text_split, headings, para_texts, kw_model)
+print("Context:", context)
+print("Keywords:", keywords)"""
+
+
 
 
 # ------------------------SLIM KAR BASED CHATBOT----------------------------#
