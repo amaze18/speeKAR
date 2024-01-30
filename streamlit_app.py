@@ -244,7 +244,8 @@ if (uploaded_file is not None):
             
             query = query_text
             
-            context, keywords = create_context(query, text_split, headings, para_texts)
+            #context, keywords = create_context(query, text_split, headings, para_texts)
+            context, keywords = create_context(query, text_split, headings, kw_model)
             
             # Generate a new response if last message is not from assistant
             with st.chat_message("assistant"):
