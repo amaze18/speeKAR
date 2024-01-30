@@ -598,7 +598,7 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
             "text"
         ].strip()  # ['choices'][0]['message']['content']
 
-      return reply, context, keywords
+        return reply, context, keywords
 
 #def chatbot_slim(question, context, keywords):
  #   """
