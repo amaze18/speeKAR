@@ -125,6 +125,9 @@ LANGUAGE = "en"
 
 SECRET_TOKEN = os.environ["SECRET_TOKEN"]
 openai.api_key = SECRET_TOKEN
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 
 # ---------------READ THE UPLOADED DOCUMENT AND GENERATE THE SPLIT---------------#
@@ -373,83 +376,144 @@ def readdoc_splittext_pdf(filename):
     return all_text, text_split, texts_raw, headings_list, paragraph_list
 
 # ----------------CREATE CONTEXT-----------------------#
+#def create_context(query, text_split, headings, para_texts):
+ #   """
+  #  Create a context for a question by finding the most similar context from the dataframe
+   # """
+#
+ #   # Get the embeddings for the question
+  #  # Get the distances from the embeddings
+   # # i=0
+    #kw_model = KeyBERT()
+#
+ #   sentences = text_split  # [i for i in nlp(text).sents]
+#
+ #   returns = []
+  #  keystart = time.time()
+   # keywords_q = []
+#
+ #   keywords_query = kw_model.extract_keywords(query)
+  #  keywords = []
+#
+ #   for j in range(len(keywords_query)):
+  #      if keywords_query[j][1] > 0.3:
+   #         if keywords_query[j][0] not in keywords_q:
+    #            # print(keywords[j][0], keywords[j][1])
+     #           keywords_q.append(keywords_query[j][0])
+#
+ #   i = 0
+  #  keyword_doc = {}
+   # keyend = time.time()
+#
+ #   for sent in sentences:
+  #      if isinstance(sent, str) and len(sent) > 6:
+   #         keywords = kw_model.extract_keywords(sent)
+    #        keyword_doc_sent = []
+#
+ #           for j in range(len(keywords)):
+  #              # Add the heading of  the para corresponding to the sentence
+   #             if j == 0:
+    #                keyword_doc_sent.append(keywords[j][0])
+     #               for h, pt in zip(headings, para_texts):
+      #                  pt = pt.lower()
+       #                 index = pt.find(sent.lower())
+        #                if index != -1:
+         #                   print("contains")
+          #                  # Add the heading of  the para corresponding to the sentence
+           #                 keyword_doc_sent.append(h)
+#
+ #               if keywords[j][1] > 0.3:  # and keywords[j][0] not in keyword_doc ):
+  #                  if keywords[j][0] not in keyword_doc_sent:
+   #                     keyword_doc_sent.append(keywords[j][0])
+    #    keyword_doc[i] = keyword_doc_sent
+#
+ #       i += 1
+#
+ #   search_start = time.time()
+#
+ #   for i in range(len(keyword_doc)):
+  #      for k in range(len(keywords_q)):
+   #         match_count = 0
+    #        if keywords_q[k] in keyword_doc[i]:
+     #           match_count += 1
+      #          keywords.append(keywords_q[k])
+       #         # print(keywords_q[k],keyword_doc[i] )
+        #        # print("match_count::",match_count)
+         #       if match_count >= 1 or match_count >= len(keywords_q):
+          #          # print("Document matched :",i, "::")
+            #        if remove_newlines(text_split[i]) not in returns:
+             #           # context_q+=remove_newlines(sent)
+              #          returns.append(remove_newlines(text_split[i]))
+               #         # print(returns,match_count )
+#
+ #   searchend = time.time()
+  #  search_time = searchend - search_start
+#
+ #   cur_len = 0
+#
+    # Return the context
+#    return "\n\n###\n\n".join(returns), keywords
+# ----------------CREATE CONTEXT-----------------------#
+import time
+from keybert import KeyBERT
+
 def create_context(query, text_split, headings, para_texts):
     """
     Create a context for a question by finding the most similar context from the dataframe
     """
 
-    # Get the embeddings for the question
-    # Get the distances from the embeddings
-    # i=0
+    # Create the kw_model inside the function
     kw_model = KeyBERT()
 
-    sentences = text_split  # [i for i in nlp(text).sents]
+    # Get the embeddings for the entire document
+    doc_keywords = kw_model.extract_keywords(" ".join(text_split))
 
     returns = []
-    keystart = time.time()
     keywords_q = []
 
-    keywords_query = kw_model.extract_keywords(query)
-    keywords = []
+    for keyword, score in doc_keywords:
+        if score > 0.3:
+            keywords_q.append(keyword)
 
-    for j in range(len(keywords_query)):
-        if keywords_query[j][1] > 0.3:
-            if keywords_query[j][0] not in keywords_q:
-                # print(keywords[j][0], keywords[j][1])
-                keywords_q.append(keywords_query[j][0])
-
-    i = 0
     keyword_doc = {}
-    keyend = time.time()
 
-    for sent in sentences:
+    for i, sent in enumerate(text_split):
         if isinstance(sent, str) and len(sent) > 6:
             keywords = kw_model.extract_keywords(sent)
             keyword_doc_sent = []
 
-            for j in range(len(keywords)):
-                # Add the heading of  the para corresponding to the sentence
-                if j == 0:
-                    keyword_doc_sent.append(keywords[j][0])
-                    for h, pt in zip(headings, para_texts):
-                        pt = pt.lower()
-                        index = pt.find(sent.lower())
-                        if index != -1:
-                            print("contains")
-                            # Add the heading of  the para corresponding to the sentence
-                            keyword_doc_sent.append(h)
+            for keyword, score in keywords:
+                if score > 0.3:
+                    keyword_doc_sent.append(keyword)
 
-                if keywords[j][1] > 0.3:  # and keywords[j][0] not in keyword_doc ):
-                    if keywords[j][0] not in keyword_doc_sent:
-                        keyword_doc_sent.append(keywords[j][0])
-        keyword_doc[i] = keyword_doc_sent
+            # Add the heading of the para corresponding to the sentence
+            for h, pt in zip(headings, para_texts):
+                pt = pt.lower()
+                index = pt.find(sent.lower())
+                if index != -1:
+                    keyword_doc_sent.append(h)
 
-        i += 1
+            keyword_doc[i] = keyword_doc_sent
 
-    search_start = time.time()
+    returns_set = set()
 
-    for i in range(len(keyword_doc)):
-        for k in range(len(keywords_q)):
-            match_count = 0
-            if keywords_q[k] in keyword_doc[i]:
-                match_count += 1
-                keywords.append(keywords_q[k])
-                # print(keywords_q[k],keyword_doc[i] )
-                # print("match_count::",match_count)
-                if match_count >= 1 or match_count >= len(keywords_q):
-                    # print("Document matched :",i, "::")
-                    if remove_newlines(text_split[i]) not in returns:
-                        # context_q+=remove_newlines(sent)
-                        returns.append(remove_newlines(text_split[i]))
-                        # print(returns,match_count )
+    for i, keyword_list in keyword_doc.items():
+        if any(keyword in keywords_q for keyword in keyword_list):
+            returns_set.add(remove_newlines(text_split[i]))
 
-    searchend = time.time()
-    search_time = searchend - search_start
+    returns = list(returns_set)
 
-    cur_len = 0
+    return "\n\n###\n\n".join(returns), keywords_q
 
-    # Return the context
-    return "\n\n###\n\n".join(returns), keywords
+def remove_newlines(s):
+    return s.replace("\n", "")
+"""# Usage
+kw_model = KeyBERT()
+context, keywords = create_context(query, text_split, headings, para_texts, kw_model)
+print("Context:", context)
+print("Keywords:", keywords)"""
+
+
 
 
 # ------------------------SLIM KAR BASED CHATBOT----------------------------#
@@ -457,7 +521,7 @@ def create_context(query, text_split, headings, para_texts):
 def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
     """
     Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response
-    with little to almost no hallucinations. Here, openai's davnci-003 has been used to generate the response.
+    with little to almost no hallucinations. Here, openai's davinci-003 has been used to generate the response.
     """
 
     if input:
@@ -514,13 +578,13 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         question = query
         context = context
         openai.api_key = SECRET_TOKEN
-        model = "text-davinci-003"
+        model = "gpt-3.5-turbo-instruct"
         chat = openai.Completion.create(
             #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
             #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
-            prompt=f"You are a question answering assistant with no previous information, 
+            prompt=f"""You are a question answering assistant with no previous information, 
             you answer question based on following context and if question cannot be answered based on context, 
-            say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
+            say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:""",
             temperature=0,
             max_tokens=2000,
             top_p=1,
@@ -555,7 +619,7 @@ def chatbot(question, db):
     docs_and_scores = db.similarity_search_with_score(question)
         
     
-    llm = OpenAI(model='text-davinci-003',temperature=0, openai_api_key=openai.api_key)
+    llm = OpenAI(model='gpt-3.5-turbo-instruct',temperature=0, openai_api_key=openai.api_key)
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type=ctype[0], retriever=retriever, return_source_documents=True)
 
     
@@ -563,7 +627,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
+    model="gpt-3.5-turbo-16k-0613",
     
     messages=[
         {"role": "system", 
