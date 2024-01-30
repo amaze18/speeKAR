@@ -454,14 +454,17 @@ def readdoc_splittext_pdf(filename):
     # Return the context
 #    return "\n\n###\n\n".join(returns), keywords
 # ----------------CREATE CONTEXT-----------------------#
-from keybert import KeyBERT
 import time
+from keybert import KeyBERT
 
 def create_context(query, text_split, headings, para_texts):
     """
     Create a context for a question by finding the most similar context from the dataframe
     """
-kw_model = KeyBERT()
+
+    # Create the kw_model inside the function
+    kw_model = KeyBERT()
+
     # Get the embeddings for the entire document
     doc_keywords = kw_model.extract_keywords(" ".join(text_split))
 
@@ -504,7 +507,6 @@ kw_model = KeyBERT()
 
 def remove_newlines(s):
     return s.replace("\n", "")
-
 """# Usage
 kw_model = KeyBERT()
 context, keywords = create_context(query, text_split, headings, para_texts, kw_model)
