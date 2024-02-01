@@ -518,159 +518,164 @@ print("Keywords:", keywords)"""
 
 # ------------------------SLIM KAR BASED CHATBOT----------------------------#
 # ------------------------SLIM KAR BASED CHATBOT----------------------------#
-def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
+#def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
+#    """
+#    Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response
+#    with little to almost no hallucinations. Here, openai's davinci-003 has been used to generate the response.
+#    """
+#
+#    if input:
+#        stime = time.time()
+#
+#        #context, keywords = create_context(query, text_split, headings, para_texts)
+
+#       ctype = ["stuff", "map_reduce", "refine", "map_rerank"]
+#      template = """
+#              You are a helpful assistant who answers question based on context provided: {context}
+
+#             If you don't have enough information to answer the question, say: "Sorry, I cannot answer that".
+
+#              """
+#        template = """
+#                  You are a helpful assistant who answers question based on context provided: {context}
+
+#                  If you don't have enough information to answer the question, say: "I cannot answer".
+
+#                  """
+#        template = """ You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} """
+
+#        system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+
+#        # Human question prompt
+
+#        human_template = "Answer following question: {question}"
+
+#        template = """ Answer question {question} based on context below, and if question can't be answered based on context,
+#       say \"I don't know\"\n\nContext: {context}
+
+#        Answer:
+#        """
+
+#        template = """ Use following pieces of context to answer the question. Provide answer in full detail using provided context.
+#        If you don't know the answer, say I don't know
+#        {context}
+#        Question : {question}
+#        Answer:"""
+
+#        human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+#        chat_prompt = ChatPromptTemplate.from_messages(
+#            [system_message_prompt, human_message_prompt]
+#        )
+
+#        chunk_size = 1500
+#        PROMPT = PromptTemplate(
+#            input_variables=["context", "question"], template=template
+#        )
+#
+#        chain_type_kwargs = {"prompt": PROMPT}
+
+#        question = query
+#        context = context
+#        openai.api_key = SECRET_TOKEN
+#        model = "gpt-3.5-turbo-instruct"
+#        chat = openai.Completion.create(
+#            #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
+#            #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
+#            prompt=f"""You are a question answering assistant with no previous information, 
+#            you answer question based on following context and if question cannot be answered based on context, 
+#            say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:""",
+#            temperature=0,
+#            max_tokens=2000,
+#            top_p=1,
+#            frequency_penalty=0,
+#            presence_penalty=0,
+#            stop=None,
+#            model=model,
+#        )
+
+#        reply = chat["choices"][0][
+#            "text"
+#        ].strip()  # ['choices'][0]['message']['content']
+
+#        return reply, context, keywords
+
+from keybert import KeyBERT
+import openai
+
+def chatbot_slim(question, context, keywords):
     """
-    Here, this function takes in the textual query, along with the textual context and uses KAR framework to geerate a suitable response
+    This function takes in the textual query, along with the textual context and uses KAR framework to generate a suitable response
     with little to almost no hallucinations. Here, openai's davinci-003 has been used to generate the response.
     """
 
-    if input:
-        stime = time.time()
-
-        #context, keywords = create_context(query, text_split, headings, para_texts)
-
-        ctype = ["stuff", "map_reduce", "refine", "map_rerank"]
-        template = """
-              You are a helpful assistant who answers question based on context provided: {context}
-
-              If you don't have enough information to answer the question, say: "Sorry, I cannot answer that".
-
-              """
-        template = """
-                  You are a helpful assistant who answers question based on context provided: {context}
-
-                  If you don't have enough information to answer the question, say: "I cannot answer".
-
-                  """
-        template = """ You answer question based on context below, and if question can't be answered based on context, say \"I don't know\"\n\nContext: {context} """
-
-        system_message_prompt = SystemMessagePromptTemplate.from_template(template)
-
-        # Human question prompt
-
-        human_template = "Answer following question: {question}"
-
-        template = """ Answer question {question} based on context below, and if question can't be answered based on context,
-        say \"I don't know\"\n\nContext: {context}
-
-        Answer:
-        """
-
-        template = """ Use following pieces of context to answer the question. Provide answer in full detail using provided context.
-        If you don't know the answer, say I don't know
-        {context}
-        Question : {question}
-        Answer:"""
-
-        human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
-
-        chat_prompt = ChatPromptTemplate.from_messages(
-            [system_message_prompt, human_message_prompt]
-        )
-
-        chunk_size = 1500
-        PROMPT = PromptTemplate(
-            input_variables=["context", "question"], template=template
-        )
-
-        chain_type_kwargs = {"prompt": PROMPT}
-
-        question = query
-        context = context
-        openai.api_key = SECRET_TOKEN
-        model = "gpt-3.5-turbo-instruct"
-        chat = openai.Completion.create(
-            #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
-            #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
-            prompt=f"""You are a question answering assistant with no previous information, 
-            you answer question based on following context and if question cannot be answered based on context, 
-            say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:""",
-            temperature=0,
-            max_tokens=2000,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-            stop=None,
-            model=model,
-        )
-
-        reply = chat["choices"][0][
-            "text"
-        ].strip()  # ['choices'][0]['message']['content']
-
-        return reply, context, keywords
-
-#def chatbot_slim(question, context, keywords):
- #   """
-  #  This function takes in the textual query, along with the textual context and uses KAR framework to generate a suitable response
-   # with little to almost no hallucinations. Here, openai's davinci-003 has been used to generate the response.
-    #"""
-
     # Create the kw_model inside the function
-#    kw_model = KeyBERT()
-#
- #   # Get the embeddings for the entire document
-  #  doc_keywords = kw_model.extract_keywords(" ".join(context))
-#
- #   returns = []
-  #  keywords_q = []
+    kw_model = KeyBERT()
 
- #   for keyword, score in doc_keywords:
-  #      if score > 0.3:
-   #         keywords_q.append(keyword)
+    # Get the embeddings for the entire document
+    doc_keywords = kw_model.extract_keywords(" ".join(context))
 
-  #  keyword_doc = {}
+    returns = []
+    keywords_q = []
 
-   # for i, sent in enumerate(context):
-    #    if isinstance(sent, str) and len(sent) > 6:
-     #       keywords = kw_model.extract_keywords(sent)
-      #      keyword_doc_sent = []
-#
- #           for keyword, score in keywords:
-  #              if score > 0.3:
-   #                 keyword_doc_sent.append(keyword)
-#
- #           keyword_doc[i] = keyword_doc_sent
-#
- #   returns_set = set()
-#
- #   for i, keyword_list in keyword_doc.items():
-  #      if any(keyword in keywords_q for keyword in keyword_list):
-   #         returns_set.add(remove_newlines(context[i]))
-##   returns = list(returns_set)
-  #  
+    for keyword, score in doc_keywords:
+        if score > 0.3:
+            keywords_q.append(keyword)
+
+    keyword_doc = {}
+
+    for i, sent in enumerate(context):
+        if isinstance(sent, str) and len(sent) > 6:
+            keywords = kw_model.extract_keywords(sent)
+            keyword_doc_sent = []
+
+            for keyword, score in keywords:
+                if score > 0.3:
+                    keyword_doc_sent.append(keyword)
+
+            keyword_doc[i] = keyword_doc_sent
+
+    returns_set = set()
+
+    for i, keyword_list in keyword_doc.items():
+        if any(keyword in keywords_q for keyword in keyword_list):
+            returns_set.add(sent)
+
+    returns = list(returns_set)
+
     # Create conversation prompt
-   # conversation_prompt = ""
-    #for i, user_input in enumerate(returns):
-     #   conversation_prompt += f"User: {user_input}\nAssistant:"
-      #  if i < len(returns) - 1:
-       #     conversation_prompt += "\n"
+    conversation_prompt = ""
+    for i, user_input in enumerate(returns):
+        conversation_prompt += f"User: {user_input}\nAssistant:"
+        if i < len(returns) - 1:
+            conversation_prompt += "\n"
 
     # Add the user's question to the conversation
-    #conversation_prompt += f"User: {question}\nAssistant:"
+    conversation_prompt += f"User: {question}\nAssistant:"
 
-   # openai.api_key = SECRET_TOKEN
-   # model = "gpt-3.5-turbo-instruct"
+    openai.api_key = "SECRET_TOKEN"  # Replace with your actual secret token
+    model = "gpt-3.5-turbo-16k-0613"
 
     # Generate response using OpenAI's Chat API
-    #chat = openai.ChatCompletion.create(
-     #   model=model,
-      #  messages=[
-       #     {"role": "system", "content": "You are a helpful assistant."},
-         #   {"role": "user", "content": conversation_prompt},
-#        ],
- #       temperature=0,
-  #      max_tokens=2000,
-   #     top_p=1,
-    #    frequency_penalty=0,
-    #    presence_penalty=0,
-    #    stop=None,
-   # )
+    chat = openai.ChatCompletion.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": conversation_prompt},
+        ],
+        temperature=0,
+        max_tokens=2000,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=None,
+    )
 
-   # response = chat["choices"][0]["message"]["content"].strip()
+    response = chat["choices"][0]["message"]["content"].strip()
 
-  #  # Return the response and context
-   # return response, context, keywords
+    # Return the response and context
+    return response, context, keywords
+
 
 @st.cache_resource(show_spinner=True)
 def create_db(_text_chunk, _uploaded_file_name):
