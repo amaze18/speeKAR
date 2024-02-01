@@ -645,6 +645,8 @@ def chatbot_slim(question, context, keywords):
 
     # Create conversation prompt
     conversation_prompt = ""
+
+    # Adding recorded conversation to the prompt
     for i, user_input in enumerate(returns):
         conversation_prompt += f"User: {user_input}\nAssistant:"
         if i < len(returns) - 1:
@@ -675,6 +677,7 @@ def chatbot_slim(question, context, keywords):
 
     # Return the response and context
     return response, context, keywords
+
 
 
 @st.cache_resource(show_spinner=True)
