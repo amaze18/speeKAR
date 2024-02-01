@@ -599,7 +599,6 @@ print("Keywords:", keywords)"""
 #        ].strip()  # ['choices'][0]['message']['content']
 
 #        return reply, context, keywords
-
 from keybert import KeyBERT
 import openai
 
@@ -655,8 +654,8 @@ def chatbot_slim(question, context, keywords):
     # Add the user's question to the conversation
     conversation_prompt += f"User: {question}\nAssistant:"
 
-    openai.api_key = "SECRET_TOKEN"  # Replace with your actual secret token
-    model = "gpt-3.5-turbo-16k-0613"
+    openai.api_key = "YOUR_SECRET_TOKEN"  # Replace with your actual secret token
+    model = "gpt-3.5-turbo-instruct"
 
     # Generate response using OpenAI's Chat API
     chat = openai.ChatCompletion.create(
@@ -677,7 +676,6 @@ def chatbot_slim(question, context, keywords):
 
     # Return the response and context
     return response, context, keywords
-
 
 
 @st.cache_resource(show_spinner=True)
