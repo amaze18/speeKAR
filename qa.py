@@ -678,6 +678,7 @@ def chatbot_slim(question, context, keywords):
     return response, context, keywords
 
 
+
 @st.cache_resource(show_spinner=True)
 def create_db(_text_chunk, _uploaded_file_name):
 
