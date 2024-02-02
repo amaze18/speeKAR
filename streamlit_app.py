@@ -237,7 +237,7 @@ if (uploaded_file is not None):
         query_text = st.text_area(label = "Let me know what you have in mind!")
         
         # Add a slider for each question
-        slider_value = st.slider("Select the creativity level for this question:", 0.0, 1.0, slider_value, key=f"slider-{st.session_state['query_counter']}")
+        slider_value = st.slider("Select the creativity level for this answer:", 0.0, 5.0, slider_value, key=f"slider-{st.session_state['query_counter']}")
     
     st.session_state.messages.append({"role": "user", "content": (query_text, slider_value)})
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
