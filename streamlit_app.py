@@ -228,13 +228,18 @@ if (uploaded_file is not None):
     # User-provided prompt
     #if prompt := st.chat_input():
     
-    
+    slider_value = 0.5  # Default value for the slider
+
     with st.chat_message("user"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
         query_text = st.text_area(label = "Let me know what you have in mind!")
-    st.session_state.messages.append({"role": "user", "content": query_text})
+        
+        # Add a slider for each question
+        slider_value = st.slider("Select the creativity level for this question:", 0.0, 1.0, slider_value, key=f"slider-{st.session_state['query_counter']}")
+    
+    st.session_state.messages.append({"role": "user", "content": (query_text, slider_value)})
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
@@ -247,7 +252,7 @@ if (uploaded_file is not None):
             context, keywords = create_context(query, text_split, headings, para_texts)
             
             
-            # Generate a new response if last message is not from assistant
+            # Generate a new response if the last message is not from the assistant
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
