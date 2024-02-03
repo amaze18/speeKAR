@@ -644,7 +644,8 @@ def chatbot_slim(question, context, keywords):
 
     # Create conversation prompt
     conversation_prompt = ""
-
+    # Add the user's question to the conversation
+    conversation_prompt += f"User: {question}\nAssistant:"
     # Adding recorded conversation to the prompt
     for i, user_input in enumerate(returns):
         conversation_prompt += f"User: {user_input}\nAssistant:"
@@ -652,7 +653,7 @@ def chatbot_slim(question, context, keywords):
             conversation_prompt += "\n"
 
     # Add the user's question to the conversation
-    conversation_prompt += f"User: {question}\nAssistant:"
+    #conversation_prompt += f"User: {question}\nAssistant:"
 
     openai.api_key = "YOUR_SECRET_TOKEN"  # Replace with your actual secret token
     model = "gpt-3.5-turbo-instruct"
