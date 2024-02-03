@@ -241,7 +241,7 @@ if (uploaded_file is not None):
         #key=f"slider-{st.session_state['query_counter']}")
     #st.write("Liker score is: ",score)
     query_text = st.chat_message("user").markdown("Let me know what you have in mind!")
-    st.session_state.messages.append({"role": "user", "content": (query_text, slider_value)})
+    st.session_state.messages.append({"role": "user", "content": (query_text)})
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
