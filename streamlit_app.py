@@ -273,7 +273,7 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar).to_csv("qar_all.csv")
+                        df=pd.DataFrame(qar)
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
                         df.to_csv(csv_buffer)
@@ -297,7 +297,7 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar).to_csv("qar_all.csv")
+                        df=pd.DataFrame(qar)
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
                         df.to_csv(csv_buffer)
