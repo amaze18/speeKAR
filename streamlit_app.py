@@ -230,27 +230,25 @@ if (uploaded_file is not None):
     
     #slider_value = 2.5  # Default value for the slider
 
-    #with st.chat_message("Assistant"):
+    with st.chat_message("user"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
-       # query_text = st.chat_message("user").markdown(label = "Let me know what you have in mind!")
-        
+        query_text = st.chat_input("Let me know what you have in mind!")
+        st.session_state.messages.append({"role": "user", "content": (query_text)})
         # Add a slider for each question
-    #score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
+     #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
         #key=f"slider-{st.session_state['query_counter']}")
-    #st.write("Liker score is: ",score)
-    query_text = st.chat_message("user").markdown("Let me know what you have in mind!").text
-    st.session_state.messages.append({"role": "user", "content": (query_text)})
+   # st.write("Liker score is: ",score)
+    #query_text = st.chat_input("Let me know what you have in mind")
+      
+    
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
-            
-            
             query = query_text
-            
             context, keywords = create_context(query, text_split, headings, para_texts)
             
             
@@ -262,22 +260,23 @@ if (uploaded_file is not None):
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
-                            score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-                            #key=f"slider-{st.session_state['query_counter']}")
-                            st.write("Liker score is: ",score)
+                            
                         else:
                             message = {"role": "assistant", "content": ans}
-                            score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-                            #key=f"slider-{st.session_state['query_counter']}")
-                            st.write("Liker score is: ",score)
+                            
                     else:
                         ans = chatbot(query,db)
                         message = {"role": "assistant", "content": ans}
-                        score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-                        #key=f"slider-{st.session_state['query_counter']}")
-                        st.write("Liker score is: ",score)
+            #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
+            with st.chat_message("assistant"):
+                score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                #key=f"slider-{st.session_state['query_counter']}")
+                st.write("Liker score is: ",score)
+                ideal_answer=st.text_area(label="Give your ideal answer instead?")
+                qar=[]
+                qar.append([query,ans,time,score,ideal_answer])
+                pd.DataFrame(qar).to_csv("qar_all.csv")
                         
-                
                 
                 # -----------text to speech--------------------------#
                 texttospeech_raw(ans, language="en")
