@@ -273,12 +273,12 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        pd.DataFrame(qar).to_csv("qar_all.csv")
+                        df=pd.DataFrame(qar).to_csv("qar_all.csv")
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
-                        qar.to_csv(csv_buffer)
+                        df.to_csv(csv_buffer)
                         s3_resource = boto3.resource('s3')
-                        s3_resource.Object(bucket, 'qar.csv').put(Body=csv_buffer.getvalue())
+                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
@@ -297,12 +297,12 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        pd.DataFrame(qar).to_csv("qar_all.csv")
+                        df=pd.DataFrame(qar).to_csv("qar_all.csv")
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
-                        qar.to_csv(csv_buffer)
+                        df.to_csv(csv_buffer)
                         s3_resource = boto3.resource('s3')
-                        s3_resource.Object(bucket, 'qar.csv').put(Body=csv_buffer.getvalue())
+                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
 
             #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
                 
