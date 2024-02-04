@@ -277,7 +277,7 @@ if (uploaded_file is not None):
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
                         df.to_csv(csv_buffer)
-                        s3 = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                        s3_resource = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
                         s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
@@ -301,7 +301,7 @@ if (uploaded_file is not None):
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
                         df.to_csv(csv_buffer)
-                        s3 = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                        s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
                         s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
                         
 
