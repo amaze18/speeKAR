@@ -272,7 +272,7 @@ if (uploaded_file is not None):
                 score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
                 #key=f"slider-{st.session_state['query_counter']}")
                 st.write("Liker score is: ",score)
-                ideal_answer=st.text_area(label="Give your ideal answer instead?")
+                ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                 qar=[]
                 qar.append([query,ans,time,score,ideal_answer])
                 pd.DataFrame(qar).to_csv("qar_all.csv")
