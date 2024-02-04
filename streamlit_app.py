@@ -264,7 +264,15 @@ if (uploaded_file is not None):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
                         ans, context, keys = chatbot_slim(query, context, keywords)
-                        rouge_score=calculate_rouge_scores(ans,context)
+                        rouge_scores=calculate_rouge_scores(ans,context)
+                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                        #key=f"slider-{st.session_state['query_counter']}")
+                        st.write("Liker score is: ",score)
+                        st.write(context)
+                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
+                        qar=[]
+                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
+                        pd.DataFrame(qar).to_csv("qar_all.csv")
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
@@ -275,16 +283,17 @@ if (uploaded_file is not None):
                     else:
                         ans = chatbot(query,db)
                         message = {"role": "assistant", "content": ans}
+                        rouge_scores=calculate_rouge_scores(ans,context)
+                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                        #key=f"slider-{st.session_state['query_counter']}")
+                        st.write("Liker score is: ",score)
+                        st.write(context)
+                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
+                        qar=[]
+                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
+                        pd.DataFrame(qar).to_csv("qar_all.csv")
             #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
-            with st.chat_message("assistant"):
-                score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
-                #key=f"slider-{st.session_state['query_counter']}")
-                st.write("Liker score is: ",score)
-                st.write(context)
-                ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
-                qar=[]
-                qar.append([query,ans,time,score,ideal_answer,rouge_score])
-                pd.DataFrame(qar).to_csv("qar_all.csv")
+                
                         
                 
                 # -----------text to speech--------------------------#
