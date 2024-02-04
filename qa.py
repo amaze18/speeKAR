@@ -694,6 +694,7 @@ def chatbot(question, db):
     openai.api_key = SECRET_TOKEN
     
     ctype=['stuff', 'map_reduce', 'refine', 'map_rerank']
+    st.write(question)
 
     retriever = db.as_retriever(search_type='similarity', search_kwargs={"k": 4} )#do not increase k beyond 3, else
     docs_and_scores = db.similarity_search_with_score(question)
