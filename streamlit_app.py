@@ -120,6 +120,13 @@ def process_query(speech_input, email, passwd):
 def generate_kARanswer(query, text_split):
     ans, context, keys = chatbot_slim(query, text_split)
     return ans, context, keys
+from rouge import Rouge
+import time
+
+def calculate_rouge_scores(answer,context):
+    rouge = Rouge()
+    rouge_scores = rouge.get_scores(answer,context)
+    return rouge_scores
 
 
 # -------------------------------------------------------------------------#
@@ -257,6 +264,7 @@ if (uploaded_file is not None):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
                         ans, context, keys = chatbot_slim(query, context, keywords)
+                        rouge_score=calculate_rouge_scores(ans,context)
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
@@ -275,7 +283,7 @@ if (uploaded_file is not None):
                 st.write(context)
                 ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                 qar=[]
-                qar.append([query,ans,time,score,ideal_answer])
+                qar.append([query,ans,time,score,ideal_answer,rouge_score])
                 pd.DataFrame(qar).to_csv("qar_all.csv")
                         
                 
