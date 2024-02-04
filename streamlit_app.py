@@ -7,6 +7,7 @@ import math
 import glob
 import base64
 from io import StringIO
+import boto3
 
 import openai
 import tiktoken
@@ -120,6 +121,13 @@ def process_query(speech_input, email, passwd):
 def generate_kARanswer(query, text_split):
     ans, context, keys = chatbot_slim(query, text_split)
     return ans, context, keys
+from rouge import Rouge
+import time
+
+def calculate_rouge_scores(answer,context):
+    rouge = Rouge()
+    rouge_scores = rouge.get_scores(answer,context)
+    return rouge_scores
 
 
 # -------------------------------------------------------------------------#
@@ -228,43 +236,78 @@ if (uploaded_file is not None):
     # User-provided prompt
     #if prompt := st.chat_input():
     
-    
+    #slider_value = 2.5  # Default value for the slider
+
     with st.chat_message("user"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
-        query_text = st.text_area(label = "Let me know what you have in mind!")
-    st.session_state.messages.append({"role": "user", "content": query_text})
+        query_text = st.text_area(label="Let me know what you have in mind!")
+        st.session_state.messages.append({"role": "user", "content": (query_text)})
+        # Add a slider for each question
+     #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
+        #key=f"slider-{st.session_state['query_counter']}")
+   # st.write("Liker score is: ",score)
+    #query_text = st.chat_input("Let me know what you have in mind")
+      
+    
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
-            
-            
             query = query_text
-            
             context, keywords = create_context(query, text_split, headings, para_texts)
             
             
-            # Generate a new response if last message is not from assistant
+            # Generate a new response if the last message is not from the assistant
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
                         ans, context, keys = chatbot_slim(query, context, keywords)
-                        
-                        if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                        rouge_scores=calculate_rouge_scores(ans,context)
+                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                        #key=f"slider-{st.session_state['query_counter']}")
+                        st.write("Liker score is: ",score)
+                        #st.write(context)
+                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
+                        qar=[]
+                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
+                        df=pd.DataFrame(qar)
+                        bucket = 'aiex' # already created on S3
+                        csv_buffer = StringIO()
+                        df.to_csv(csv_buffer)
+                        s3_resource = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
+                        if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
-                        else:
                             
+                        else:
                             message = {"role": "assistant", "content": ans}
+                            
                     else:
                         ans = chatbot(query,db)
-                        
                         message = {"role": "assistant", "content": ans}
+                        rouge_scores=calculate_rouge_scores(ans,context)
+                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                        #key=f"slider-{st.session_state['query_counter']}")
+                        st.write("Liker score is: ",score)
+                        #st.write(context)
+                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
+                        qar=[]
+                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
+                        df=pd.DataFrame(qar)
+                        bucket = 'aiex' # already created on S3
+                        csv_buffer = StringIO()
+                        df.to_csv(csv_buffer)
+                        s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
                         
+
+            #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
                 
+                        
                 
                 # -----------text to speech--------------------------#
                 texttospeech_raw(ans, language="en")
