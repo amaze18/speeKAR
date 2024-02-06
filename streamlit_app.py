@@ -294,9 +294,9 @@ if (uploaded_file is not None):
                           csv_buffer = StringIO()
                           file_name.to_csv(csv_buffer)
                           timestr = time.strftime("%Y%m%d-%H%M%S")
-                         file_name="df "+timestr+ ".csv"
-                         s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                         s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
+                          file_name="df "+timestr+ ".csv"
+                          s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                          s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
                 
                 
                         
