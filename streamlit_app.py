@@ -282,11 +282,11 @@ if (uploaded_file is not None):
             #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
             with st.chat_message("assistant"):
                 rouge_scores=calculate_rouge_scores(ans,context)
-                score = st.slider("Rate the answer on scale of 5, 5:excellent,1:bad", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                score = st.slider("Rate the answer on scale of 5, 5=excellent,1=bad", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
                         #key=f"slider-{st.session_state['query_counter']}")
                 st.write("Liker score is: ",score)
                         #st.write(context)
-                ideal_answer=st.text_area(label="Give your ideal answer:Enter the reference source to actual answer",value="")
+                ideal_answer=st.text_area(label="Give your ideal answer --> Enter the reference source to actual answer",value="")
                 qar=[]
                 qar.append([query,ans,time,score,ideal_answer,rouge_scores])
                 file_name=pd.DataFrame(qar)
