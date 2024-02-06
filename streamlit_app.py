@@ -263,7 +263,7 @@ if (uploaded_file is not None):
         
       
     
-    if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
+    #if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
@@ -280,20 +280,20 @@ if (uploaded_file is not None):
                        
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(str(query),db)
-                            message = {"role": "assistant", "content": ans}
-                            #st.session_state.messages.append({"role": "user", "content": ans})
-                           # st.markdown(message)
+                            #message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            st.markdown(message)
                             
                         else:
-                            message = {"role": "assistant", "content": ans}
-                          #  st.session_state.messages.append({"role": "user", "content": ans})
-                           # st.markdown(message)
+                            #message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            st.markdown(message)
                             
                     else:
                         ans = chatbot(str(query),db)
-                        message = {"role": "assistant", "content": ans}
-                      #  st.session_state.messages.append({"role": "user", "content": ans})
-                      #  st.markdown(message)
+                         #message = {"role": "assistant", "content": ans}
+                        st.session_state.messages.append({"role": "user", "content": ans})
+                        st.markdown(message)
                         
                         
 
@@ -335,19 +335,22 @@ if (uploaded_file is not None):
                     mymidia_placeholder.empty()
                     time.sleep(1)
                     mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-            st.session_state.messages.append(message)    
+            st.session_state.messages.append(ans)
+            with st.chat_message("user"):
+                st.markdown(ans)
             st.session_state["query_status"] = False
             st.session_state["text_input_status"] = False
             st.session_state["audio_input_status"] = False
+            
 
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 
-if st.session_state.messages != []:
-    for message in st.session_state.messages[::1]:
-        with st.chat_message(message.role):
-            st.write(message.content)
+#if st.session_state.messages != []:
+#    for message in st.session_state.messages[::1]:
+#        with st.chat_message(message.role):
+#            st.write(message.content)
 
 
 
