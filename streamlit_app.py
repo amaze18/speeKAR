@@ -335,7 +335,7 @@ if (uploaded_file is not None):
                     mymidia_placeholder.empty()
                     time.sleep(1)
                     mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-            st.session_state.messages.append(message)    
+            st.session_state.messages.append(ans)    
             st.session_state["query_status"] = False
             st.session_state["text_input_status"] = False
             st.session_state["audio_input_status"] = False
