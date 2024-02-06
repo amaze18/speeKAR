@@ -346,8 +346,8 @@ if (uploaded_file is not None):
 
 if st.session_state.messages != []:
     for message in st.session_state.messages[::1]:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
+        with st.chat_message(message.role):
+            st.write(message.content)
 
 
 
