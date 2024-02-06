@@ -276,10 +276,10 @@ if (uploaded_file is not None):
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
-                        ans, context, keys = chatbot_slim(query, context, keywords)
+                        ans, context, keys = chatbot_slim(str(query), context, keywords)
                        
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
-                            ans = chatbot(query,db)
+                            ans = chatbot(str(query),db)
                             message = {"role": "assistant", "content": ans}
                             #st.session_state.messages.append({"role": "user", "content": ans})
                            # st.markdown(message)
@@ -290,7 +290,7 @@ if (uploaded_file is not None):
                            # st.markdown(message)
                             
                     else:
-                        ans = chatbot(query,db)
+                        ans = chatbot(str(query),db)
                         message = {"role": "assistant", "content": ans}
                       #  st.session_state.messages.append({"role": "user", "content": ans})
                       #  st.markdown(message)
