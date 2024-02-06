@@ -231,7 +231,9 @@ if (uploaded_file is not None):
 
     if uploaded_file is not None and st.session_state["db_created"] == True:
         st.title("Ask me anything about the document!")
-
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
     
     # User-provided prompt
     #if prompt := st.chat_input():
