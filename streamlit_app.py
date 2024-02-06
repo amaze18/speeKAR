@@ -238,17 +238,22 @@ if (uploaded_file is not None):
     
     #slider_value = 2.5  # Default value for the slider
 
-    with st.chat_message("user"):
+   # with st.chat_message("assistant"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
+        #query_text = st.text_area(label="Let me know what you have in mind!")
+       # st.session_state.messages.append({"role": "user", "content": (query_text)})
+    # Add a slider for each question
+    #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
+        #key=f"slider-{st.session_state['query_counter']}")
+    # st.write("Liker score is: ",score)
+    #query_text = st.chat_input("Let me know what you have in mind")
+    with st.chat_input("Let me know what you have in mind!"):
         query_text = st.text_area(label="Let me know what you have in mind!")
         st.session_state.messages.append({"role": "user", "content": (query_text)})
-        # Add a slider for each question
-     #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-        #key=f"slider-{st.session_state['query_counter']}")
-   # st.write("Liker score is: ",score)
-    #query_text = st.chat_input("Let me know what you have in mind")
+        st.markdown(query_text)
+        
       
     
     if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
@@ -268,14 +273,23 @@ if (uploaded_file is not None):
                        
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
-                            message = {"role": "assistant", "content": ans}
+                           # message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            with st.chat_message("assistant"):
+                                st.markdown(ans)
                             
                         else:
-                            message = {"role": "assistant", "content": ans}
+                            #message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            with st.chat_message("assistant"):
+                                st.markdown(ans)
                             
                     else:
                         ans = chatbot(query,db)
-                        message = {"role": "assistant", "content": ans}
+                        #message = {"role": "assistant", "content": ans}
+                        st.session_state.messages.append({"role": "user", "content": ans})
+                        with st.chat_message("assistant"):
+                                st.markdown(ans)
                         
                         
 
