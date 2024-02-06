@@ -282,18 +282,18 @@ if (uploaded_file is not None):
                        
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(str(query),db)
-                            #message = {"role": "assistant", "content": ans}
+                            message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
                             st.markdown(ans)
                             
                         else:
-                            #message = {"role": "assistant", "content": ans}
+                            message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
                             st.markdown(ans)
                             
                     else:
                         ans = chatbot(str(query),db)
-                         #message = {"role": "assistant", "content": ans}
+                        message = {"role": "assistant", "content": ans}
                         st.session_state.messages.append({"role": "user", "content": ans})
                         st.markdown(ans)
                         
@@ -337,7 +337,7 @@ if (uploaded_file is not None):
                     mymidia_placeholder.empty()
                     time.sleep(1)
                     mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-            st.session_state.messages.append(ans)
+            st.session_state.messages.append(message)
             #with st.chat_message("user"):
                 #st.markdown(ans)
             st.session_state["query_status"] = False
