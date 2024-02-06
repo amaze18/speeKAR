@@ -249,10 +249,17 @@ if (uploaded_file is not None):
         #key=f"slider-{st.session_state['query_counter']}")
     # st.write("Liker score is: ",score)
     #query_text = st.chat_input("Let me know what you have in mind")
-    with st.chat_input("Let me know what you have in mind!"):
-        query_text = st.text_area(label="Let me know what you have in mind!")
-        st.session_state.messages.append({"role": "user", "content": (query_text)})
-        st.markdown(query_text)
+        if query_text := st.chat_input("Let me know what you have in mind!"):
+            # Add user message to chat history
+            st.session_state.messages.append({"role": "user", "content": query_text})
+            # Display user message in chat message container
+            with st.chat_message("user"):
+                st.markdown(query_text)
+        
+        #query_text = st.chat_input("")
+        #query_text = st.text_area(label="Let me know what you have in mind!")
+       # st.session_state.messages.append({"role": "user", "content": (query_text)})
+      #  st.markdown(query_text)
         
       
     
