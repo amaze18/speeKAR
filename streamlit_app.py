@@ -231,9 +231,9 @@ if (uploaded_file is not None):
 
     if uploaded_file is not None and st.session_state["db_created"] == True:
         st.title("Ask me anything about the document!")
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    #for message in st.session_state.messages:
+    #    with st.chat_message(message["role"]):
+    #        st.markdown(message["content"])
     
     # User-provided prompt
     #if prompt := st.chat_input():
@@ -284,18 +284,18 @@ if (uploaded_file is not None):
                             ans = chatbot(str(query),db)
                             #message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
-                            st.markdown(message)
+                            st.markdown(ans)
                             
                         else:
                             #message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
-                            st.markdown(message)
+                            st.markdown(ans)
                             
                     else:
                         ans = chatbot(str(query),db)
                         #message = {"role": "assistant", "content": ans}
                         st.session_state.messages.append({"role": "user", "content": ans})
-                        st.markdown(message)
+                        st.markdown(ans)
                         
                         
 
@@ -344,11 +344,6 @@ if (uploaded_file is not None):
             st.session_state["query_status"] = False
             st.session_state["text_input_status"] = False
             st.session_state["audio_input_status"] = False
-            
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ]
 
 # ------------------------------------------------------------------------------#
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
