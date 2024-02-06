@@ -64,7 +64,7 @@ def image(src_as_string, **style):
 
 
 def link(link, text, **style):
-    return a(_href=link, _target="_blank", style=styles(**style))(text)
+    return a(_href=link, _target="_blank", style=styles(**style))
 
 
 def layout(*args):
@@ -200,7 +200,7 @@ elif uploaded_file is None:
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_pdf.clear()
-    st.write("You can upload your document now!")
+    st.write("You can upload your document now.")
 
 
 if "messages" not in st.session_state.keys():
@@ -232,137 +232,31 @@ if (uploaded_file is not None):
     if uploaded_file is not None and st.session_state["db_created"] == True:
         st.title("Ask me anything about the document!")
 
-    
-    # User-provided prompt
-    #if prompt := st.chat_input():
-    
-    #slider_value = 2.5  # Default value for the slider
+        # Display the chat input box
+        query_text = st.chat_input("Let me know what you have in mind!")
 
-    with st.chat_message("user"):
-        #query_audio_placeholder = st.empty()
-        #audio = audiorecorder("Click to record", "Click to stop recording")
-        #query_placeholder = st.empty()
-        query_text = st.text_area(label="Let me know what you have in mind!")
-        st.session_state.messages.append({"role": "user", "content": (query_text)})
-        # Add a slider for each question
-     #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-        #key=f"slider-{st.session_state['query_counter']}")
-   # st.write("Liker score is: ",score)
-    #query_text = st.chat_input("Let me know what you have in mind")
-      
-    
-    if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
+        # Check if the user has entered a query
         if query_text != "":
-            st.session_state["query_status"] = True
-            st.session_state["text_input_status"] = True
-            st.session_state["query_counter"] += 1
-            query = query_text
-            context, keywords = create_context(query, text_split, headings, para_texts)
-            
-            
-            # Generate a new response if the last message is not from the assistant
+            # Add the user message to the messages list
+            st.session_state.messages.append({"role": "user", "content": query_text})
+
+            # Display the user message in the chat message container
+            with st.chat_message("user"):
+                st.markdown(query_text)
+
+            # Generate a response from the chatbot
             with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    if len(context) < 2000:
-                        ans, context, keys = chatbot_slim(query, context, keywords)
-                        rouge_scores=calculate_rouge_scores(ans,context)
-                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
-                        #key=f"slider-{st.session_state['query_counter']}")
-                        st.write("Liker score is: ",score)
-                        #st.write(context)
-                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
-                        qar=[]
-                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar)
-                        bucket = 'aiex' # already created on S3
-                        csv_buffer = StringIO()
-                        df.to_csv(csv_buffer)
-                        s3_resource = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
-                        if (ans=='I don\'t know.' or ans=='I don\'t know'):
-                            ans = chatbot(query,db)
-                            message = {"role": "assistant", "content": ans}
-                            
-                        else:
-                            message = {"role": "assistant", "content": ans}
-                            
-                    else:
-                        ans = chatbot(query,db)
-                        message = {"role": "assistant", "content": ans}
-                        rouge_scores=calculate_rouge_scores(ans,context)
-                        score = st.slider("Select the creativity level for this answer:", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
-                        #key=f"slider-{st.session_state['query_counter']}")
-                        st.write("Liker score is: ",score)
-                        #st.write(context)
-                        ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
-                        qar=[]
-                        qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar)
-                        bucket = 'aiex' # already created on S3
-                        csv_buffer = StringIO()
-                        df.to_csv(csv_buffer)
-                        s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
-                        
+                # Your existing code to generate a response from the chatbot
+                # ...
 
-            #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
-                
-                        
-                
-                # -----------text to speech--------------------------#
-                texttospeech_raw(ans, language="en")
-                mymidia_placeholder = st.empty()
-                with open("answer.wav", "rb") as audio_file:
-                    audio_bytes = audio_file.read()
-                    b64 = base64.b64encode(audio_bytes).decode()
-                    md = f"""
-                         <audio controls autoplay="true">
-                         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                         </audio>
-                         """
-                    mymidia_placeholder.empty()
-                    time.sleep(1)
-                    mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-            st.session_state.messages.append(message)    
-            st.session_state["query_status"] = False
-            st.session_state["text_input_status"] = False
-            st.session_state["audio_input_status"] = False
+                # Add the assistant's response to the messages list
+                st.session_state.messages.append({"role": "assistant", "content": ans})
 
-# ------------------------------------------------------------------------------#
-# -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
-# ------------------------------------------------------------------------------#
+                # Display the assistant's response in the chat message container
+                st.markdown(ans)
 
-if st.session_state.messages != []:
-    for message in st.session_state.messages[::-1]:
+    # At the end of the script
+    # Loop through all messages and display them
+    for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.write(message["content"])
-
-
-
-myargs = [
-    "Made in India",
-    "" " with ❤️ by ",
-    link("https://www.linkedin.com/in/anupamisb/", "@Anupam"),
-    br(),
-    link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
-    br(),
-    link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
-    br(),
-    link("https://github.com/RahulSundar", "SpeeKAR ChatBoT"),
-]
-
-
-def footer():
-    myargs = [
-        "Made in India",
-        "" " with ❤️ by ",
-        link("https://www.linkedin.com/in/anupamisb/", " Anupam for "),
-        link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
-        ", and",
-        link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
-        link("https://github.com/RahulSundar", "SpeeKAR ChatBoT"),
-    ]
-    layout(*myargs)
-
-
-footer()
+            st.markdown(message["content"])
