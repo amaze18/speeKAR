@@ -282,21 +282,18 @@ if (uploaded_file is not None):
                             ans = chatbot(str(query),db)
                            # message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
-                            with st.chat_message("assistant"):
-                                st.markdown(ans)
+                            st.markdown(ans)
                             
                         else:
                             #message = {"role": "assistant", "content": ans}
                             st.session_state.messages.append({"role": "user", "content": ans})
-                            with st.chat_message("assistant"):
-                                st.markdown(ans)
+                            st.markdown(ans)
                             
                     else:
                         ans = chatbot(str(query),db)
                         #message = {"role": "assistant", "content": ans}
                         st.session_state.messages.append({"role": "user", "content": ans})
-                        with st.chat_message("assistant"):
-                                st.markdown(ans)
+                        st.markdown(ans)
                         
                         
 
