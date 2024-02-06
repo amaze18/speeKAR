@@ -281,7 +281,7 @@ if (uploaded_file is not None):
 
             #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
             with st.chat_message("assistant"):
-                          rouge_scores=calculate_rouge_scores(ans,context)
+                rouge_scores=calculate_rouge_scores(ans,context)
                           score = st.slider("Rate the answer on scale of 5, 5:excellent,1:bad", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
                         #key=f"slider-{st.session_state['query_counter']}")
                           st.write("Liker score is: ",score)
@@ -297,6 +297,8 @@ if (uploaded_file is not None):
                           file_name="df "+timestr+ ".csv"
                           s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
                           s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
+                
+                          
                 
                 
                         
