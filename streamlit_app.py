@@ -273,12 +273,14 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar)
+                        file_name=pd.DataFrame(qar)
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
-                        df.to_csv(csv_buffer)
-                        s3_resource = boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
+                        file_name.to_csv(csv_buffer)
+                        timestr = time.strftime("%Y%m%d-%H%M%S")
+                        file_name="df "+timestr+ ".csv"
+                        s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                        s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(query,db)
                             message = {"role": "assistant", "content": ans}
@@ -297,12 +299,14 @@ if (uploaded_file is not None):
                         ideal_answer=st.text_area(label="Give your ideal answer instead",value="")
                         qar=[]
                         qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                        df=pd.DataFrame(qar)
+                        file_name=pd.DataFrame(qar)
                         bucket = 'aiex' # already created on S3
                         csv_buffer = StringIO()
-                        df.to_csv(csv_buffer)
+                        file_name.to_csv(csv_buffer)
+                        timestr = time.strftime("%Y%m%d-%H%M%S")
+                        file_name="df "+timestr+ ".csv"
                         s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                        s3_resource.Object(bucket, 'df.csv').put(Body=csv_buffer.getvalue())
+                        s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
                         
 
             #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
@@ -366,3 +370,4 @@ def footer():
 
 
 footer()
+
