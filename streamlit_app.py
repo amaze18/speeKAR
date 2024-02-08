@@ -243,15 +243,21 @@ if (uploaded_file is not None):
 
         # Display the chat input box
         query_text = st.chat_input("Let me know what you have in mind!")
-
-        # Check if the user has entered a query
         if query_text != "":
-            # Add the user message to the messages list
+            st.session_state["query_status"] = True
+            st.session_state["text_input_status"] = True
+            st.session_state["query_counter"] += 1
             st.session_state.messages.append({"role": "user", "content": query_text})
 
             # Display the user message in the chat message container
             with st.chat_message("user"):
                 st.markdown(query_text)
+            
+            
+            query = query_text
+            
+            context, keywords = create_context(query, text_split, headings, para_texts)
+            
 
             # Generate a response from the chatbot
             with st.chat_message("assistant"):
