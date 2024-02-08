@@ -326,3 +326,31 @@ if (uploaded_file is not None):
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+
+myargs = [
+    "Made in India",
+    "" " with ❤ by ",
+    link("https://www.linkedin.com/in/anupamisb/", "@Anupam"),
+    br(),
+    link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
+    br(),
+    link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
+    br(),
+    link("https://github.com/RahulSundar", "SpeeKAR ChatBoT"),
+]
+
+
+def footer():
+    myargs = [
+        "Made in India",
+        "" " with ❤ by ",
+        link("https://www.linkedin.com/in/anupamisb/", " Anupam for "),
+        link("https://anupam-purwar.github.io/page/", "SpeeKAR ChatBoT"),
+        ", and",
+        link("https://www.linkedin.com/in/rahul-sundar-311a6977/", "@Rahul"),
+        link("https://github.com/RahulSundar", "SpeeKAR ChatBoT"),
+    ]
+    layout(*myargs)
+
+
+footer()
