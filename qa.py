@@ -656,7 +656,7 @@ def chatbot_slim(question, context, keywords):
     #conversation_prompt += f"User: {question}\nAssistant:"
 
     openai.api_key = "YOUR_SECRET_TOKEN"  # Replace with your actual secret token
-    model = "gpt-3.5-turbo-instruct"
+    model = "gpt-3.5-turbo-0125"
 
     # Generate response using OpenAI's Chat API
     chat = openai.ChatCompletion.create(
@@ -708,7 +708,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-16k-0613",
+    model="gpt-3.5-turbo-0125",
     
     messages=[
         {"role": "system", 
