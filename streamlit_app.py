@@ -170,7 +170,7 @@ if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
 
 uploaded_file = st.file_uploader(label = "")
-if st.session_state["uploaded_status"] == False and uploaded_file is not None:
+if st.session_state["uploaded_status"] is False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_pdf.clear()
@@ -238,7 +238,7 @@ if (uploaded_file is not None):
     
     st.session_state["db_created"] = True    
 
-    if uploaded_file is not None and st.session_state["db_created"] == True:
+    if uploaded_file is not None and st.session_state["db_created"] is True:
         st.title("Ask me anything about the document!")
 
         # Display the chat input box
