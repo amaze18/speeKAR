@@ -255,14 +255,65 @@ if (uploaded_file is not None):
 
             # Generate a response from the chatbot
             with st.chat_message("assistant"):
-                # Your existing code to generate a response from the chatbot
-                # ...
-
-                # Add the assistant's response to the messages list
-                st.session_state.messages.append({"role": "assistant", "content": ans})
-
-                # Display the assistant's response in the chat message container
-                st.markdown(ans)
+                with st.spinner("Thinking..."):
+                    if len(context) < 2000:
+                        ans, context, keys = chatbot_slim(str(query), context, keywords)
+                       
+                        if (ans=='I don\'t know.' or ans=='I don\'t know'):
+                            ans = chatbot(str(query),db)
+                            #message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            st.markdown(ans)
+                            
+                        else:
+                            #message = {"role": "assistant", "content": ans}
+                            st.session_state.messages.append({"role": "user", "content": ans})
+                            st.markdown(ans)
+                            
+                    else:
+                        ans = chatbot(str(query),db)
+                        #message = {"role": "assistant", "content": ans}
+                        st.session_state.messages.append({"role": "user", "content": ans})
+                        st.markdown(ans)
+     #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
+            with st.chat_message("assistant"):
+                rouge_scores=calculate_rouge_scores(ans,context)
+                score = st.slider("Rate the answer on scale of 5, 5=excellent,1=bad", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
+                        #key=f"slider-{st.session_state['query_counter']}")
+                st.write("Rating provided by user: ",score)
+                        #st.write(context)
+                ideal_answer=st.text_area(label="Give your ideal answer --> Enter the reference source to actual answer",value="")
+                qar=[]
+                qar.append([query,ans,time,score,ideal_answer,rouge_scores])
+                file_name=pd.DataFrame(qar)
+                bucket = 'aiex' # already created on S3
+                csv_buffer = StringIO()
+                file_name.to_csv(csv_buffer)
+                timestr = time.strftime("%Y%m%d-%H%M%S")
+                file_name="df "+timestr+ ".csv"
+                s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
+                s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
+# -----------text to speech--------------------------#
+                texttospeech_raw(ans, language="en")
+                mymidia_placeholder = st.empty()
+                with open("answer.wav", "rb") as audio_file:
+                    audio_bytes = audio_file.read()
+                    b64 = base64.b64encode(audio_bytes).decode()
+                    md = f"""
+                         <audio controls autoplay="true">
+                         <source src="data:audio/wav;base64,{b64}" type="audio/wav">
+                         </audio>
+                         """
+                    mymidia_placeholder.empty()
+                    time.sleep(1)
+                    mymidia_placeholder.markdown(md, unsafe_allow_html=True)
+            
+            st.session_state.messages.append(ans)
+            #with st.chat_message("user"):
+                #st.markdown(ans)
+            st.session_state["query_status"] = False
+            st.session_state["text_input_status"] = False
+            st.session_state["audio_input_status"] = False
 
     # At the end of the script
     # Loop through all messages and display them
