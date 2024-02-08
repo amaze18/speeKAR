@@ -7,7 +7,6 @@ import math
 import glob
 import base64
 from io import StringIO
-import boto3
 
 import openai
 import tiktoken
@@ -121,13 +120,6 @@ def process_query(speech_input, email, passwd):
 def generate_kARanswer(query, text_split):
     ans, context, keys = chatbot_slim(query, text_split)
     return ans, context, keys
-from rouge import Rouge
-import time
-
-def calculate_rouge_scores(answer,context):
-    rouge = Rouge()
-    rouge_scores = rouge.get_scores(answer,context)
-    return rouge_scores
 
 
 # -------------------------------------------------------------------------#
@@ -231,97 +223,48 @@ if (uploaded_file is not None):
 
     if uploaded_file is not None and st.session_state["db_created"] == True:
         st.title("Ask me anything about the document!")
-    #for message in st.session_state.messages:
-    #    with st.chat_message(message["role"]):
-    #        st.markdown(message["content"])
+
     
     # User-provided prompt
     #if prompt := st.chat_input():
     
-    #slider_value = 2.5  # Default value for the slider
-
-   # with st.chat_message("assistant"):
+    
+    with st.chat_message("user"):
         #query_audio_placeholder = st.empty()
         #audio = audiorecorder("Click to record", "Click to stop recording")
         #query_placeholder = st.empty()
-        #query_text = st.text_area(label="Let me know what you have in mind!")
-       # st.session_state.messages.append({"role": "user", "content": (query_text)})
-    # Add a slider for each question
-    #   score = st.slider("Select the creativity level for this answer:", 0.0, 5.0, 2.5) 
-        #key=f"slider-{st.session_state['query_counter']}")
-    # st.write("Liker score is: ",score)
-    #query_text = st.chat_input("Let me know what you have in mind")
-        if query_text := st.chat_input("Let me know what you have in mind!"):
-            # Add user message to chat history
-            st.session_state.messages.append({"role": "user", "content": query_text})
-            # Display user message in chat message container
-            with st.chat_message("user"):
-                st.markdown(query_text)
-        
-        #query_text = st.chat_input("")
-        #query_text = st.text_area(label="Let me know what you have in mind!")
-       # st.session_state.messages.append({"role": "user", "content": (query_text)})
-      #  st.markdown(query_text)
-        
-      
-    
-    #if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
+        query_text = st.text_area(label = "Let me know what you have in mind!")
+    st.session_state.messages.append({"role": "user", "content": query_text})
+    if query_text != "":# or not audio.empty() and not os.path.exists("query.wav"):
         if query_text != "":
             st.session_state["query_status"] = True
             st.session_state["text_input_status"] = True
             st.session_state["query_counter"] += 1
+            
+            
             query = query_text
+            
             context, keywords = create_context(query, text_split, headings, para_texts)
             
             
-            # Generate a new response if the last message is not from the assistant
+            # Generate a new response if last message is not from assistant
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     if len(context) < 2000:
-                        ans, context, keys = chatbot_slim(str(query), context, keywords)
-                       
-                        if (ans=='I don\'t know.' or ans=='I don\'t know'):
-                            ans = chatbot(str(query),db)
-                            #message = {"role": "assistant", "content": ans}
-                            st.session_state.messages.append({"role": "user", "content": ans})
-                            st.markdown(ans)
-                            
+                        ans, context, keys = chatbot_slim(query, context, keywords)
+                        
+                        if (ans=='I don\'t know.' or ans=='I don\'t know' ):
+                            ans = chatbot(query,db)
+                            message = {"role": "assistant", "content": ans}
                         else:
-                            #message = {"role": "assistant", "content": ans}
-                            st.session_state.messages.append({"role": "user", "content": ans})
-                            st.markdown(ans)
                             
+                            message = {"role": "assistant", "content": ans}
                     else:
-                        ans = chatbot(str(query),db)
-                        #message = {"role": "assistant", "content": ans}
-                        st.session_state.messages.append({"role": "user", "content": ans})
-                        st.markdown(ans)
+                        ans = chatbot(query,db)
                         
+                        message = {"role": "assistant", "content": ans}
                         
-
-            #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
-            with st.chat_message("assistant"):
-                rouge_scores=calculate_rouge_scores(ans,context)
-                score = st.slider("Rate the answer on scale of 5, 5=excellent,1=bad", min_value=0.0,max_value=5.0,value=2.5,step=0.5) 
-                        #key=f"slider-{st.session_state['query_counter']}")
-                st.write("Rating provided by user: ",score)
-                        #st.write(context)
-                ideal_answer=st.text_area(label="Give your ideal answer --> Enter the reference source to actual answer",value="")
-                qar=[]
-                qar.append([query,ans,time,score,ideal_answer,rouge_scores])
-                file_name=pd.DataFrame(qar)
-                bucket = 'aiex' # already created on S3
-                csv_buffer = StringIO()
-                file_name.to_csv(csv_buffer)
-                timestr = time.strftime("%Y%m%d-%H%M%S")
-                file_name="df "+timestr+ ".csv"
-                s3_resource= boto3.resource('s3',aws_access_key_id=os.environ["ACCESS_ID"],aws_secret_access_key= os.environ["ACCESS_KEY"])
-                s3_resource.Object(bucket,file_name).put(Body=csv_buffer.getvalue())
                 
-                          
-                
-                
-                        
                 
                 # -----------text to speech--------------------------#
                 texttospeech_raw(ans, language="en")
@@ -337,10 +280,7 @@ if (uploaded_file is not None):
                     mymidia_placeholder.empty()
                     time.sleep(1)
                     mymidia_placeholder.markdown(md, unsafe_allow_html=True)
-            
-            st.session_state.messages.append(ans)
-            #with st.chat_message("user"):
-                #st.markdown(ans)
+            st.session_state.messages.append(message)    
             st.session_state["query_status"] = False
             st.session_state["text_input_status"] = False
             st.session_state["audio_input_status"] = False
@@ -349,10 +289,10 @@ if (uploaded_file is not None):
 # -------------------------QUERY AUDIO INPUT - RETURNING TEXT QUERY-------------#
 # ------------------------------------------------------------------------------#
 
-#if st.session_state.messages != []:
-#    for message in st.session_state.messages[::1]:
-#        with st.chat_message(message.role):
-#            st.write(message.content)
+if st.session_state.messages != []:
+    for message in st.session_state.messages[::-1]:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
 
 
