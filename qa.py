@@ -683,7 +683,7 @@ def chatbot_slim(question, context, keywords):
 @st.cache_resource(show_spinner=True)
 def create_db(_text_chunk, _uploaded_file_name):
 
-    hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
+    hf= OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=openai.api_key)
     db = FAISS.from_documents(_text_chunk, hf)
     db.save_local("faiss_index_anupam" + _uploaded_file_name)
     db=FAISS.load_local("faiss_index_anupam" + _uploaded_file_name, hf)
