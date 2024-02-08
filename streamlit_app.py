@@ -268,18 +268,18 @@ if (uploaded_file is not None):
                         if (ans=='I don\'t know.' or ans=='I don\'t know'):
                             ans = chatbot(str(query),db)
                             message = {"role": "assistant", "content": ans}
-                            #st.session_state.messages.append({"role": "user", "content": ans})
+                            st.session_state.messages.append({"role": "user", "content": ans})
                             st.markdown(ans)
                             
                         else:
                             message = {"role": "assistant", "content": ans}
-                            #st.session_state.messages.append({"role": "user", "content": ans})
+                            st.session_state.messages.append({"role": "user", "content": ans})
                             st.markdown(ans)
                             
                     else:
                         ans = chatbot(str(query),db)
                         message = {"role": "assistant", "content": ans}
-                        #st.session_state.messages.append({"role": "user", "content": ans})
+                        st.session_state.messages.append({"role": "user", "content": ans})
                         st.markdown(ans)
      #Generate a slider that takes input from 0 to 5 and asks for an ideal_answer
             with st.chat_message("assistant"):
