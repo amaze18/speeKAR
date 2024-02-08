@@ -202,6 +202,15 @@ elif uploaded_file is None:
     readdoc_splittext_pdf.clear()
     st.write("You can upload your document now.")
 
+import streamlit as st
+
+
+if "uploaded_status" not in st.session_state:
+    st.session_state["uploaded_status"] = False
+if "query_counter" not in st.session_state:
+    st.session_state["query_counter"] = 0
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 if "messages" not in st.session_state.keys():
     st.session_state.messages = []
