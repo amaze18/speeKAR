@@ -314,7 +314,7 @@ if (uploaded_file is not None):
                     time.sleep(1)
                     mymidia_placeholder.markdown(md, unsafe_allow_html=True)
             
-            st.session_state.messages.append(ans)
+            #st.session_state.messages.append(ans)
             #with st.chat_message("user"):
                 #st.markdown(ans)
             st.session_state["query_status"] = False
