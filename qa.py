@@ -518,8 +518,8 @@ def chatbot_slim(query, context, keywords):#text_split, headings, para_texts):
         chat = openai.Completion.create(
             #prompt=f"You answer question based on context below, and if the question can't be answered based on the context, 
             #say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
-            prompt=f"You are a question answering assistant with no previous information, 
-            you answer question based on following context and if question cannot be answered based on context, 
+            prompt=f"You are a question answering assistant with no previous information,\
+            you answer question based on following context and if question cannot be answered based on context, \
             say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:",
             temperature=0,
             max_tokens=2000,
