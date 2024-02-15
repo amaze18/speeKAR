@@ -555,8 +555,11 @@ def chatbot(question, db):
     retriever = db.as_retriever(search_type='similarity', search_kwargs={"k": 4} )#do not increase k beyond 3, else
     docs_and_scores = db.similarity_search_with_score(question)
         
+    #model="gpt-3.5-turbo",
+    #llm = OpenAI(model='text-davinci-003',temperature=0, openai_api_key=openai.api_key)
+    llm = OpenAI(model= "gpt-3.5-turbo-instruct",temperature=0, openai_api_key=openai.api_key)
     
-    llm = OpenAI(model='text-davinci-003',temperature=0, openai_api_key=openai.api_key)
+    
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type=ctype[0], retriever=retriever, return_source_documents=True)
 
     
@@ -564,7 +567,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
+    model = "gpt-3.5-turbo-instruct"
     
     messages=[
         {"role": "system", 
