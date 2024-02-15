@@ -567,8 +567,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model = "gpt-3.5-turbo-instruct"
-    
+    model = "gpt-3.5-turbo-instruct",
     messages=[
         {"role": "system", 
          "content": "You are a question-answering assistant, with no prior information. You answer questions based on content provided, if you dont know the answer say I do not know"},  
