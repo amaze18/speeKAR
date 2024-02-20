@@ -174,6 +174,7 @@ uploaded_file = st.file_uploader(label = "")
 if st.session_state["uploaded_status"] is False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
+    readdoc_splittext_txt.clear()
     readdoc_splittext_pdf.clear()
 
 if "query_counter" not in st.session_state:
@@ -200,6 +201,7 @@ elif uploaded_file is None:
     st.write("Dear user, clearing unnecesary data fo you to start afresh!!")
     create_db.clear()
     readdoc_splittext.clear()
+    readdoc_splittext_txt.clear()
     readdoc_splittext_pdf.clear()
     st.write("You can upload your document now.")
 
@@ -229,6 +231,8 @@ if (uploaded_file is not None):
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+    elif ".txt" in filename:
+        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_txt(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
     
