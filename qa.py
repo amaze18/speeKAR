@@ -318,7 +318,7 @@ def get_paragraphs(headings, paragraph_sentences):
 
 #---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
-def readdoc_splittext(filename):
+def readdoc_splittext_txt(filename):
   if ".txt" in filename:
     loader = UnstructuredFileLoader(filename)
     docs = loader.load()
