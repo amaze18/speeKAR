@@ -17,6 +17,7 @@ encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
 from qa import (
     speechtotext,
     readdoc_splittext,
+    readdoc_splittext_txt,
     readdoc_splittext_pdf,
     create_context,
     create_db,
