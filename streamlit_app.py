@@ -232,9 +232,9 @@ if (uploaded_file is not None):
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".txt" in filename:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_txt(filename)#uploaded_file.name)
+        all_text, text_split, text_raw, headings_list, paragraph_list = readdoc_splittext_txt(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
+        all_text, text_split, text_raw, headings_list, paragraph_list = readdoc_splittext_pdf(filename)#uploaded_file.name)
     
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
