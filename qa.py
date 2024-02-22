@@ -315,6 +315,59 @@ def get_paragraphs(headings, paragraph_sentences):
         
 
         return  paragraph_list
+#---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
+@st.cache_resource(show_spinner=True)
+def readdoc_splittext_pptx(filename):
+  if ".pptx" in filename:
+    loader = UnstructuredPowerPointLoader(filename)
+    docs = str(loader.load())
+  block_dict = get_block_dict_fromDoc(docs)
+  span_df = get_docfeature_dataframe(block_dict)
+  docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
+  docs_clean.head()
+  paragraphs = docs_clean.text[docs_clean.font_size == span_df.font_size.mode()[0]]
+  #print(paragraphs.values,paragraphs.index)
+  headings = docs_clean.text[docs_clean.font_size > span_df.font_size.mode()[0]]
+    #print(headings.values, headings.index)
+  #pat1= re.compile(r".+\:")
+  #pat2=re.compile(r".+\.\n")
+  #headings=pat1.search(docs)
+  #paragraphs=pat2.search(docs)
+  paragraph_list = get_paragraphs(headings, paragraphs)
+  headings_list = headings.values.tolist()
+  n = 1500 #Number of characters to be included in a single chunk of text
+  all_text=''
+  for text in paragraph_list:
+      all_text+=text
+  a=glob.glob(filename)
+    #print(a)
+  chunk_size = 1024
+  chunk_overlap=10
+  text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+  texts_isb=[]
+  texts_raw = []
+  documents=[]
+  for i in range(len(a)):
+        documents.extend(UnstructuredPowerPointLoader(a[i]).load())
+        for j in range(
+            len(
+                text_splitter.split_documents(
+                    UnstructuredPowerPointLoader(a[i]).load()
+                )
+            )
+        ):
+            text_chunk = text_splitter.split_documents(
+                UnstructuredPowerPointLoader(a[i]).load()
+            )[j]
+            text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            texts_isb.append(text_chunk.page_content)
+            texts_raw.append(text_chunk)
+
+  text_split = texts_isb
+  return all_text, text_split, texts_raw, headings_list, paragraph_list
 
 #---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
