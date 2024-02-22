@@ -332,10 +332,8 @@ def readdoc_splittext_txt(filename):
     #print(headings.values, headings.index)
   pat1= re.compile(r".+\:")
   pat2=re.compile(r".+\.\n")
-  headings=pat1.search(docs)
-  paragraphs=pat2.search(docs)
-  paragraph_list = paragraphs.tolist()
-  headings_list = headings.tolist()
+  headings_list=pat1.findall(docs)
+  paragraphs_list=pat2.findall(docs)
   n = 1500 #Number of characters to be included in a single chunk of text
   all_text=''
   for text in paragraph_list:
@@ -368,7 +366,7 @@ def readdoc_splittext_txt(filename):
             texts_raw.append(text_chunk)
 
   text_split = texts_isb
-  return all_text, text_split, texts_raw, headings_list, paragraph_list
+  return all_text, text_split, texts_raw, headings_list, paragraphs_list
 
 @st.cache_resource(show_spinner=True)
 def readdoc_splittext_pdf(filename):
