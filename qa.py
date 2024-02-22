@@ -322,17 +322,21 @@ def readdoc_splittext_txt(filename):
   if ".txt" in filename:
     loader = UnstructuredFileLoader(filename)
     docs = loader.load()
-  block_dict = get_block_dict_fromDoc(docs)
-  span_df = get_docfeature_dataframe(block_dict)
-  docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
+  #block_dict = get_block_dict_fromDoc(docs)
+  #span_df = get_docfeature_dataframe(block_dict)
+  #docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
   #doc_clean.head()
-  paragraphs = docs_clean.text[docs_clean.font_size == span_df.font_size.mode()[0]]
+  #paragraphs = docs_clean.text[docs_clean.font_size == span_df.font_size.mode()[0]]
   #print(paragraphs.values,paragraphs.index)
-  headings = docs_clean.text[docs_clean.font_size > span_df.font_size.mode()[0]]
+  #headings = docs_clean.text[docs_clean.font_size > span_df.font_size.mode()[0]]
     #print(headings.values, headings.index)
+  pat1= re.compile(r".+\:")
+  pat2=re.compile(r".+\.\n")
+  headings=pat1.search(docs)
+  paragraphs=pat2.search(docs)
   paragraph_list = get_paragraphs(headings, paragraphs)
   headings_list = headings.values.tolist()
-  n = 1500 #Number of characters to be included in a single chunk of text 
+  n = 1500 #Number of characters to be included in a single chunk of text
   all_text=''
   for text in paragraph_list:
       all_text+=text
@@ -362,7 +366,7 @@ def readdoc_splittext_txt(filename):
             text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
             texts_isb.append(text_chunk.page_content)
             texts_raw.append(text_chunk)
-    
+
   text_split = texts_isb
   return all_text, text_split, texts_raw, headings_list, paragraph_list
 
