@@ -18,6 +18,7 @@ from qa import (
     speechtotext,
     readdoc_splittext,
     readdoc_splittext_txt,
+    readdoc_splittext_pptx,
     readdoc_splittext_pdf,
     create_context,
     create_db,
@@ -175,6 +176,7 @@ if st.session_state["uploaded_status"] is False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_txt.clear()
+    readdoc_splittext_pptx.clear()
     readdoc_splittext_pdf.clear()
 
 if "query_counter" not in st.session_state:
@@ -202,6 +204,7 @@ elif uploaded_file is None:
     create_db.clear()
     readdoc_splittext.clear()
     readdoc_splittext_txt.clear()
+    readdoc_splittext_pptx.clear()
     readdoc_splittext_pdf.clear()
     st.write("You can upload your document now.")
 
@@ -233,6 +236,8 @@ if (uploaded_file is not None):
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".txt" in filename:
         all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_txt(filename)#uploaded_file.name)
+    elif ".pptx" in filename: #uploaded_file.name:
+        all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pdf(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pdf(filename)#uploaded_file.name)
     
