@@ -261,7 +261,7 @@ if (uploaded_file is not None):
             
             query = query_text
             
-            context, keywords = create_context(query, text_split, headings_list, para_texts)
+            context, keywords = create_context(query, text_split, headings_list, paragraph_list)
             
 
             # Generate a response from the chatbot
