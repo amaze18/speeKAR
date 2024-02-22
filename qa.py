@@ -334,8 +334,8 @@ def readdoc_splittext_txt(filename):
   pat2=re.compile(r".+\.\n")
   headings=pat1.search(docs)
   paragraphs=pat2.search(docs)
-  paragraph_list = paragraphs.values.tolist()
-  headings_list = headings.values.tolist()
+  paragraph_list = paragraphs.tolist()
+  headings_list = headings.tolist()
   n = 1500 #Number of characters to be included in a single chunk of text
   all_text=''
   for text in paragraph_list:
