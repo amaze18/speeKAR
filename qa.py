@@ -321,7 +321,7 @@ def get_paragraphs(headings, paragraph_sentences):
 def readdoc_splittext_txt(filename):
   if ".txt" in filename:
     loader = UnstructuredFileLoader(filename)
-    docs = loader.load()
+    docs = str(loader.load())
   #block_dict = get_block_dict_fromDoc(docs)
   #span_df = get_docfeature_dataframe(block_dict)
   #docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
