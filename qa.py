@@ -320,7 +320,7 @@ def get_paragraphs(headings, paragraph_sentences):
 def readdoc_splittext_pptx(filename):
   if ".pptx" in filename:
     loader = UnstructuredPowerPointLoader(filename)
-    docs = str(loader.load())
+    docs = loader.load()
   block_dict = get_block_dict_fromDoc(docs)
   span_df = get_docfeature_dataframe(block_dict)
   docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
