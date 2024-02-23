@@ -324,12 +324,24 @@ def extract_text_from_pptx(filename):
             if hasattr(shape, "text"):
                 text += shape.text + "\n"
     return text
+def extract_image_addresses(filename):
+    image_addresses = []
+
+    prs = Presentation(filename)
+
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            if shape.shape_type == 13:  # Check if shape is an image
+                image_addresses.append(shape.image.anchor.photovalue.url)
+
+    return image_addresses
 #---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
 def readdoc_splittext_pptx(filename):
   if ".pptx" in filename:
     loader = UnstructuredPowerPointLoader(filename)
     docs = extract_text_from_pptx(filename)
+    image_addresses = extract_image_addresses(filename)
   pat1= re.compile(r".+\:")
   pat2=re.compile(r".+\.\n")
   headings_list=pat1.findall(docs)
