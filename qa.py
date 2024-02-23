@@ -330,7 +330,7 @@ def readdoc_splittext_pptx(filename):
   if ".pptx" in filename:
     loader = UnstructuredPowerPointLoader(filename)
     docs = extract_text_from_pptx(filename)
-  block_dict = get_block_dict_fromDoc(doc)
+  block_dict = get_block_dict_fromDoc(docs)
   span_df = get_docfeature_dataframe(block_dict)
   doc_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
     #doc_clean.head()
