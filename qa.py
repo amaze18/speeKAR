@@ -330,19 +330,10 @@ def readdoc_splittext_pptx(filename):
   if ".pptx" in filename:
     loader = UnstructuredPowerPointLoader(filename)
     docs = extract_text_from_pptx(filename)
-  block_dict = get_block_dict_fromDoc(docs)
-  span_df = get_docfeature_dataframe(block_dict)
-  doc_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
-    #doc_clean.head()
-  paragraphs = doc_clean.text[doc_clean.font_size == span_df.font_size.mode()[0]]
-    #print(paragraphs.values,paragraphs.index)
-  headings = doc_clean.text[doc_clean.font_size > span_df.font_size.mode()[0]]
-    #print(headings.values, headings.index)
-  paragraph_list = get_paragraphs(headings, paragraphs)
-  headings_list = headings.values.tolist()
-
-  paragraph_list = get_paragraphs(headings, paragraphs)
-  headings_list = headings.values.tolist()
+  pat1= re.compile(r".+\:")
+  pat2=re.compile(r".+\.\n")
+  headings_list=pat1.findall(docs)
+  paragraph_list=pat2.findall(docs)
   n = 1500 #Number of characters to be included in a single chunk of text
   all_text=''
   for text in paragraph_list:
