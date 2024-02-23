@@ -19,6 +19,7 @@ ffmpeg-python
 mutagen
 python-docx
 python-pptx
+pillow
 pytesseract
 audio-recorder-streamlit
 SpeechRecognition
