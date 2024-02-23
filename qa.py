@@ -31,6 +31,8 @@ from urllib.parse import urlparse
 import pandas as pd
 import pprint as pp
 from pptx import Presentation
+from PIL import Image
+import pytesseract
 from docx import Document as Docxreader
 from docx.shared import Inches
 import textwrap
