@@ -30,7 +30,7 @@ from urllib.parse import urlparse
 # -------DATA FRAME/DOCX/TEXT HANDLING----------$
 import pandas as pd
 import pprint as pp
-import python-pptx 
+from pptx import Presentation
 from docx import Document as Docxreader
 from docx.shared import Inches
 import textwrap
@@ -316,24 +316,31 @@ def get_paragraphs(headings, paragraph_sentences):
         
 
         return  paragraph_list
+def extract_text_from_pptx(filename):
+    text = ""
+    prs = Presentation(filename)
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            if hasattr(shape, "text"):
+                text += shape.text + "\n"
+    return text
 #---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
 def readdoc_splittext_pptx(filename):
   if ".pptx" in filename:
     loader = UnstructuredPowerPointLoader(filename)
-    docs = loader.load()
-  block_dict = get_block_dict_fromDoc(docs)
+    docs = extract_text_from_pptx(filename)
+  block_dict = get_block_dict_fromDoc(doc)
   span_df = get_docfeature_dataframe(block_dict)
-  docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
-  docs_clean.head()
-  paragraphs = docs_clean.text[docs_clean.font_size == span_df.font_size.mode()[0]]
-  #print(paragraphs.values,paragraphs.index)
-  headings = docs_clean.text[docs_clean.font_size > span_df.font_size.mode()[0]]
+  doc_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
+    #doc_clean.head()
+  paragraphs = doc_clean.text[doc_clean.font_size == span_df.font_size.mode()[0]]
+    #print(paragraphs.values,paragraphs.index)
+  headings = doc_clean.text[doc_clean.font_size > span_df.font_size.mode()[0]]
     #print(headings.values, headings.index)
-  #pat1= re.compile(r".+\:")
-  #pat2=re.compile(r".+\.\n")
-  #headings=pat1.search(docs)
-  #paragraphs=pat2.search(docs)
+  paragraph_list = get_paragraphs(headings, paragraphs)
+  headings_list = headings.values.tolist()
+
   paragraph_list = get_paragraphs(headings, paragraphs)
   headings_list = headings.values.tolist()
   n = 1500 #Number of characters to be included in a single chunk of text
@@ -376,14 +383,6 @@ def readdoc_splittext_txt(filename):
   if ".txt" in filename:
     loader = UnstructuredFileLoader(filename)
     docs = str(loader.load())
-  #block_dict = get_block_dict_fromDoc(docs)
-  #span_df = get_docfeature_dataframe(block_dict)
-  #docs_clean = span_df[span_df["font_size"]>=span_df["font_size"].mode()[0]]
-  #doc_clean.head()
-  #paragraphs = docs_clean.text[docs_clean.font_size == span_df.font_size.mode()[0]]
-  #print(paragraphs.values,paragraphs.index)
-  #headings = docs_clean.text[docs_clean.font_size > span_df.font_size.mode()[0]]
-    #print(headings.values, headings.index)
   pat1= re.compile(r".+\:")
   pat2=re.compile(r".+\.\n")
   headings_list=pat1.findall(docs)
