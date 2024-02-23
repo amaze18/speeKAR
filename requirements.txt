@@ -18,6 +18,7 @@ requests
 ffmpeg-python
 mutagen
 python-docx
+python-pptx
 audio-recorder-streamlit
 SpeechRecognition
 streamlit-audiorecorder
