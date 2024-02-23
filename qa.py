@@ -753,7 +753,7 @@ def chatbot_slim(question, context, keywords):
     #conversation_prompt += f"User: {question}\nAssistant:"
 
     openai.api_key = "YOUR_SECRET_TOKEN"  # Replace with your actual secret token
-    model = "gpt-3.5-turbo-instruct"
+    model = "gpt-3.5-turbo-0125"
 
     # Generate response using OpenAI's Chat API
     chat = openai.ChatCompletion.create(
@@ -780,6 +780,7 @@ def chatbot_slim(question, context, keywords):
 @st.cache_resource(show_spinner=True)
 def create_db(_texts_raw, _uploaded_file_name):
 
+
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
     db = FAISS.from_documents(_texts_raw, hf)
     db.save_local("faiss_index_anupam" + _uploaded_file_name)
@@ -805,7 +806,7 @@ def chatbot(question, db):
     
     res = qa(query)
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-16k-0613",
+    model="gpt-3.5-turbo-0125",
     
     messages=[
         {"role": "system", 
