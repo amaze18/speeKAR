@@ -344,6 +344,9 @@ def readdoc_splittext_pptx(filename):
     loader = UnstructuredPowerPointLoader(filename)
     docs = extract_text_from_pptx(filename)
     image_addresses = extract_image_addresses(filename)
+  for i in range(1,len(image_addresses)):
+      images_text=''
+      images_text=pytesseract.image_to_string(Image.open('image_addresses[i]'))
   pat1= re.compile(r".+\:")
   pat2=re.compile(r".+\.\n")
   headings_list=pat1.findall(docs)
@@ -352,6 +355,7 @@ def readdoc_splittext_pptx(filename):
   all_text=''
   for text in paragraph_list:
       all_text+=text
+  all_text+=images_text
   a=glob.glob(filename)
     #print(a)
   chunk_size = 1024
