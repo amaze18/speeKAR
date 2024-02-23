@@ -30,6 +30,7 @@ from urllib.parse import urlparse
 # -------DATA FRAME/DOCX/TEXT HANDLING----------$
 import pandas as pd
 import pprint as pp
+import python-pptx 
 from docx import Document as Docxreader
 from docx.shared import Inches
 import textwrap
