@@ -424,6 +424,8 @@ def readdoc_splittext_pptx(filename):
         "universe_domain": "googleapis.com"
         })
         images_text = ''
+        headings_list=[]
+        paragraph_list=[]
         # Perform OCR on images
         for image_address in image_addresses:
             with io.open(image_address, 'rb') as image_file:
@@ -449,6 +451,8 @@ def readdoc_splittext_pptx(filename):
         pat2 = re.compile(r".+\.\n")
         headings_list_pptx = pat1.findall(docs)
         paragraph_list_pptx = pat2.findall(docs)
+        headings_list.extend(headings_list_pptx)
+        paragraph_list.extend(paragraph_list_pptx)
 
         n = 1500  # Number of characters to be included in a single chunk of text
         all_text = ''
@@ -478,7 +482,7 @@ def readdoc_splittext_pptx(filename):
 
         text_split = texts_isb
 
-        return all_text, text_split, texts_raw, headings_list_pptx, paragraph_list_pptx
+        return all_text, text_split, texts_raw, headings_list, paragraph_list
 
 #---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
