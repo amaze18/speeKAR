@@ -402,7 +402,7 @@ def readdoc_splittext_pptx(filename):
     if ".pptx" in filename:
         loader = UnstructuredPowerPointLoader(filename)
         docs = loader.load()
-        image_addresses = loader.extract_image_addresses()
+        image_addresses = extract_image_addresses(filename)
 
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_file('able-store-415222-3c73cfca4950.json')
