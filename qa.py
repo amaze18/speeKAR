@@ -413,18 +413,18 @@ def readdoc_splittext_pptx(filename):
 
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_info({
-  "type": "service_account",
-  "project_id": "able-store-415222",
-  "private_key_id": "3c73cfca4950749ff7d8b9411e28e7db84c89c75",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZEH33tpJHp4XL\n3+jMloFGguZCzQuT8HwobVK7gI+x/fNfbamU2gzla+vP7GGmIP8JYn0S1cvWY0ki\nyakN7Hxp6DmkIeOpK9piojKriUFUFXu86JiaEmYRUplSeifOCexHM4KIgM4ABKc9\nogGVilJUdoLEigaMXF8/XS7O2uBRaApegUhSCZnYEp64VXVVyPoRtFAcKhmp5y4T\n+x58TjTX/7oEC6nWvfq1opJBzX++svH8f/eQ4FfpCh2WfyDyQk7GNyRxQMM9Xbnx\nwM9aWejuDN+yBufqWjoDI1wOqBNNDAuOr/Gdkpp8E5CqP/mBNwsK5LoMyWaAgrUq\nKkrE/M2fAgMBAAECggEAFXIer/m2zCOOAY2Wx5fbH+dQ7qqpiS1KZwgeE25pRBGu\nGPCRv6YnfgdCniFhqHM8H2Y+qzy6Te0zTZ+U9041IJWUFFZQ0ucFRZd24CHIdZFF\nz20/noFQ2kdJ5K8y/ZVXZdV+ARSQxcmv6FP4ShkHd1baJqbobLe3pWAEfuV7Ii+x\nlW026XwMvMZqGIn5Vw0ra4waJbexmGIHFy29pc7r8RTzgpxXEkSMi3JBPq4q6cfK\nV7ckoUw5qtvhFvhjTH+B2ipPII5+YxAo6MoxTwMrH3aZUrjTVjWzTQ3Fbb72Il77\nlKKAuzNNlNycN5T5cR3WR8rJ9lf2xfIqw9Jw44YDkQKBgQD+63n1aovkv8VLAJeJ\nbb/CRAU3ohrJpx3oRTSdwOkfVRITdJpPzxtZUun8xgFjmR50qptRNobZegbBF+FQ\nRjKu7L69UC0LEEBItn9ud+iQ64JNp+f2Wq7doTRqXHVZBANr3fSwZteQyqh2UHeF\nGQmVk7t35vIj9vXF/4sfAzhFpwKBgQDZ+/O9Y3CmyiHNX7sAJe4n//5W1VEW1nsC\nyO4+fIJPv7NPhJN8AeC//LltKKKm7C87Mc9JTkHQEtTeQoqW8/xlTwGpop068QmE\nVGWM9bfA1hLSgtwp8GoGrT92FX+12BKg5D6UxDslNDzXhrBqXGyVTqIhuPWy0zWw\nL1unWZenSQKBgQC1f2is8Dg8HMHWvcwmv+oo4Y8pZhRWgNLNXgCxVPlmIoalLX70\n1ctuFJeeLkgs5ocFn7bH4t+uFbCbaGo2YlSRsOO5HE2FtANhAfbG6z69d8Clk6eX\nAkfAapdMJxoxz6az9SrTMdXHNFMvMel27TWitrViEB9Ute+VEnW2Fe/JvwKBgAbx\nDg7+5qx5DWCD5umXS6E8drX/LwjiJaKuEWAuCNxPR3+FwkiVqrmSa7k9LQjRxqNE\n78vu0Qu2Pc8iIVWzSVtUi8ICKq2g1WPAaEd337UlXA4WGrq/LDEwPTAeeSWqTtWO\nzytfoF6L7lASuvV4IgETMviN8k0Sisgkie+nW7v5AoGBAMr4rftvEEUxOPuu+U7h\newe63BiLTU4F+OMGXhIHQIz88HdQk6w4XTj6Nrb2pivqCGPFNgTr4+WmMfe9DkAH\nxzny8Kdp9HUob6u8DrkWI2OLwKAnReVy3E3wd8MLBeZTahLHVc4vtpMH4L7cXpKv\nYlCS/pHOIfU6R5pPkSXj6ozZ\n-----END PRIVATE KEY-----\n",
-  "client_email": "speekar@able-store-415222.iam.gserviceaccount.com",
-  "client_id": "110531954629070375774",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speekar%40able-store-415222.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-})
+        "type": "service_account",
+        "project_id": "able-store-415222",
+        "private_key_id": "3c73cfca4950749ff7d8b9411e28e7db84c89c75",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZEH33tpJHp4XL\n3+jMloFGguZCzQuT8HwobVK7gI+x/fNfbamU2gzla+vP7GGmIP8JYn0S1cvWY0ki\nyakN7Hxp6DmkIeOpK9piojKriUFUFXu86JiaEmYRUplSeifOCexHM4KIgM4ABKc9\nogGVilJUdoLEigaMXF8/XS7O2uBRaApegUhSCZnYEp64VXVVyPoRtFAcKhmp5y4T\n+x58TjTX/7oEC6nWvfq1opJBzX++svH8f/eQ4FfpCh2WfyDyQk7GNyRxQMM9Xbnx\nwM9aWejuDN+yBufqWjoDI1wOqBNNDAuOr/Gdkpp8E5CqP/mBNwsK5LoMyWaAgrUq\nKkrE/M2fAgMBAAECggEAFXIer/m2zCOOAY2Wx5fbH+dQ7qqpiS1KZwgeE25pRBGu\nGPCRv6YnfgdCniFhqHM8H2Y+qzy6Te0zTZ+U9041IJWUFFZQ0ucFRZd24CHIdZFF\nz20/noFQ2kdJ5K8y/ZVXZdV+ARSQxcmv6FP4ShkHd1baJqbobLe3pWAEfuV7Ii+x\nlW026XwMvMZqGIn5Vw0ra4waJbexmGIHFy29pc7r8RTzgpxXEkSMi3JBPq4q6cfK\nV7ckoUw5qtvhFvhjTH+B2ipPII5+YxAo6MoxTwMrH3aZUrjTVjWzTQ3Fbb72Il77\nlKKAuzNNlNycN5T5cR3WR8rJ9lf2xfIqw9Jw44YDkQKBgQD+63n1aovkv8VLAJeJ\nbb/CRAU3ohrJpx3oRTSdwOkfVRITdJpPzxtZUun8xgFjmR50qptRNobZegbBF+FQ\nRjKu7L69UC0LEEBItn9ud+iQ64JNp+f2Wq7doTRqXHVZBANr3fSwZteQyqh2UHeF\nGQmVk7t35vIj9vXF/4sfAzhFpwKBgQDZ+/O9Y3CmyiHNX7sAJe4n//5W1VEW1nsC\nyO4+fIJPv7NPhJN8AeC//LltKKKm7C87Mc9JTkHQEtTeQoqW8/xlTwGpop068QmE\nVGWM9bfA1hLSgtwp8GoGrT92FX+12BKg5D6UxDslNDzXhrBqXGyVTqIhuPWy0zWw\nL1unWZenSQKBgQC1f2is8Dg8HMHWvcwmv+oo4Y8pZhRWgNLNXgCxVPlmIoalLX70\n1ctuFJeeLkgs5ocFn7bH4t+uFbCbaGo2YlSRsOO5HE2FtANhAfbG6z69d8Clk6eX\nAkfAapdMJxoxz6az9SrTMdXHNFMvMel27TWitrViEB9Ute+VEnW2Fe/JvwKBgAbx\nDg7+5qx5DWCD5umXS6E8drX/LwjiJaKuEWAuCNxPR3+FwkiVqrmSa7k9LQjRxqNE\n78vu0Qu2Pc8iIVWzSVtUi8ICKq2g1WPAaEd337UlXA4WGrq/LDEwPTAeeSWqTtWO\nzytfoF6L7lASuvV4IgETMviN8k0Sisgkie+nW7v5AoGBAMr4rftvEEUxOPuu+U7h\newe63BiLTU4F+OMGXhIHQIz88HdQk6w4XTj6Nrb2pivqCGPFNgTr4+WmMfe9DkAH\nxzny8Kdp9HUob6u8DrkWI2OLwKAnReVy3E3wd8MLBeZTahLHVc4vtpMH4L7cXpKv\nYlCS/pHOIfU6R5pPkSXj6ozZ\n-----END PRIVATE KEY-----\n",
+        "client_email": "speekar@able-store-415222.iam.gserviceaccount.com",
+        "client_id": "110531954629070375774",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speekar%40able-store-415222.iam.gserviceaccount.com",
+        "universe_domain": "googleapis.com"
+        })
 
         images_text = ''
         headings_list = []
