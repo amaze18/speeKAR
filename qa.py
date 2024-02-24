@@ -35,6 +35,8 @@ from PIL import Image
 import pytesseract
 from docx import Document as Docxreader
 from docx.shared import Inches
+from google.cloud import vision
+from google.oauth2 import service_account
 import textwrap
 import glob
 from spire.doc import *
@@ -338,53 +340,130 @@ def extract_image_addresses(filename):
 
     return image_addresses
 #---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
-@st.cache_resource(show_spinner=True)
-def readdoc_splittext_pptx(filename):
-  if ".pptx" in filename:
-    loader = UnstructuredPowerPointLoader(filename)
-    docs = extract_text_from_pptx(filename)
-    image_addresses = extract_image_addresses(filename)
-  images_text=''
-  for i in range(len(image_addresses)):
-      images_text=pytesseract.image_to_string(Image.open('image_addresses[i]'))
-  pat1= re.compile(r".+\:")
-  pat2=re.compile(r".+\.\n")
-  headings_list=pat1.findall(docs)
-  paragraph_list=pat2.findall(docs)
-  n = 1500 #Number of characters to be included in a single chunk of text
-  all_text=''
-  for text in paragraph_list:
-      all_text+=text
-  all_text+=images_text
-  a=glob.glob(filename)
-    #print(a)
-  chunk_size = 1024
-  chunk_overlap=10
-  text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-  texts_isb=[]
-  texts_raw = []
-  documents=[]
-  for i in range(len(a)):
-        documents.extend(UnstructuredPowerPointLoader(a[i]).load())
-        for j in range(
-            len(
-                text_splitter.split_documents(
-                    UnstructuredPowerPointLoader(a[i]).load()
-                )
-            )
-        ):
-            text_chunk = text_splitter.split_documents(
-                UnstructuredPowerPointLoader(a[i]).load()
-            )[j]
-            text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
-            text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
-            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
-            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
-            texts_isb.append(text_chunk.page_content)
-            texts_raw.append(text_chunk)
+#@st.cache_resource(show_spinner=True)
+#def readdoc_splittext_pptx(filename):
+ # if ".pptx" in filename:
+  #  loader = UnstructuredPowerPointLoader(filename)
+   # docs = extract_text_from_pptx(filename)
+    #image_addresses = extract_image_addresses(filename)
+  # Authenticate using service account credentials
+  #credentials = service_account.Credentials.from_service_account_file('able-store-415222-3c73cfca4950.json')  # Path to your JSON service account key file
+  #client = vision.ImageAnnotatorClient(credentials=credentials)
+  #images_text=''
+  # Perform OCR on an image
+  #for image_address in image_addresses:
+   #   with io.open(image_address, 'rb') as image_file:
+    #    content = image_file.read()
+  #image = vision.Image(content=content)
+  #response = client.text_detection(image=image)
+  #texts = response.text_annotations
+  #for text in texts:
+   #     print(text.description)
+  #pat1= re.compile(r".+\:")
+  #pat2=re.compile(r".+\.\n")
+  #headings_list=pat1.findall(docs)
+  #paragraph_list=pat2.findall(docs)
+  #n = 1500 #Number of characters to be included in a single chunk of text
+  #all_text=''
+  #for text in paragraph_list:
+  #    all_text+=text
+  #all_text+=images_text
+  #a=glob.glob(filename)
+  #  #print(a)
+  #chunk_size = 1024
+  #chunk_overlap=10
+  #text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+  #texts_isb=[]
+  #texts_raw = []
+  #documents=[]
+  #for i in range(len(a)):
+  #      documents.extend(UnstructuredPowerPointLoader(a[i]).load())
+  #      for j in range(
+  #          len(
+  #              text_splitter.split_documents(
+  #                  UnstructuredPowerPointLoader(a[i]).load()
+  #              )
+  #          )
+  #      ):
+  #          text_chunk = text_splitter.split_documents(
+  #              UnstructuredPowerPointLoader(a[i]).load()
+  #          )[j]
+  #          text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+  #          text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+  #          text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+  #          text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+  #          texts_isb.append(text_chunk.page_content)
+  #          texts_raw.append(text_chunk)
 
-  text_split = texts_isb
-  return all_text, text_split, texts_raw, headings_list, paragraph_list
+#  text_split = texts_isb
+#  return all_text, text_split, texts_raw, headings_list, paragraph_list
+
+def readdoc_splittext_pptx(filename):
+    if ".pptx" in filename:
+        loader = UnstructuredPowerPointLoader(filename)
+        docs = loader.extract_text()
+        image_addresses = loader.extract_image_addresses()
+
+        # Authenticate using service account credentials
+        credentials = service_account.Credentials.from_service_account_file('able-store-415222-3c73cfca4950.json')
+        client = vision.ImageAnnotatorClient(credentials=credentials)
+
+        images_text = ''
+        # Perform OCR on images
+        for image_address in image_addresses:
+            with io.open(image_address, 'rb') as image_file:
+                content = image_file.read()
+
+            image = vision.Image(content=content)
+            response = client.text_detection(image=image)
+            texts = response.text_annotations
+            for text in texts:
+                images_text += text.description + '\n'
+
+                # Extract headers and paragraphs from OCR results of images
+                pat1 = re.compile(r".+\:")
+                pat2 = re.compile(r".+\.\n")
+                headings_list_img = pat1.findall(text.description)
+                paragraph_list_img = pat2.findall(text.description)
+
+                # Append headers and paragraphs from images to existing lists
+                headings_list.extend(headings_list_img)
+                paragraph_list.extend(paragraph_list_img)
+
+        pat1 = re.compile(r".+\:")
+        pat2 = re.compile(r".+\.\n")
+        headings_list_pptx = pat1.findall(docs)
+        paragraph_list_pptx = pat2.findall(docs)
+
+        n = 1500  # Number of characters to be included in a single chunk of text
+        all_text = ''
+        for text in paragraph_list_pptx:
+            all_text += text
+        all_text += images_text
+
+        a = glob.glob(filename)
+
+        chunk_size = 1024
+        chunk_overlap = 10
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+        texts_isb = []
+        texts_raw = []
+        documents = []
+        for i in range(len(a)):
+            documents.extend(loader.load())
+            for j in range(len(text_splitter.split_documents(loader.load()))):
+                text_chunk = text_splitter.split_documents(loader.load())[j]
+                text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+                text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+                text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+                text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+                texts_isb.append(text_chunk.page_content)
+                texts_raw.append(text_chunk)
+
+        text_split = texts_isb
+
+        return all_text, text_split, texts_raw, headings_list_pptx, paragraph_list_pptx
 
 #---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
