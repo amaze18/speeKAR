@@ -8,7 +8,7 @@ openapi-schema-pydantic==1.2.4
 streamlit
 google-cloud-vision
 google.cloud
-google.outh2
+google.oauth2
 python-dotenv==1.0.0
 accelerate==0.21.0
 gradio==3.37.0
