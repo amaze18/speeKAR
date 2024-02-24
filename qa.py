@@ -409,6 +409,7 @@ def readdoc_splittext_pptx(filename):
         
         # Extract image addresses from the PowerPoint presentation
         image_addresses = extract_image_addresses(filename)
+        print(image_addresses)
 
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_info({
