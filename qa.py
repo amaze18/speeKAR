@@ -401,7 +401,7 @@ def extract_image_addresses(filename):
 def readdoc_splittext_pptx(filename):
     if ".pptx" in filename:
         loader = UnstructuredPowerPointLoader(filename)
-        docs = loader.extract_text()
+        docs = loader.load()
         image_addresses = loader.extract_image_addresses()
 
         # Authenticate using service account credentials
