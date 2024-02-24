@@ -405,9 +405,12 @@ def readdoc_splittext_pptx(filename):
         image_addresses = extract_image_addresses(filename)
 
         # Authenticate using service account credentials
-        credentials = service_account.Credentials.from_service_account_file('able-store-415222-3c73cfca4950.json')
-        client = vision.ImageAnnotatorClient(credentials=credentials)
-
+        #credentials = service_account.Credentials.from_service_account_file('able-store-415222-3c73cfca4950.json')
+        #client = vision.ImageAnnotatorClient(credentials=credentials)
+        # Set the path to the service account key as an environment variable
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "able-store-415222-3c73cfca4950.json"
+        # Load credentials from the environment variable
+        credentials = service_account.Credentials.from_service_account_info()
         images_text = ''
         # Perform OCR on images
         for image_address in image_addresses:
