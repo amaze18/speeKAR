@@ -336,7 +336,10 @@ def extract_image_addresses(filename):
     for slide in prs.slides:
         for shape in slide.shapes:
             if shape.shape_type == 13:  # Check if shape is an image
-                image_addresses.append(shape.image.anchor.photovalue.url)
+                # Get the image address (file path or URL)
+                image_address = shape.image.filename
+                # Append the image address to the list
+                image_addresses.append(image_address)
 
     return image_addresses
 #---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
