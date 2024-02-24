@@ -397,7 +397,7 @@ def extract_image_addresses(filename):
 
 #  text_split = texts_isb
 #  return all_text, text_split, texts_raw, headings_list, paragraph_list
-
+@st.cache_resource(show_spinner=True)
 def readdoc_splittext_pptx(filename):
     if ".pptx" in filename:
         loader = UnstructuredPowerPointLoader(filename)
