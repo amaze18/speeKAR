@@ -241,7 +241,7 @@ if (uploaded_file is not None):
     elif ".txt" in filename:
         all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_txt(filename)#uploaded_file.name)
     elif ".pptx" in filename: #uploaded_file.name:
-        all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pptx(filename)#uploaded_file.name)
+        all_text, text_split, texts_raw, headings_list_pptx, paragraph_list_pptx = readdoc_splittext_pptx(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
         all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pdf(filename)#uploaded_file.name)
     
