@@ -430,8 +430,8 @@ def readdoc_splittext_pptx(filename):
         headings_list=[]
         paragraph_list=[]
         # Perform OCR on images
-        for image_address in image_addresses:
-            with io.open(image_address, 'rb') as image_file:
+        for i in range(image_addresses):
+            with io.open(image_addresses[i], 'rb') as image_file:
                 content = image_file.read()
 
             image = vision.Image(content=content)
