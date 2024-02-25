@@ -412,7 +412,7 @@ def readdoc_splittext_pptx(filename):
         image_addresses = extract_image_addresses(filename)
         print(image_addresses)
         bucket_name='BUCKET-NAME'
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '"C:\Users\saikr\Downloads\able-store-415222-3c73cfca4950.json"'
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'able-store-415222-3c73cfca4950.json'
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_info({
         "type": "service_account",
