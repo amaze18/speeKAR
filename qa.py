@@ -411,7 +411,7 @@ def readdoc_splittext_pptx(filename):
         # Extract image addresses from the PowerPoint presentation
         image_addresses = extract_image_addresses(filename)
         print(image_addresses)
-        bucket_name='BUCKET-NAME'
+        bucket_name='aiexplorers'
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'able-store-415222-3c73cfca4950.json'
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_info({
@@ -433,7 +433,10 @@ def readdoc_splittext_pptx(filename):
         paragraph_list = []
 
         # Initialize Google Cloud Vision API client
-        client = vision.ImageAnnotatorClient(credentials=credentials)
+        storage_client = storage.Client()
+        bucket = storage_client.get_bucket(bucket_name)
+        vision_client = vision.ImageAnnotatorClient(credentials=credentials)
+        feature = vision.Feature(type_=vision.Feature.Type.DOCUMENT_TEXT_DETECTION)
 
         # Perform OCR on images
         for image_address in image_addresses:
