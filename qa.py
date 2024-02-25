@@ -37,6 +37,7 @@ from docx import Document as Docxreader
 from docx.shared import Inches
 from google.cloud import vision
 from google.oauth2 import service_account
+from google.cloud import storage
 import textwrap
 import glob
 from spire.doc import *
@@ -410,7 +411,8 @@ def readdoc_splittext_pptx(filename):
         # Extract image addresses from the PowerPoint presentation
         image_addresses = extract_image_addresses(filename)
         print(image_addresses)
-
+        bucket_name='BUCKET-NAME'
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '"C:\Users\saikr\Downloads\able-store-415222-3c73cfca4950.json"'
         # Authenticate using service account credentials
         credentials = service_account.Credentials.from_service_account_info({
         "type": "service_account",
