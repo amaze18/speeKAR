@@ -496,7 +496,7 @@ def readdoc_splittext_pptx(filename):
 
             return all_text, text_split, texts_raw, headings_list, paragraph_list
         except Exception as e:
-    print("An error occurred:", e)
+            print("An error occurred:", e)
 #---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
 def readdoc_splittext_txt(filename):
