@@ -435,7 +435,7 @@ def readdoc_splittext_pptx(filename):
         # Initialize Google Cloud Vision API client
         storage_client = storage.Client()
         bucket = storage_client.get_bucket(bucket_name)
-        vision_client = vision.ImageAnnotatorClient(credentials=credentials)
+        vision_client = vision.ImageAnnotatorClient()
         feature = vision.Feature(type_=vision.Feature.Type.DOCUMENT_TEXT_DETECTION)
 
         # Perform OCR on images
