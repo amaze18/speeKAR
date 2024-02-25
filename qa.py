@@ -449,7 +449,7 @@ def readdoc_splittext_pptx(filename):
                         response = vision_client.text_detection(image=image)
                         texts = response.text_annotations
                         for text in texts:
-                        images_text += text.description + '\n'
+                            images_text += text.description + '\n'
 
                         # Extract headers and paragraphs from OCR results of images
                         pat1 = re.compile(r".+\:")
