@@ -599,86 +599,8 @@ def readdoc_splittext_pdf(filename):
             texts_isb.append(text_chunk.page_content)
             texts_raw.append(text_chunk)
     text_split=texts_isb
-    return all_text, text_split, texts_raw, headings_list, paragraph_list
+    return all_text, text_split,texts_raw, headings_list, paragraph_list
 
-# ----------------CREATE CONTEXT-----------------------#
-#def create_context(query, text_split, headings, para_texts):
- #   """
-  #  Create a context for a question by finding the most similar context from the dataframe
-   # """
-#
- #   # Get the embeddings for the question
-  #  # Get the distances from the embeddings
-   # # i=0
-    #kw_model = KeyBERT()
-#
- #   sentences = text_split  # [i for i in nlp(text).sents]
-#
- #   returns = []
-  #  keystart = time.time()
-   # keywords_q = []
-#
- #   keywords_query = kw_model.extract_keywords(query)
-  #  keywords = []
-#
- #   for j in range(len(keywords_query)):
-  #      if keywords_query[j][1] > 0.3:
-   #         if keywords_query[j][0] not in keywords_q:
-    #            # print(keywords[j][0], keywords[j][1])
-     #           keywords_q.append(keywords_query[j][0])
-#
- #   i = 0
-  #  keyword_doc = {}
-   # keyend = time.time()
-#
- #   for sent in sentences:
-  #      if isinstance(sent, str) and len(sent) > 6:
-   #         keywords = kw_model.extract_keywords(sent)
-    #        keyword_doc_sent = []
-#
- #           for j in range(len(keywords)):
-  #              # Add the heading of  the para corresponding to the sentence
-   #             if j == 0:
-    #                keyword_doc_sent.append(keywords[j][0])
-     #               for h, pt in zip(headings, para_texts):
-      #                  pt = pt.lower()
-       #                 index = pt.find(sent.lower())
-        #                if index != -1:
-         #                   print("contains")
-          #                  # Add the heading of  the para corresponding to the sentence
-           #                 keyword_doc_sent.append(h)
-#
- #               if keywords[j][1] > 0.3:  # and keywords[j][0] not in keyword_doc ):
-  #                  if keywords[j][0] not in keyword_doc_sent:
-   #                     keyword_doc_sent.append(keywords[j][0])
-    #    keyword_doc[i] = keyword_doc_sent
-#
- #       i += 1
-#
- #   search_start = time.time()
-#
- #   for i in range(len(keyword_doc)):
-  #      for k in range(len(keywords_q)):
-   #         match_count = 0
-    #        if keywords_q[k] in keyword_doc[i]:
-     #           match_count += 1
-      #          keywords.append(keywords_q[k])
-       #         # print(keywords_q[k],keyword_doc[i] )
-        #        # print("match_count::",match_count)
-         #       if match_count >= 1 or match_count >= len(keywords_q):
-          #          # print("Document matched :",i, "::")
-            #        if remove_newlines(text_split[i]) not in returns:
-             #           # context_q+=remove_newlines(sent)
-              #          returns.append(remove_newlines(text_split[i]))
-               #         # print(returns,match_count )
-#
- #   searchend = time.time()
-  #  search_time = searchend - search_start
-#
- #   cur_len = 0
-#
-    # Return the context
-#    return "\n\n###\n\n".join(returns), keywords
 # ----------------CREATE CONTEXT-----------------------#
 import time
 from keybert import KeyBERT
@@ -907,11 +829,11 @@ def chatbot_slim(question, context, keywords):
 
 
 @st.cache_resource(show_spinner=True)
-def create_db(texts_raw, uploaded_file_name):
+def create_db(texts_raw,_uploaded_file_name):
 
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
-    db = FAISS.from_documents(_texts_raw, hf)
+    db = FAISS.from_documents(texts_raw, hf)
     db.save_local("faiss_index_anupam" + _uploaded_file_name)
     db=FAISS.load_local("faiss_index_anupam" + _uploaded_file_name, hf)
     return hf, db
