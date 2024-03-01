@@ -248,7 +248,7 @@ if (uploaded_file is not None):
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
 
-    hf, db = create_db(texts_raw, uploaded_file.name)    
+    hf, db = create_db(texts_raw, uploaded_file_name)    
     
     st.session_state["db_created"] = True    
 
