@@ -907,7 +907,7 @@ def chatbot_slim(question, context, keywords):
 
 
 @st.cache_resource(show_spinner=True)
-def create_db(_texts_raw, _uploaded_file_name):
+def create_db(texts_raw, uploaded_file_name):
 
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
