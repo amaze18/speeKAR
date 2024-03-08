@@ -2,7 +2,7 @@ import time, os
 import io
 import scipy
 import numpy as np
-
+import json
 # ----------------SPEECH RECOGNITION /AUDIO/TEXT TO SPEECH DEPENDENCIES-------------#
 from scipy.io.wavfile import read as wav_read
 from pydub import AudioSegment
@@ -30,8 +30,14 @@ from urllib.parse import urlparse
 # -------DATA FRAME/DOCX/TEXT HANDLING----------$
 import pandas as pd
 import pprint as pp
+from pptx import Presentation
+from PIL import Image
+import pytesseract
 from docx import Document as Docxreader
 from docx.shared import Inches
+from google.cloud import vision
+from google.oauth2 import service_account
+from google.cloud import storage
 import textwrap
 import glob
 from spire.doc import *
@@ -100,6 +106,7 @@ from langchain.document_loaders import (
     UnstructuredODTLoader,
     UnstructuredPowerPointLoader,
     UnstructuredWordDocumentLoader,
+    UnstructuredFileLoader   
 )
 import os
 import glob
@@ -314,7 +321,169 @@ def get_paragraphs(headings, paragraph_sentences):
         
 
         return  paragraph_list
+def extract_text_from_pptx(filename):
+    text = ""
+    prs = Presentation(filename)
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            if hasattr(shape, "text"):
+                text += shape.text + "\n"
+    return text
+def extract_image_addresses(filename):
+    image_addresses = []
 
+    prs = Presentation(filename)
+
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            if shape.shape_type == 13:  # Check if shape is an image
+                # Get the image address (file path or URL)
+                image_address = shape.image.filename
+                # Append the image address to the list
+                image_addresses.append(image_address)
+
+    return image_addresses
+#---------------READ THE .PPTX FILE AND GENERATE THE SPLIT--------------------#
+@st.cache_resource(show_spinner=True)
+def readdoc_splittext_pptx(filename):
+    if ".pptx" in filename:
+        loader = UnstructuredPowerPointLoader(filename)
+        # Extract text from the PowerPoint presentation
+        docs = str(loader.load())  # Assuming loader.load() returns the text content of the presentation
+        
+        # Extract image addresses from the PowerPoint presentation
+        image_addresses = extract_image_addresses(filename)
+        print(image_addresses)
+        try:
+            bucket_name='aiexplorers'
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'able-store-415222-3c73cfca4950.json'
+            # Authenticate using service account credentials
+            credentials = service_account.Credentials.from_service_account_info({
+            "type": "service_account",
+            "project_id": "able-store-415222",
+            "private_key_id": "3c73cfca4950749ff7d8b9411e28e7db84c89c75",
+            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZEH33tpJHp4XL\n3+jMloFGguZCzQuT8HwobVK7gI+x/fNfbamU2gzla+vP7GGmIP8JYn0S1cvWY0ki\nyakN7Hxp6DmkIeOpK9piojKriUFUFXu86JiaEmYRUplSeifOCexHM4KIgM4ABKc9\nogGVilJUdoLEigaMXF8/XS7O2uBRaApegUhSCZnYEp64VXVVyPoRtFAcKhmp5y4T\n+x58TjTX/7oEC6nWvfq1opJBzX++svH8f/eQ4FfpCh2WfyDyQk7GNyRxQMM9Xbnx\nwM9aWejuDN+yBufqWjoDI1wOqBNNDAuOr/Gdkpp8E5CqP/mBNwsK5LoMyWaAgrUq\nKkrE/M2fAgMBAAECggEAFXIer/m2zCOOAY2Wx5fbH+dQ7qqpiS1KZwgeE25pRBGu\nGPCRv6YnfgdCniFhqHM8H2Y+qzy6Te0zTZ+U9041IJWUFFZQ0ucFRZd24CHIdZFF\nz20/noFQ2kdJ5K8y/ZVXZdV+ARSQxcmv6FP4ShkHd1baJqbobLe3pWAEfuV7Ii+x\nlW026XwMvMZqGIn5Vw0ra4waJbexmGIHFy29pc7r8RTzgpxXEkSMi3JBPq4q6cfK\nV7ckoUw5qtvhFvhjTH+B2ipPII5+YxAo6MoxTwMrH3aZUrjTVjWzTQ3Fbb72Il77\nlKKAuzNNlNycN5T5cR3WR8rJ9lf2xfIqw9Jw44YDkQKBgQD+63n1aovkv8VLAJeJ\nbb/CRAU3ohrJpx3oRTSdwOkfVRITdJpPzxtZUun8xgFjmR50qptRNobZegbBF+FQ\nRjKu7L69UC0LEEBItn9ud+iQ64JNp+f2Wq7doTRqXHVZBANr3fSwZteQyqh2UHeF\nGQmVk7t35vIj9vXF/4sfAzhFpwKBgQDZ+/O9Y3CmyiHNX7sAJe4n//5W1VEW1nsC\nyO4+fIJPv7NPhJN8AeC//LltKKKm7C87Mc9JTkHQEtTeQoqW8/xlTwGpop068QmE\nVGWM9bfA1hLSgtwp8GoGrT92FX+12BKg5D6UxDslNDzXhrBqXGyVTqIhuPWy0zWw\nL1unWZenSQKBgQC1f2is8Dg8HMHWvcwmv+oo4Y8pZhRWgNLNXgCxVPlmIoalLX70\n1ctuFJeeLkgs5ocFn7bH4t+uFbCbaGo2YlSRsOO5HE2FtANhAfbG6z69d8Clk6eX\nAkfAapdMJxoxz6az9SrTMdXHNFMvMel27TWitrViEB9Ute+VEnW2Fe/JvwKBgAbx\nDg7+5qx5DWCD5umXS6E8drX/LwjiJaKuEWAuCNxPR3+FwkiVqrmSa7k9LQjRxqNE\n78vu0Qu2Pc8iIVWzSVtUi8ICKq2g1WPAaEd337UlXA4WGrq/LDEwPTAeeSWqTtWO\nzytfoF6L7lASuvV4IgETMviN8k0Sisgkie+nW7v5AoGBAMr4rftvEEUxOPuu+U7h\newe63BiLTU4F+OMGXhIHQIz88HdQk6w4XTj6Nrb2pivqCGPFNgTr4+WmMfe9DkAH\nxzny8Kdp9HUob6u8DrkWI2OLwKAnReVy3E3wd8MLBeZTahLHVc4vtpMH4L7cXpKv\nYlCS/pHOIfU6R5pPkSXj6ozZ\n-----END PRIVATE KEY-----\n",
+            "client_email": "speekar@able-store-415222.iam.gserviceaccount.com",
+            "client_id": "110531954629070375774",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speekar%40able-store-415222.iam.gserviceaccount.com",
+            "universe_domain": "googleapis.com"
+            })
+
+            images_text = ''
+            headings_list = []
+            paragraph_list = []
+
+            # Initialize Google Cloud Vision API client
+            storage_client = storage.Client()
+            bucket = storage_client.get_bucket(bucket_name)
+            vision_client = vision.ImageAnnotatorClient(credentials=credentials)
+            feature = vision.Feature(type_=vision.Feature.Type.DOCUMENT_TEXT_DETECTION)
+
+            # Perform OCR on images
+            for i in range(len(image_addresses)):
+                if os.path.exists(image_addresses[i]):  # Check if the image file exists
+                    with io.open(image_addresses[i], 'rb') as image_file:
+                        content = image_file.read()
+
+                        image = vision.Image(content=content)
+                        response = vision_client.text_detection(image=image)
+                        texts = response.text_annotations
+                        for text in texts:
+                            images_text += text.description + '\n'
+
+                        # Extract headers and paragraphs from OCR results of images
+                        pat1 = re.compile(r".+\:")
+                        pat2 = re.compile(r".+\.\n")
+                        headings_list_img = pat1.findall(text.description)
+                        paragraph_list_img = pat2.findall(text.description)
+
+                        # Append headers and paragraphs from images to existing lists
+                        headings_list.extend(headings_list_img)
+                        paragraph_list.extend(paragraph_list_img)
+
+            # Extract headers and paragraphs from the PowerPoint text
+            pat1 = re.compile(r".+\:")
+            pat2 = re.compile(r".+\.\n")
+            headings_list_pptx = pat1.findall(docs)
+            paragraph_list_pptx = pat2.findall(docs)
+            headings_list.extend(headings_list_pptx)
+            paragraph_list.extend(paragraph_list_pptx)
+            n = 1500
+            # Combine all text from PowerPoint and OCR'd images
+            all_text = ''.join(paragraph_list_pptx) + images_text
+
+            a = glob.glob(filename)
+
+            chunk_size = 1024
+            chunk_overlap = 10
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+            texts_isb = []
+            texts_raw = []
+            documents = []
+            for i in range(len(a)):
+                documents.extend(loader.load())
+                for j in range(len(text_splitter.split_documents(loader.load()))):
+                    text_chunk = text_splitter.split_documents(loader.load())[j]
+                    text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+                    text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+                    text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+                    text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+                    texts_isb.append(text_chunk.page_content)
+                    texts_raw.append(text_chunk)
+
+            text_split = texts_isb
+
+            return all_text, text_split, texts_raw, headings_list, paragraph_list
+        except Exception as e:
+            print("An error occurred:", e)
+#---------------READ THE .TXT FILE AND GENERATE THE SPLIT--------------------#
+@st.cache_resource(show_spinner=True)
+def readdoc_splittext_txt(filename):
+  if ".txt" in filename:
+    loader = UnstructuredFileLoader(filename)
+    docs = str(loader.load())
+  pat1= re.compile(r".+\:")
+  pat2=re.compile(r".+\.\n")
+  headings_list=pat1.findall(docs)
+  paragraph_list=pat2.findall(docs)
+  n = 1500 #Number of characters to be included in a single chunk of text
+  all_text=''
+  for text in paragraph_list:
+      all_text+=text
+  a=glob.glob(filename)
+    #print(a)
+  chunk_size = 1024
+  chunk_overlap=10
+  text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+  texts_isb=[]
+  texts_raw = []
+  documents=[]
+  for i in range(len(a)):
+        documents.extend(UnstructuredFileLoader(a[i]).load())
+        for j in range(
+            len(
+                text_splitter.split_documents(
+                    UnstructuredFileLoader(a[i]).load()
+                )
+            )
+        ):
+            text_chunk = text_splitter.split_documents(
+                UnstructuredFileLoader(a[i]).load()
+            )[j]
+            text_chunk.page_content = text_chunk.page_content.replace("\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("\\n", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
+            texts_isb.append(text_chunk.page_content)
+            texts_raw.append(text_chunk)
+
+  text_split = texts_isb
+  return all_text, text_split, texts_raw, headings_list, paragraph_list
+#---------------READ THE .Pdf FILE AND GENERATE THE SPLIT--------------------#
 @st.cache_resource(show_spinner=True)
 def readdoc_splittext_pdf(filename):
     """
@@ -373,86 +542,8 @@ def readdoc_splittext_pdf(filename):
             texts_isb.append(text_chunk.page_content)
             texts_raw.append(text_chunk)
     text_split=texts_isb
-    return all_text, text_split, texts_raw, headings_list, paragraph_list
+    return all_text, text_split,texts_raw, headings_list, paragraph_list
 
-# ----------------CREATE CONTEXT-----------------------#
-#def create_context(query, text_split, headings, para_texts):
- #   """
-  #  Create a context for a question by finding the most similar context from the dataframe
-   # """
-#
- #   # Get the embeddings for the question
-  #  # Get the distances from the embeddings
-   # # i=0
-    #kw_model = KeyBERT()
-#
- #   sentences = text_split  # [i for i in nlp(text).sents]
-#
- #   returns = []
-  #  keystart = time.time()
-   # keywords_q = []
-#
- #   keywords_query = kw_model.extract_keywords(query)
-  #  keywords = []
-#
- #   for j in range(len(keywords_query)):
-  #      if keywords_query[j][1] > 0.3:
-   #         if keywords_query[j][0] not in keywords_q:
-    #            # print(keywords[j][0], keywords[j][1])
-     #           keywords_q.append(keywords_query[j][0])
-#
- #   i = 0
-  #  keyword_doc = {}
-   # keyend = time.time()
-#
- #   for sent in sentences:
-  #      if isinstance(sent, str) and len(sent) > 6:
-   #         keywords = kw_model.extract_keywords(sent)
-    #        keyword_doc_sent = []
-#
- #           for j in range(len(keywords)):
-  #              # Add the heading of  the para corresponding to the sentence
-   #             if j == 0:
-    #                keyword_doc_sent.append(keywords[j][0])
-     #               for h, pt in zip(headings, para_texts):
-      #                  pt = pt.lower()
-       #                 index = pt.find(sent.lower())
-        #                if index != -1:
-         #                   print("contains")
-          #                  # Add the heading of  the para corresponding to the sentence
-           #                 keyword_doc_sent.append(h)
-#
- #               if keywords[j][1] > 0.3:  # and keywords[j][0] not in keyword_doc ):
-  #                  if keywords[j][0] not in keyword_doc_sent:
-   #                     keyword_doc_sent.append(keywords[j][0])
-    #    keyword_doc[i] = keyword_doc_sent
-#
- #       i += 1
-#
- #   search_start = time.time()
-#
- #   for i in range(len(keyword_doc)):
-  #      for k in range(len(keywords_q)):
-   #         match_count = 0
-    #        if keywords_q[k] in keyword_doc[i]:
-     #           match_count += 1
-      #          keywords.append(keywords_q[k])
-       #         # print(keywords_q[k],keyword_doc[i] )
-        #        # print("match_count::",match_count)
-         #       if match_count >= 1 or match_count >= len(keywords_q):
-          #          # print("Document matched :",i, "::")
-            #        if remove_newlines(text_split[i]) not in returns:
-             #           # context_q+=remove_newlines(sent)
-              #          returns.append(remove_newlines(text_split[i]))
-               #         # print(returns,match_count )
-#
- #   searchend = time.time()
-  #  search_time = searchend - search_start
-#
- #   cur_len = 0
-#
-    # Return the context
-#    return "\n\n###\n\n".join(returns), keywords
 # ----------------CREATE CONTEXT-----------------------#
 import time
 from keybert import KeyBERT
@@ -681,10 +772,11 @@ def chatbot_slim(question, context, keywords):
 
 
 @st.cache_resource(show_spinner=True)
-def create_db(_text_chunk, _uploaded_file_name):
+def create_db(texts_raw,_uploaded_file_name):
 
-    hf= OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=openai.api_key)
-    db = FAISS.from_documents(_text_chunk, hf)
+
+    hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
+    db = FAISS.from_documents(texts_raw, hf)
     db.save_local("faiss_index_anupam" + _uploaded_file_name)
     db=FAISS.load_local("faiss_index_anupam" + _uploaded_file_name, hf)
     return hf, db

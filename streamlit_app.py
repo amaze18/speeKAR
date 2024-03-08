@@ -17,6 +17,8 @@ encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
 from qa import (
     speechtotext,
     readdoc_splittext,
+    readdoc_splittext_txt,
+    readdoc_splittext_pptx,
     readdoc_splittext_pdf,
     create_context,
     create_db,
@@ -170,9 +172,11 @@ if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
 
 uploaded_file = st.file_uploader(label = "")
-if st.session_state["uploaded_status"] == False and uploaded_file is not None:
+if st.session_state["uploaded_status"] is False and uploaded_file is not None:
     create_db.clear()
     readdoc_splittext.clear()
+    readdoc_splittext_txt.clear()
+    readdoc_splittext_pptx.clear()
     readdoc_splittext_pdf.clear()
 
 if "query_counter" not in st.session_state:
@@ -199,11 +203,17 @@ elif uploaded_file is None:
     st.write("Dear user, clearing unnecesary data fo you to start afresh!!")
     create_db.clear()
     readdoc_splittext.clear()
+    readdoc_splittext_txt.clear()
+    readdoc_splittext_pptx.clear()
     readdoc_splittext_pdf.clear()
     st.write("You can upload your document now.")
-
 import streamlit as st
-
+if "uploaded_status" not in st.session_state:
+    st.session_state["uploaded_status"] = False
+if "query_counter" not in st.session_state:
+    st.session_state["query_counter"] = 0
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 if "uploaded_status" not in st.session_state:
     st.session_state["uploaded_status"] = False
@@ -228,17 +238,21 @@ if (uploaded_file is not None):
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
         all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+    elif ".txt" in filename:
+        all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_txt(filename)#uploaded_file.name)
+    elif ".pptx" in filename: #uploaded_file.name:
+        all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pptx(filename)#uploaded_file.name)
     elif ".pdf" in filename: #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext_pdf(filename)#uploaded_file.name)
+        all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_pdf(filename)#uploaded_file.name)
     
     with st.chat_message("assistant"):
         st.write("Hi! Getting your contexts ready for query! Please wait!")
 
-    hf, db = create_db(text_chunk, uploaded_file.name)    
+    hf, db = create_db(texts_raw, uploaded_file_name)    
     
     st.session_state["db_created"] = True    
 
-    if uploaded_file is not None and st.session_state["db_created"] == True:
+    if uploaded_file is not None and st.session_state["db_created"] is True:
         st.title("Ask me anything about the document!")
 
         # Display the chat input box
@@ -256,8 +270,7 @@ if (uploaded_file is not None):
             
             query = query_text
             
-            context, keywords = create_context(query, text_split, headings, para_texts)
-            
+            context, keywords = create_context(query, text_split, headings_list, paragraph_list)
 
             # Generate a response from the chatbot
             with st.chat_message("assistant"):

@@ -6,6 +6,8 @@ beautifulsoup4==4.12.2
 openai==0.27.7
 openapi-schema-pydantic==1.2.4
 streamlit
+google-cloud-vision
+google-cloud-storage
 python-dotenv==1.0.0
 accelerate==0.21.0
 gradio==3.37.0
@@ -18,6 +20,9 @@ requests
 ffmpeg-python
 mutagen
 python-docx
+python-pptx
+pillow
+pytesseract
 audio-recorder-streamlit
 SpeechRecognition
 streamlit-audiorecorder
