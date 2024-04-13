@@ -36,7 +36,6 @@ langchain
 sentence_transformers
 tiktoken
 pdfminer.six
-openai
 faiss-cpu
 unstructured
 keybert[flair]
