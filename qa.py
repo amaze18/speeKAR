@@ -776,7 +776,7 @@ def create_db(_texts_raw,_uploaded_file_name):
 
 
     hf= OpenAIEmbeddings(model="text-embedding-ada-002", openai_api_key=openai.api_key)
-    db = FAISS.from_documents(texts_raw, hf)
+    db = FAISS.from_documents(_texts_raw, hf)
     db.save_local("faiss_index_anupam" + _uploaded_file_name)
     db=FAISS.load_local("faiss_index_anupam" + _uploaded_file_name, hf)
     return hf, db
