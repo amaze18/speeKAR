@@ -771,7 +771,7 @@ def chatbot_slim(question, context, keywords):
 
 
 
-@st.cache_resource(show_spinner=True)
+@st.cache_resource(allow_dangerous_deserialization=True)
 def create_db(_texts_raw,_uploaded_file_name):
 
 
