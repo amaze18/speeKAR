@@ -202,7 +202,7 @@ def readdoc_splittext(filename):
         chunk_size=chunk_size, chunk_overlap=chunk_overlap
     )
     texts_isb = []
-    text_chunk = []
+    texts_chunk = []
     texts_raw=[]
     documents = []
     for i in range(len(a)):
@@ -222,9 +222,9 @@ def readdoc_splittext(filename):
             text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
             text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
             texts_isb.append(text_chunk.page_content)
-            text_chunk.append(text_chunk)
+            texts_chunk.append(text_chunk)
     text_split = texts_isb
-    texts_raw=text_chunk
+    texts_raw=texts_chunk
     return all_text, text_split, texts_raw, headings, para_texts
 
 
