@@ -192,7 +192,7 @@ def readdoc_splittext(filename):
         chunk_size=chunk_size, chunk_overlap=chunk_overlap
     )
     texts_isb = []
-    texts_raw=[]
+    texts_chunk=[]
     documents = []
     for i in range(len(a)):
         documents.extend(UnstructuredWordDocumentLoader(a[i]).load())
@@ -211,9 +211,9 @@ def readdoc_splittext(filename):
             text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
             text_chunk.page_content = text_chunk.page_content.replace("  ", " ")
             texts_isb.append(text_chunk.page_content)
-            texts_raw.append(text_chunk)
+            texts_chunk.append(text_chunk)
     text_split = texts_isb
-    return all_text, text_split, texts_raw, headings, para_texts
+    return all_text, text_split, texts_chunk, headings, para_texts
 
 
 def remove_newlines(serie):
