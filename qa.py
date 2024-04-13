@@ -224,8 +224,7 @@ def readdoc_splittext(filename):
             texts_isb.append(text_chunk.page_content)
             texts_chunk.append(text_chunk)
     text_split = texts_isb
-    texts_raw=texts_chunk
-    return all_text, text_split, texts_raw, headings, para_texts
+    return all_text, text_split, texts_chunk, headings, para_texts
 
 
 def remove_newlines(serie):
