@@ -235,9 +235,9 @@ if (uploaded_file is not None):
     filename = file_path
 
     if ".docx" in filename: #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+        all_text, text_split, texts_raw, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif (".doc" in filename) and (".docx" not in filename): #uploaded_file.name:
-        all_text, text_split, text_chunk, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
+        all_text, text_split, texts_raw, headings, para_texts = readdoc_splittext(filename)#uploaded_file.name)
     elif ".txt" in filename:
         all_text, text_split, texts_raw, headings_list, paragraph_list = readdoc_splittext_txt(filename)#uploaded_file.name)
     elif ".pptx" in filename: #uploaded_file.name:
